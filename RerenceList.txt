@@ -1,0 +1,29 @@
+This document is to be used as a rough reference and colaboration point for possible research ideas
+
+An efficient method for content reconstruction( references [13] and [4]) = Dristribution schemes
+	- reference [5] lossless reconstruction with bit-wise accurace.
+	Stego image is distorted but but image can be perfectly recovered
+	-Refrence [14] High tamper rate but low restoration quality
+	-allows for reconstruction with average PSNR of 37 dB. at 50% tamper rate
+	-states that it is a special case o an erasur channel (page 4)
+	
+	general notes on paper.
+		-they propose using the elements around the tapered are to help potentially recover the
+		data that has been lost.
+		-look at table page 14 on comparison between algorithms
+		
+image self embedding with high quality restoration capability
+	-uses dynamic allocation of blocks depending on their degree of smoothness
+	this means that rougher blocks have more bits for recovery and smooth blocks have less
+	-bits embedded into 3LSB layers or cover
+	
+	general notes on paper.
+	- This paper effectively describes a new way of compressing the image
+	
+High capacity reversible data embedding and content authentication
+	- uses difference expansion (reference 7) and LSB embedding (reference 2)
+	-Reference [6] difference expansion.
+	
+	
+	
+	
