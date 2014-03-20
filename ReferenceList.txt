@@ -1,0 +1,63 @@
+This document is to be used as a rough reference and colaboration point for possible research ideas
+
+-----------------------------------------
+Watermarking and image recovery
+-----------------------------------------
+
+An efficient method for content reconstruction( references [13] and [4]) = Dristribution schemes
+	- reference [5] lossless reconstruction with bit-wise accuracy.
+	Stego image is distorted but but image can be perfectly recovered
+	-Refrence [14] High tamper rate but low restoration quality
+	-allows for reconstruction with average PSNR of 37 dB. at 50% tamper rate
+	-states that it is a special case o an erasur channel (page 4)
+	
+	general notes on paper.
+		-they propose using the elements around the tapered are to help potentially recover the
+		data that has been lost.
+		-look at table page 14 on comparison between algorithms
+		
+image self embedding with high quality restoration capability
+	-uses dynamic allocation of blocks depending on their degree of smoothness
+	this means that rougher blocks have more bits for recovery and smooth blocks have less
+	-bits embedded into 3LSB layers or cover
+	
+	general notes on paper.
+	- This paper effectively describes a new way of compressing the image
+	
+High capacity reversible data embedding and content authentication
+	- uses difference expansion (reference 7) and LSB embedding (reference 2)
+	-Reference [6] difference expansion.
+	
+Fragile Watermarking With Error-Free Restoration Capability
+	- This scheme looks promising but the problem is the quality of the cover image.
+		Compared to their references the cover image quality is less than some other 
+		methods restored quality.
+		The tradoff is that the restored quality is perfect but in my opinion it is pointless 
+		because now you are sitting with a bad quality image that has to be restored the whole time
+		just to get good quality
+	- Because of this problem I would also say that the security is not very good because of the 
+	visual distortion you can see something is wrong with the image.
+	
+-----------------------------------------
+Steganography Algorithms
+-----------------------------------------
+	
+	
+BPCS_Steg
+	-This algorithm seems promising in the sense that it has massive capacity without much
+	image distortion.
+	-The Capacity does decrease though when using greyscale images rather than colour images
+	-The security of this algorithm is not very good. It is suceptible to a histogram attack.
+	-The algorithm is also not very robust since no effort is made to protect the message against 
+	attacks. 
+		This could potentially be a problem because the image will obviously be modified in my proposed
+		application. 
+		Further research must thus be done to ensure that there is possibly some redundancy in the message
+		and that the message is spread properly across the image.
+		As I see it you are effectively treating the multiple parts of the recovery data as seperate messages that
+		will be embedded in the cover image
+		
+	
+	
+	
+	
