@@ -57,6 +57,30 @@ BPCS_Steg
 		As I see it you are effectively treating the multiple parts of the recovery data as seperate messages that
 		will be embedded in the cover image
 		
+A High Capacity Image Steganographic Model
+	-This paper is good to look at because it covers most of the process to conduct to analyse an algorithm and to compare it
+	to existing algorithms
+	-The algorithm they propose also uses bit planes the same as BPCS_Steg but I am still unsure if they assign the blocks used for
+	embedding dynamically like BPCS, I believe they don't take into consideration the image charactaristics of the image when selecting the 
+	blocks.
+	-More research is still required.
+	-Obtains about 4Bpp
+	
+High-capacity steganography using a shared colour palate
+	-6Bpp and peak signal to noise ration of 40dB
+	-Check reference [5] for another algorithm (SMK) with between 7-13Bpp
+		Quality of resuting image is however quite low
+	-Reference [4] for high capacity algorithm that achieves around 4Bpp
+	-This paper improves on SMK by increasing the imperceptibility by limiting the 
+	maximum capacity
+	-Look into this paper futher for usefull things
+	
+A Modified High capacity image steganography technique based on wavelet transform
+	-Research for another day...
+
+	
+	
+		
 	
 	
 	
