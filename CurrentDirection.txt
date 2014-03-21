@@ -1,0 +1,21 @@
+At the moment I feel like my current direction and steps to follow would be:
+
+-Study into current image self recovery algorithms 
+	Compare strengts and weaknesses
+
+-Study into current High capacity algorithms
+	Compare strengtsh and weaknesses
+
+-Choose a prommesing High capacity algorithm
+-Choose a prommesing self recovery method which I can modify
+
+-Attempt to apply the High capacity algorithm to the modified self recovery problem
+	Experiment and test to find results
+
+
+-Further research needs to be done into how information is spread in self embedding and recovery
+through the cover image as to get good modifiability while still being able to recover the image 
+effectively
+
+-Look into if compression is needed or not
+

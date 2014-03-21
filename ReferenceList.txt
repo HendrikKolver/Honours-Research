@@ -76,12 +76,9 @@ High-capacity steganography using a shared colour palate
 	-Look into this paper futher for usefull things
 	
 A Modified High capacity image steganography technique based on wavelet transform
-	-Research for another day...
+	-They propose using wavelet transform inorder to get a cover image that can have more information embedded into it
+	-Their method achieves relatively high capacity and it has good security.
+	-The drawbacks are computational overhead and robustness.
+	-They do not go into details about the extraction of the data but mererly mention that the process should be reversed.
 
-	
-	
-		
-	
-	
-	
-	
+
