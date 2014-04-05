@@ -5,10 +5,11 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage[T1]{fontenc}
 
-\title{Achieving high quality self recovery images using a high capacity embedding algorihm}
+\title{High quality content reconstruction in images using a high capacity self-embedding algorihm}
 
-\author{HJ Kolver}
+\author{Hendrik J Kolver}
 
 \date{\today}
 
@@ -29,5 +30,29 @@ This would be usefull to determine if the proposed method does indeed improve on
 It would also help highlight strenghts and shortcommings in the proposed method.
 
 \subsection{Overview}
+
+The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content recostruction problem.
+The method uses LSB embedding to embed the refernce data into the image itself.
+The method also uses a global spreading technique to spead the reference data across the image.
+They also propose that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after recovery.
+
+\hspace{0pt} \\
+The method proposed in \cite {korus2013efficient} achieves good quality cover images with a PSNR \textgreater 35dB. 
+The method also achives an image recovery quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with taper rates of 50\% and 33\% respectively.
+The method does not let the restoration quality of the image deteriorate much if the tampering rate is increased up to a value of 50\%.
+They do however note that they can only achieve minimal reconstruction performace increases by decreasing the amount of information in the reconstruction reference.
+By using only 50\% of the available capacity the maximal tampering rate increases form 50\% to 59\%.
+
+\hspace{0pt} \\
+This method \cite {korus2013efficient} is thus quite robust since 50\% of the image may be tampered wiht before recovery starts to deteriorate.
+The security for this method is also very good since the quality of the cover image is not very suceptible to visual checks.
+The authors did not do any statistical analysis on the image.
+The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the recovery the quality of the image, before and after recovery, is still very good even without a very high embedding capacity.  
+
+\hspace{0pt} \\
+\cite {tian2003high} Proposed a method that is really quite interesting
+
+\bibliography{main}
+\bibliographystyle{plain}
 
 \end{document}
