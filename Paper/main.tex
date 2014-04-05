@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[T1]{fontenc}
+\usepackage[margin=0.5in]{geometry}
 
 \title{High quality content reconstruction in images using a high capacity self-embedding algorihm}
 
@@ -17,10 +18,21 @@
 \maketitle
 
 \begin{abstract}
-Abstract of this paper and what I plan to write in it
+
+\noindent Abstract of this paper and what I plan to write in it.
+This will explain the whole bit about there being a tradeoff in content recovery and self embedding and that I will attempt to make that tradeoff smaller by trying to apply a well researched high capacity embedding algorithm to this problem etc.
+
 \end{abstract}
 
 \section{Introduction}
+A short introduction into the wonderfull world of fragile watermarking, self embedding and image recovery. Attempt to make this interesting...
+It whould also probably be beneficial to mention how the paper will be structured. 
+That I will first research the current self embedding and content recovery methods. 
+Then mention that I will also research the high capacity embedding algorithms and evaluate their aplicability to my current problem. 
+I will then start with my experiment and all the things that will contain. 
+I will finally analyse my findings and draw conclusions based on my research and my experimental findings. 
+This will involve evaluating if the proposed mehtod does indeed increase quality and wasn't just a waste of time. 
+Although that would tecnically be a finding as well. 
 
 \section{Current self embedding and recovery schemes and algorithms}
 
@@ -50,7 +62,18 @@ The authors did not do any statistical analysis on the image.
 The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the recovery the quality of the image, before and after recovery, is still very good even without a very high embedding capacity.  
 
 \hspace{0pt} \\
-\cite {tian2003high} Proposed a method that is really quite interesting
+\cite {tian2003high} Proposed a method that uses difference expansion and generalized LSB embedding.
+The method uses these two techniques in combination to achieve a high embedding capacity while keeping destortion relatively low.
+The method achieves a PSNR \textgreater 35dB after embedding.
+The method achieves a embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit greyscale version of the Lena image.
+
+\hspace{0pt} \\
+The method's restoration quality is acceptable at roughly 50\%. 
+The difference expansion this method uses provides extra space for embedding.
+The authors did thus not impliment compression on the image data because of the extra space the differece expansion provides.
+The embedding capacity of this method could thus be further improved by compressing the embedded data. This could possibly lead to better quality than what their experimental results achieved at the expense of complexity.
+
+The authors do not mention the image tamper rate that this method allows.
 
 \bibliography{main}
 \bibliographystyle{plain}

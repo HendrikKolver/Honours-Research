@@ -3,8 +3,8 @@ Honours-Research
 
 Used for honours research paper/s
 
-The Papers folder is used for research findings and rough work
+The research folder is used to store all relevant papers to the project and contains my research
 
-The MainResearch folder is used for the main research paper and is the final artifact
+The Paper folder is used for the main research paper (main.tex) and bibliography (main.bib) 
 
 The Experiments folder is used for any relevant coding experiments
