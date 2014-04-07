@@ -26,7 +26,8 @@ image self embedding with high quality restoration capability
 	
 High capacity reversible data embedding and content authentication
 	- uses difference expansion (reference 7) and LSB embedding (reference 2)
-	-Reference [6] difference expansion.
+	-Reference [7] difference expansion.
+
 	
 Fragile Watermarking With Error-Free Restoration Capability
 	- This scheme looks promising but the problem is the quality of the cover image.
@@ -37,6 +38,21 @@ Fragile Watermarking With Error-Free Restoration Capability
 		just to get good quality
 	- Because of this problem I would also say that the security is not very good because of the 
 	visual distortion you can see something is wrong with the image.
+
+----------------------------------------
+Reversible and fragile watermarking
+----------------------------------------
+
+Reversible watermarking by difference expansion
+	-This technique bassically eliminates the need for compression of the content data to be embedded in
+	the watermarked image in order to reverse because it exploits the high redundancy in images. It embeds its
+	payload in the difference of pixel values. for a pair of pixel values (x,y).
+
+	I do however notice drastic quality degradation as the payload gets larger and larger.
+
+Wavelet-based reversible watermarking for authentication
+	--TODO
+
 	
 -----------------------------------------
 Steganography Algorithms

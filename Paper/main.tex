@@ -8,6 +8,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[margin=0.5in]{geometry}
 
+
 \title{High quality content reconstruction in images using a high capacity self-embedding algorithm}
 
 \author{Hendrik J Kolver}
@@ -63,6 +64,10 @@ The embedding capacity of this method is also acceptable, but because the method
 
 \hspace{0pt} \\
 \cite {tian2003high} Proposed a method that uses difference expansion and generalized LSB embedding.
+Difference expansion works by exploiting the high redundancy that are present in images.
+With difference expansion the payload is embedded in the difference of pixel values. 
+For a pair of pixel values (x,y). \cite {tian2002reversible}
+It should however be noted that image quality reduces rapidly as the payload size is increased when using difference expansion. 
 The method uses these two techniques in combination to achieve a high embedding capacity while keeping distortion relatively low.
 The method achieves a PSNR \textgreater 35dB after embedding.
 The method achieves an embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.

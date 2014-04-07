@@ -5,4 +5,5 @@ Paper/*.dvi
 Paper/*.log
 Paper/*.synctex.gz
 Paper/*.tex.undo
+Paper/*.bat
 
