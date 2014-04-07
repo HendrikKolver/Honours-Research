@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[11pt]{article}
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -8,7 +8,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[margin=0.5in]{geometry}
 
-\title{High quality content reconstruction in images using a high capacity self-embedding algorihm}
+\title{High quality content reconstruction in images using a high capacity self-embedding algorithm}
 
 \author{Hendrik J Kolver}
 
@@ -20,57 +20,57 @@
 \begin{abstract}
 
 \noindent Abstract of this paper and what I plan to write in it.
-This will explain the whole bit about there being a tradeoff in content recovery and self embedding and that I will attempt to make that tradeoff smaller by trying to apply a well researched high capacity embedding algorithm to this problem etc.
+This will explain the whole bit about there being a trade off in content recovery and self embedding and that I will attempt to make that trade off smaller by trying to apply a well researched high capacity embedding algorithm to this problem etc.
 
 \end{abstract}
 
 \section{Introduction}
-A short introduction into the wonderfull world of fragile watermarking, self embedding and image recovery. Attempt to make this interesting...
-It whould also probably be beneficial to mention how the paper will be structured. 
+A short introduction into the wonderful world of fragile watermarking, self embedding and image recovery. Attempt to make this interesting...
+It would also probably be beneficial to mention how the paper will be structured. 
 That I will first research the current self embedding and content recovery methods. 
-Then mention that I will also research the high capacity embedding algorithms and evaluate their aplicability to my current problem. 
+Then mention that I will also research the high capacity embedding algorithms and evaluate their applicability to my current problem. 
 I will then start with my experiment and all the things that will contain. 
-I will finally analyse my findings and draw conclusions based on my research and my experimental findings. 
-This will involve evaluating if the proposed mehtod does indeed increase quality and wasn't just a waste of time. 
-Although that would tecnically be a finding as well. 
+I will finally analyze my findings and draw conclusions based on my research and my experimental findings. 
+This will involve evaluating if the proposed method does indeed increase quality and wasn't just a waste of time. 
+Although that would technically be a finding as well. 
 
 \section{Current self embedding and recovery schemes and algorithms}
 
 This section compares current Content reconstruction algorithms using self embedding.
-This serves to give an overview of what is currently available and to possibly highlight shortcommings of the current algorithms.
-This would be usefull to determine if the proposed method does indeed improve on existing methods. 
-It would also help highlight strenghts and shortcommings in the proposed method.
+This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
+This would be useful to determine if the proposed method does indeed improve on existing methods. 
+It would also help highlight strengths and shortcomings in the proposed method.
 
 \subsection{Overview}
 
-The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content recostruction problem.
-The method uses LSB embedding to embed the refernce data into the image itself.
-The method also uses a global spreading technique to spead the reference data across the image.
+The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
+The method uses LSB embedding to embed the reference data into the image itself.
+The method also uses a global spreading technique to spread the reference data across the image.
 They also propose that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after recovery.
 
 \hspace{0pt} \\
 The method proposed in \cite {korus2013efficient} achieves good quality cover images with a PSNR \textgreater 35dB. 
-The method also achives an image recovery quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with taper rates of 50\% and 33\% respectively.
+The method also achieves an image recovery quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with taper rates of 50\% and 33\% respectively.
 The method does not let the restoration quality of the image deteriorate much if the tampering rate is increased up to a value of 50\%.
-They do however note that they can only achieve minimal reconstruction performace increases by decreasing the amount of information in the reconstruction reference.
+They do however note that they can only achieve minimal reconstruction performance increases by decreasing the amount of information in the reconstruction reference.
 By using only 50\% of the available capacity the maximal tampering rate increases form 50\% to 59\%.
 
 \hspace{0pt} \\
-This method \cite {korus2013efficient} is thus quite robust since 50\% of the image may be tampered wiht before recovery starts to deteriorate.
-The security for this method is also very good since the quality of the cover image is not very suceptible to visual checks.
+This method \cite {korus2013efficient} is thus quite robust since 50\% of the image may be tampered with before recovery starts to deteriorate.
+The security for this method is also very good since the quality of the cover image is not very susceptible to visual checks.
 The authors did not do any statistical analysis on the image.
 The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the recovery the quality of the image, before and after recovery, is still very good even without a very high embedding capacity.  
 
 \hspace{0pt} \\
 \cite {tian2003high} Proposed a method that uses difference expansion and generalized LSB embedding.
-The method uses these two techniques in combination to achieve a high embedding capacity while keeping destortion relatively low.
+The method uses these two techniques in combination to achieve a high embedding capacity while keeping distortion relatively low.
 The method achieves a PSNR \textgreater 35dB after embedding.
-The method achieves a embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit greyscale version of the Lena image.
+The method achieves an embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
 
 \hspace{0pt} \\
 The method's restoration quality is acceptable at roughly 50\%. 
 The difference expansion this method uses provides extra space for embedding.
-The authors did thus not impliment compression on the image data because of the extra space the differece expansion provides.
+The authors did thus not implement compression on the image data because of the extra space the difference expansion provides.
 The embedding capacity of this method could thus be further improved by compressing the embedded data. This could possibly lead to better quality than what their experimental results achieved at the expense of complexity.
 
 The authors do not mention the image tamper rate that this method allows.

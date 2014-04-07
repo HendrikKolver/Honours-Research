@@ -1,0 +1,8 @@
+Paper/*.aux
+Paper/*.bbl
+Paper/*.blg
+Paper/*.dvi
+Paper/*.log
+Paper/*.synctex.gz
+Paper/*.tex.undo
+
