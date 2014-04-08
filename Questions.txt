@@ -1,0 +1,10 @@
+Questions
+
+-Amount of detail with which to do studies on other papers
+-Format of final paper
+-Length of final paper
+-How to choose a appropriate high capacity algorithm
+-How to do experiment as to keep all other variables static as far as possible
+-Do I need to impliment others or can I compare to their papers findings
+-What to do about papers that make claims but do not quantify them
+-How these meetings will work form here on forward
