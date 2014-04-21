@@ -6,7 +6,7 @@
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[T1]{fontenc}
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=1.0in]{geometry}
 
 
 \title{High quality content reconstruction in images using a high capacity self-embedding algorithm}
@@ -25,6 +25,8 @@ This will explain the whole bit about there being a trade off in content recover
 
 \end{abstract}
 
+\tableofcontents
+
 \section{Introduction}
 A short introduction into the wonderful world of fragile watermarking, self embedding and image recovery. Attempt to make this interesting...
 It would also probably be beneficial to mention how the paper will be structured. 
@@ -41,9 +43,13 @@ This section compares current Content reconstruction algorithms using self embed
 This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
 This would be useful to determine if the proposed method does indeed improve on existing methods. 
 It would also help highlight strengths and shortcomings in the proposed method.
+The methods analyzed were chosen because they all provide good quality cover and reconstructed images.
+They also each offer an unique approach or aspect to the image recovery problem and would thus provide a good idea of the different approaches that have already been tested.
 
 \subsection{Overview}
 
+\subsubsection{Erasure channel model utilizing the remaining authentic content}
+\label{ErasureChannelOverview}
 The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
 The method uses LSB embedding to embed the reference data into the image itself.
 The method also uses a global spreading technique to spread the reference data across the image.
@@ -62,7 +68,8 @@ The security for this method is also very good since the quality of the cover im
 The authors did not do any statistical analysis on the image.
 The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the recovery the quality of the image, before and after recovery, is still very good even without a very high embedding capacity.  
 
-\hspace{0pt} \\
+\subsubsection{Method using difference expansion}
+\label{differenceExpansionOverview}
 \cite {tian2003high} Proposed a method that uses difference expansion and generalized LSB embedding.
 Difference expansion works by exploiting the high redundancy that are present in images.
 With difference expansion the payload is embedded in the difference of pixel values. 
@@ -73,12 +80,58 @@ The method achieves a PSNR \textgreater 35dB after embedding.
 The method achieves an embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
 
 \hspace{0pt} \\
-The method's restoration quality is acceptable at roughly 50\%. 
+The method's \cite {tian2003high} restoration quality is acceptable at roughly 50\%. 
 The difference expansion this method uses provides extra space for embedding.
 The authors did thus not implement compression on the image data because of the extra space the difference expansion provides.
 The embedding capacity of this method could thus be further improved by compressing the embedded data. This could possibly lead to better quality than what their experimental results achieved at the expense of complexity.
+Difference expansion thus seems a good solution to increase the embedding capacity while still keeping the distortion low.
 
-The authors do not mention the image tamper rate that this method allows.
+\hspace{0pt} \\ 
+The authors do not mention the image tamper rate that this method \cite {tian2003high} allows.
+
+\subsubsection{Dynamic block allocation for self embedding}
+\label{DynamicBlockOverview}
+(Qian et al) \cite{qian2011image} proposes a method for fragile watermarking with good restoration capabilities using self embedding.
+The proposed method differs from the other methods mention in \ref{ErasureChannelOverview} and \ref{differenceExpansionOverview} due to the fact that the proposed method does not embed the information into all blocks uniformly.
+The proposed method classifies different blocks of the image according to the block smoothness.
+The less smooth the block is the more information will be embedded into it.
+The authors argue that the current methods that use a fixed embedding size for each block are inadequate since less information should be embedded into the very smooth blocks and more should be embedded into the rough blocks \cite{qian2011image}.
+
+\hspace{0pt} \\
+The advantage of using this dynamic scheme is that there would be less visual distortion to the cover image. 
+This is because if the specific block is already very rough (very busy visually) the human eye would not notice small changes.
+If however the specific block is very smooth (very uniform visually) the human eye is more likely to notice small changes.
+The proposed method thus creates less distortion in the cover image than fixed size methods while still retaining good restoration quality \cite{qian2011image}. 
+
+\hspace{0pt} \\
+The method proposed by (Qian et al) \cite{qian2011image} uses the 3 LSB bit planes to embed the needed information in.
+The method achieves good results in experimentation with a cover image PSNR \textgreater 37dB as well as a reconstructed image PSNR = 35dB.
+The method also allows for a tamper rate \textless 35\%.
+The authors do not analyze the security of the algorithm.
+
+\subsection{Comparison}
+Each of the methods described in \ref{DynamicBlockOverview}, \ref{ErasureChannelOverview} and \ref{differenceExpansionOverview} provide good quality cover images as well as good quality reconstructed images.
+There are however important differences.
+The method described in \ref{ErasureChannelOverview} offers a very good tamper rate of 50\% compared to the method described in \ref{DynamicBlockOverview} which has a tamper rate of 35\%.
+This means that a larger of the cove image can be tampered with while still being able to restore the image with good quality.
+
+\hspace{0pt} \\
+The method described in \ref{differenceExpansionOverview} achieves a cover image with a PSNR \textgreater 35dB, the method described in \ref{ErasureChannelOverview} achieves similar results, however the method described in \ref{DynamicBlockOverview} achieves a cover image PSNR \textgreater 37dB.
+This means that the method described in \ref{DynamicBlockOverview} would have less noise in the cover images after embedding and would thus have better overall quality of the cover images.
+
+\hspace{0pt} \\
+At almost equal tamper rates of around 33\%-35\% the method described in \ref{ErasureChannelOverview} achieves a restoration PSNR \textgreater 40dB whereas the method described in \ref{DynamicBlockOverview} only achieves a restoration PSNR = 35dB.
+The method described in \ref{differenceExpansionOverview} only achieves a restoration quality of about 50\% the original image.
+This means that the method described in \ref{ErasureChannelOverview} would generally produce better quality restored images than the methods described in \ref{DynamicBlockOverview} and \ref{differenceExpansionOverview}.
+
+\hspace{0pt} \\
+This means that the method described in \ref{ErasureChannelOverview} provides the best tamper rate and the best restored image quality, and the method described in \ref{DynamicBlockOverview} provides the best cover image quality.
+The method described in \ref{differenceExpansionOverview} provides decent quality of the cover image as well as the restored image.
+
+\hspace{0pt} \\
+All three methods thus provide good results and would serve as a good benchmark for comparing the method described later in this paper.
+
+  
 
 \bibliography{main}
 \bibliographystyle{plain}
