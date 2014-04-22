@@ -28,14 +28,38 @@ This will explain the whole bit about there being a trade off in content recover
 \tableofcontents
 
 \section{Introduction}
-A short introduction into the wonderful world of fragile watermarking, self embedding and image recovery. Attempt to make this interesting...
-It would also probably be beneficial to mention how the paper will be structured. 
-That I will first research the current self embedding and content recovery methods. 
-Then mention that I will also research the high capacity embedding algorithms and evaluate their applicability to my current problem. 
-I will then start with my experiment and all the things that will contain. 
-I will finally analyze my findings and draw conclusions based on my research and my experimental findings. 
-This will involve evaluating if the proposed method does indeed increase quality and wasn't just a waste of time. 
-Although that would technically be a finding as well. 
+This section gives a brief description of the concepts used in this report.
+The reasoning behind the proposed method will also be explained in \ref{introQualityIncrease} and \ref{introHighCap}.
+This will serve to to show the applicability of the proposed method as well as the shortcomings it attempts to address. 
+
+\subsection{Overview}
+Self recovering images (described in \ref{introSelfEmbedRecovery}) poses an interesting problem.
+There is an inherent trade-off (described in \ref{introQualityTrade}) between the quality of the image after embedding and the quality of the image after recovery.
+This report proposes a method in which a high capacity embedding algorithm (described in \ref{introHighCap}) is applied to the problem of self-recovering images to attempt to increase the quality of the images (described in \ref{introQualityIncrease}) both after embedding and after recovery.
+
+
+\subsection{Steganography}
+\label{introSteganography}
+Steganography is the process of hiding information in such a way that it does not get detected \cite{johnson1998exploring}.
+Steganography, derived from Greek means "covered writing".
+This means it differs from cryptography which does not attempt to hide information but merely scrambles it so it cannot be understood.
+Steganography does not scramble the information but rather relies on the information to remain hidden. 
+
+\subsection{Fragile Watermarking}
+\label{introFragWatermarking}
+
+
+\subsection{Self embedding and recovery}
+\label{introSelfEmbedRecovery}
+
+\subsection{Quality Trade-off}
+\label{introQualityTrade}
+
+\subsubsection{Increasing quality with capacity}
+\label{introQualityIncrease}
+
+\subsubsection{High capacity embedding algorithms}
+\label{introHighCap}
 
 \section{Current self embedding and recovery schemes and algorithms}
 
