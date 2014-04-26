@@ -20,8 +20,8 @@
 
 \begin{abstract}
 
-\noindent Abstract of this paper and what I plan to write in it.
-This will explain the whole bit about there being a trade off in content recovery and self embedding and that I will attempt to make that trade off smaller by trying to apply a well researched high capacity embedding algorithm to this problem etc.
+\noindent Abstract of this paper and what I wrote in it.
+This will give the reader a short overview of what they can expect to find in this paper.
 
 \end{abstract}
 
@@ -47,19 +47,61 @@ Steganography does not scramble the information but rather relies on the informa
 
 \subsection{Fragile Watermarking}
 \label{introFragWatermarking}
-
+Fragile watermarking is a variation of traditional watermarking where a watermark is embedded into an image such that subsequent alterations to the watermarked image can be detected with high probability \cite{lin1999review}.
+This means that if modifications are made to the watermarked image it would be possible to detect that modifications were made as well as what parts of the image were modified.
+This is a necessary component in self recovering images because in order to be able to recover image data it first needs to be determined what data needs to be recovered.
+It thus needs to be know what data was modified.
+A fragile watermark is used for this purpose. 
 
 \subsection{Self embedding and recovery}
 \label{introSelfEmbedRecovery}
+Self embedding is a scheme where image content is embedded into the image itself. This embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself \cite{fridrich1999images}.
+A self embedding and recovery scheme such as the proposed method contains a couple of high level steps.
+Firstly the authentic image content is embedded into the original image along with a fragile watermark.
+This watermark will help determine later on which parts of the image was modified if any (see \ref{introFragWatermarking}).
+When the authentic image needs to be recovered, after modification, the fragile watermark is used to determine which content was modified.
+An attempt is then made to extract the original content for the areas that were modified from the modified image.
+If this process is successful the user is left with a high quality reconstruction of the original image.
 
 \subsection{Quality Trade-off}
 \label{introQualityTrade}
+There is an inherent quality trade-off present within self embedding schemes.
+The trade-off exists between the image after embedding and the image after recovery.
+If an embedding algorith such as LSB(Least significan bit) embedding is used (as in \ref{ErasureChannelOverview}) the actual bit values of the original image are overwritten.
+Naturally the more bit values are overwritten the more noise is introduced into the image.
+This effectively reduces the quality of the image after embedding.
+
+\hspace{0pt} \\
+The solution to this would be to simply embed a small amount of information into the image to keep the noise low.
+However this presents another problem.
+The quality of the image after recovery is dependent on the amount of authentic image data embedded into the image.
+
+\hspace{0pt} \\
+To achieve maximum quality after embedding the embedded information must be as little as possible.
+To achieve maximum quality after recover the embedded information must be as large as possible to be as close as possible to the original image.
+There exists then a trade-off between the two.
 
 \subsubsection{Increasing quality with capacity}
 \label{introQualityIncrease}
+It might be possible to increase the quality of the image after recovery while still keeping the quality after embedding high.
+It is proposed that applying an embedding algorithm designed for high capacity while retaining quality (as discussed in \ref{introHighCap}) to the problem of self embedding could possibly increase the quality of the image after embedding as well as after recovery.
+This is because such an algorithm should provide higher embedding capacity while producing less noise in the image. 
+ 
 
 \subsubsection{High capacity embedding algorithms}
 \label{introHighCap}
+The proposed method in this paper attempts to apply the algorithm for BPCS Steganography \cite{beaullieubpcs} to the problem of self recovering images, specifically to increase overall quality.
+
+\hspace{0pt} \\
+The goal of the BPCS algorithm is to embed as much data as possible into a cover image without detection \cite{beaullieubpcs}.
+This refers to detection by human perception as well as statistical analysis although the latter is not the focus of this paper.
+The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding (similar to \ref{DynamicBlockOverview}).
+BPCS steg differs however in the fact that the blocks can be conjugated in a checker board pattern to increase complexity and decrease detectability if needs be.
+
+\hspace{0pt} \\
+The BPCS algorithm can achieve a very high capacity while still remaining undetectable through human perception.
+This makes the BPCS algorithm a possible good choice to increase the capacity of a self recovering image scheme and possible increase the quality through this process.
+
 
 \section{Current self embedding and recovery schemes and algorithms}
 
