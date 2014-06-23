@@ -7,3 +7,6 @@ Paper/*.synctex.gz
 Paper/*.tex.undo
 Paper/*.bat
 
+/HonoursResearchApplication/nbproject/private/
+/Experiments/HonoursResearchApplication/build/
+/Experiments/HonoursResearchApplication/dist/
