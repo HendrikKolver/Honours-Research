@@ -18,11 +18,20 @@ public class SelfEmbed {
         ArrayList<Block> blockList = getBlocks(image);
         int suitableBlockCount = 0;
         for(Block block : blockList){
-            if(block.getComplexity()>0.1){
+            if(block.getComplexity()>0.3){
                 suitableBlockCount++;
             }
         }
-        System.out.println("There are "+suitableBlockCount+ " complex blocks");
+        System.out.println("There are "+suitableBlockCount+ " complex blocks out of: "+ blockList.size() + " blocks");
+        double embeddingCapacity = 0;
+        embeddingCapacity = ((suitableBlockCount *((8*8)-1))*3);
+        System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
+        ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
+        return null;
+    }
+    
+    public static ArrayList<Block> divideMessageIntoBlocks()
+    {
         return null;
     }
     
@@ -74,7 +83,7 @@ public class SelfEmbed {
         return blockList;
     }
     
-        public String getBinary(String value)
+    public static String getBinary(String value)
     {
        
         byte[] bytes = value.getBytes();
@@ -91,6 +100,33 @@ public class SelfEmbed {
         }
         
         return binary.toString();
+    }
+    
+    public static Block conjugateBlock(Block block)
+    {
+        char compareValue= '0';
+        char [][][] blockValues = block.getBlock();
+        for (int i = 0; i < block.getBlockSize(); i++) {
+            if(i == 0 | i%2==0){
+               compareValue='1'; 
+            }
+            else{
+               compareValue='0'; 
+            }
+            for (int j = 0; j < block.getBlockSize(); j++) {
+                if(blockValues[0][i][j] == compareValue)
+                  blockValues[0][i][j] = '0';
+                else
+                  blockValues[0][i][j] = '1';
+                
+                if(compareValue == '0')
+                    compareValue = '1';
+                else
+                    compareValue = '0';   
+            }
+        }
+        block.setBlock(blockValues);
+        return block;
     }
     
 }

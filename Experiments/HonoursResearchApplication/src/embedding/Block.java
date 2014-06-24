@@ -6,7 +6,7 @@ package embedding;
  */
 public class Block {
     private char[][][] block;
-    private int blockSize = 8;
+    private final int blockSize = 8;
     private double complexity = 0;
 
     public Block() {
