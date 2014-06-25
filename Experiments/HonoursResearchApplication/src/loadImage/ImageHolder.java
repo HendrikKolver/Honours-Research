@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
  * @author Hendrik
  */
 public class ImageHolder {
-    private Image image;
+    private MyImage image;
 
     public ImageHolder() {
         image = null;
@@ -52,14 +52,14 @@ public class ImageHolder {
             }
         }
        
-        image = new Image();
+        image = new MyImage();
         image.setImagePixels(colorArray);
         image.setBitPlanePixels(bitPlanesPixels);
     }
     
     
     
-    public Image getImage() {
+    public MyImage getImage() {
         return image;
     }
     

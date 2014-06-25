@@ -2,8 +2,9 @@ package embedding;
 
 import java.awt.Color;
 import java.awt.List;
+import java.io.IOException;
 import java.util.ArrayList;
-import loadImage.Image;
+import loadImage.MyImage;
 import static loadImage.ImageHolder.encodeGray;
 
 /**
@@ -14,7 +15,7 @@ public class SelfEmbed {
     private static int cornerRow =0;
     private static int cornerCol=0;
     
-    public static Image selfEmbed(Image image){
+    public static MyImage selfEmbed(MyImage image) throws IOException{
         ArrayList<Block> blockList = getBlocks(image);
         int suitableBlockCount = 0;
         for(Block block : blockList){
@@ -24,7 +25,10 @@ public class SelfEmbed {
         }
         System.out.println("There are "+suitableBlockCount+ " complex blocks out of: "+ blockList.size() + " blocks");
         double embeddingCapacity = 0;
-        embeddingCapacity = ((suitableBlockCount *((8*8)-1))*3);
+        //actual capacity
+        //embeddingCapacity = ((suitableBlockCount *((8*8)-1))*3);
+        //capacity avaliable with my block wise embedding fasion
+        embeddingCapacity = (suitableBlockCount *186);
         System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
         ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
         return null;
@@ -35,7 +39,7 @@ public class SelfEmbed {
         return null;
     }
     
-    public static ArrayList<Block> getBlocks(Image image)
+    public static ArrayList<Block> getBlocks(MyImage image)
     {
         ArrayList<Block> blockList = new ArrayList<>();
         while(cornerRow <512 && cornerCol <512){
