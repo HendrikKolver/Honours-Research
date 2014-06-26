@@ -8,6 +8,8 @@ public class Block {
     private char[][][] block;
     private final int blockSize = 8;
     private double complexity = 0;
+    public int lsbLayer = 0;
+    public boolean message = false;
 
     public Block() {
         this.block = new char[3][blockSize][blockSize];

@@ -52,6 +52,11 @@ Reversible watermarking by difference expansion
 
 Wavelet-based reversible watermarking for authentication
 	--TODO
+	
+Secret and public key authentication watermarking schemes that resist vector quantization attack
+	--TODO (wong2000secret)
+	-Creates a checksum hash of the 7 msb layers of a block and embeds that in the lsb of that block.
+	- I will create a similiar system but will adapt it to use the 4 empty bits that are left over in my embedding
 
 	
 -----------------------------------------

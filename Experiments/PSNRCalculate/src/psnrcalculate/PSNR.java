@@ -16,7 +16,7 @@ public class PSNR {
     nrows = 8;
     ncols = 8;
     img1 = getImageRGB("originalBlock.bmp",0);
-    img2 = getImageRGB("scaledBlock.bmp",0);
+    img2 = getImageRGB("reAssembledAndSavedImage.bmp",0);
     
 
     signalr = noiser = peakr = 0;
@@ -30,7 +30,7 @@ public class PSNR {
     }
     
     img1 = getImageRGB("originalBlock.bmp",1);
-    img2 = getImageRGB("scaledBlock.bmp",1);
+    img2 = getImageRGB("reAssembledAndSavedImage.bmp",1);
     
 
     signalg = noiseg = peakg = 0;
@@ -44,7 +44,7 @@ public class PSNR {
     }
     
     img1 = getImageRGB("originalBlock.bmp",2);
-    img2 = getImageRGB("scaledBlock.bmp",2);
+    img2 = getImageRGB("reAssembledAndSavedImage.bmp",2);
     
 
     signalb = noiseb = peakb = 0;

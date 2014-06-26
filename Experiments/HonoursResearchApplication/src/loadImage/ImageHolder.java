@@ -22,7 +22,6 @@ public class ImageHolder {
         File img = new File(path);
         BufferedImage bufferedImage = ImageIO.read(img);
         Color colorArray[][] = new Color[bufferedImage.getHeight()][bufferedImage.getWidth()];
-        
         char[][][][] bitPlanesPixels = new char[8][3][bufferedImage.getHeight()][bufferedImage.getWidth()];
        
         for (int i = 0; i < bufferedImage.getHeight(); i++) {
@@ -31,6 +30,7 @@ public class ImageHolder {
                 
                 //Red colour planes
                 //Get binary representaion in grey coding
+                
                 String colourBinary = getBinary(encodeGray(colorArray[i][j].getRed()));
                 for (int k = 0; k < 8; k++) {
                     bitPlanesPixels[k][0][i][j] = colourBinary.charAt(k);  

@@ -2,8 +2,11 @@ package embedding;
 
 import java.awt.Color;
 import java.awt.List;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import loadImage.MyImage;
 import static loadImage.ImageHolder.encodeGray;
 
@@ -14,15 +17,21 @@ import static loadImage.ImageHolder.encodeGray;
 public class SelfEmbed {
     private static int cornerRow =0;
     private static int cornerCol=0;
+    //0.636
+    private static final double embeddingRate = 0.3;
     
     public static MyImage selfEmbed(MyImage image) throws IOException{
         ArrayList<Block> blockList = getBlocks(image);
         int suitableBlockCount = 0;
+        int lsbPlane = 0;
         for(Block block : blockList){
-            if(block.getComplexity()>0.3){
+            if(block.getComplexity()>embeddingRate && block.lsbLayer!=7){
+                if(block.lsbLayer==7)
+                   lsbPlane++; 
                 suitableBlockCount++;
             }
         }
+        
         System.out.println("There are "+suitableBlockCount+ " complex blocks out of: "+ blockList.size() + " blocks");
         double embeddingCapacity = 0;
         //actual capacity
@@ -30,17 +39,109 @@ public class SelfEmbed {
         //capacity avaliable with my block wise embedding fasion
         embeddingCapacity = (suitableBlockCount *186);
         System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
-        ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
+        ArrayList<Block> messageBlocks = ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
+        ArrayList<Block> embeddedImageList = embedMessage(blockList,messageBlocks);
+        reAssembleImage(blockList);
         return null;
     }
     
-    public static ArrayList<Block> divideMessageIntoBlocks()
-    {
-        return null;
+    public static ArrayList<Block> embedMessage(ArrayList<Block> imageBlocks,ArrayList<Block> messageBlocks){
+        //TODO
+        //remember the message is not in grey code
+        int messageBlockCount =0;
+        for (int i = 0; i < imageBlocks.size(); i++) {
+            if(imageBlocks.get(i).getComplexity()>embeddingRate){
+                imageBlocks.set(i, messageBlocks.get(messageBlockCount));
+                messageBlockCount++;
+            }
+            if(messageBlockCount==messageBlocks.size())
+                break;
+        }
+        return imageBlocks;
     }
+         
+    
+    public static void reAssembleImage(ArrayList<Block> blocks) throws IOException{
+        int blockLayerCount = 0;
+        int row = 0;
+        int col = 0;
+        int rowCorner=0;
+        int colCorner=0;
+        int bitsExtracted = 0;
+        Color[][] imageColors = new Color[512][512];
+        String[][][] PixelValue = new String[3][8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                PixelValue[0][i][j] = "";
+                PixelValue[1][i][j] = "";
+                PixelValue[2][i][j] = "";
+            } 
+        }
+        
+        for(Block block : blocks){
+            if(block.getComplexity()<embeddingRate && block.message)
+                block = conjugateBlock(block);
+            
+            char[][][] blockContent = block.getBlock();
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    
+                    PixelValue[0][i][j] += blockContent[0][i][j];
+                    PixelValue[1][i][j] += blockContent[1][i][j];
+                    PixelValue[2][i][j] += blockContent[2][i][j];
+                }
+            } 
+            blockLayerCount++; 
+            
+            if(blockLayerCount>=8)
+            {
+                blockLayerCount=0;
+                col = colCorner;
+                row = rowCorner;
+                
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        int red;
+                        int green;
+                        int blue;
+                        red = decodeGray(Integer.parseInt(PixelValue[0][i][j], 2));
+                        green = decodeGray(Integer.parseInt(PixelValue[1][i][j], 2));
+                        blue = decodeGray(Integer.parseInt(PixelValue[2][i][j], 2));
+
+                        Color pixelColor = new Color(red,green,blue);
+                        imageColors[row][col] = pixelColor;
+                        
+                        col++;
+                        if(col >= colCorner+8){
+                            col = colCorner;
+                            row++;
+                        }
+                        PixelValue[0][i][j] = "";
+                        PixelValue[1][i][j] = "";
+                        PixelValue[2][i][j] = "";
+                    } 
+                }
+                colCorner+=8;
+                if(colCorner >=512){
+                    colCorner =0;
+                    rowCorner+=8;
+                }
+                
+            }
+        }
+        
+        BufferedImage saveImage = new BufferedImage(512,512,BufferedImage.TYPE_INT_RGB);
+        for (int i = 0; i < 512; i++) {
+            for (int j = 0; j < 512; j++) {
+                saveImage.setRGB(i, j, imageColors[i][j].getRGB());
+            }
+        }
+        boolean success = ImageIO.write(saveImage, "BMP", new File("reAssembledAndSavedImage.bmp"));
+    } 
     
     public static ArrayList<Block> getBlocks(MyImage image)
     {
+        
         ArrayList<Block> blockList = new ArrayList<>();
         while(cornerRow <512 && cornerCol <512){
             int row=0;
@@ -48,7 +149,9 @@ public class SelfEmbed {
             
             ArrayList<Block> tempBlocks = new ArrayList<>();
             for (int k = 0; k < 8; k++) { 
-                tempBlocks.add(new Block());
+                Block tmpLayerBlock = new Block();
+                tmpLayerBlock.lsbLayer = k;
+                tempBlocks.add(tmpLayerBlock);
             }
             
             for (int i = cornerRow; i < cornerRow+8; i++) {
@@ -70,7 +173,7 @@ public class SelfEmbed {
             }
             
             for (int k = 0; k < 8; k++) { 
-                tempBlocks.get(k).calculateComplexity();
+                tempBlocks.get(k).calculateComplexity();               
                 blockList.add(tempBlocks.get(k));
             }
             
@@ -83,7 +186,8 @@ public class SelfEmbed {
             }
             
         }
-        
+        cornerRow = 0;
+        cornerCol =0;
         return blockList;
     }
     
@@ -131,6 +235,15 @@ public class SelfEmbed {
         }
         block.setBlock(blockValues);
         return block;
+    }
+    
+     public static int decodeGray(int gray) {
+        int natural = 0;
+        while (gray != 0) {
+            natural ^= gray;
+            gray >>>= 1;
+        }
+        return natural;
     }
     
 }

@@ -17,7 +17,7 @@ import loadImage.MyImage;
  * @author Hendrik
  */
 public class ImageContentExtractionAndCompression {
-    public static void getCompressedImageContent(MyImage image, double embeddingCapacity) throws IOException{
+    public static ArrayList<Block> getCompressedImageContent(MyImage image, double embeddingCapacity) throws IOException{
         System.out.println(embeddingCapacity );
         /*24 = bit per pixel
         *18 = the two position integers that get embedded
@@ -40,40 +40,44 @@ public class ImageContentExtractionAndCompression {
                 
             }    
         }
-        
-        
-        
+
         BufferedImage scaledBuf = getScaledImage(bufImage,newWidth,newWidth);
         int perBlockCheck = 7;
         String binary = "";
         ArrayList<Block> blockList = new ArrayList<>();
         for (int i = 0; i < scaledBuf.getHeight(); i++) {
             for (int j = 0; j < scaledBuf.getWidth(); j++) {
-                //6 is used because that is the amount of pixels that will be stored per block
+                //7 is used because that is the amount of pixels that will be stored per block
                 if(perBlockCheck%7==0)
                 {
                     //System.out.println("binarysize:" + binary.length());
-                    if(perBlockCheck!=0){
+                    if(perBlockCheck!=0 && !binary.equals("")){
                         blockList.add(makeBlock(binary));
                     }
                     perBlockCheck = 0;
                     binary = "";
                     //binary += binaryImageSize;
                     
-                    binary += getBinary(i,9);
-                    binary += getBinary(j,9);
+                    binary += "0"+getBinary(i,9);
+                    binary += "1"+getBinary(j,9);
                 }
-                    Color pixelColor = new Color(scaledBuf.getRGB(i, j));
-                    binary+=(getBinary(pixelColor.getRed(),8));
-                    binary+=(getBinary(pixelColor.getGreen(),8));
-                    binary+=(getBinary(pixelColor.getBlue(),8));
-                    perBlockCheck++;
+                    
+                Color pixelColor = new Color(scaledBuf.getRGB(i, j));
+
+                binary+=(getBinary(pixelColor.getRed(),8));
+                binary+=(getBinary(pixelColor.getGreen(),8));
+                binary+=(getBinary(pixelColor.getBlue(),8));
+                perBlockCheck++;
                     
                     
             }
-            
+   
         }
-        System.out.println("MessageBlocks: "+blockList.size());
+        scaledBuf = getScaledImage(scaledBuf,512,512);
+        ImageIO.write(scaledBuf, "BMP", new File("scaledBlockNew.bmp"));
+        return blockList;
+        
+        //System.out.println("MessageBlocks: "+blockList.size());
 //        scaledBuf = getScaledImage(scaledBuf,512,512);
 //        System.out.println(ImageIO.write(bufImage, "BMP", new File("originalBlock.bmp")));
 //        ImageIO.write(scaledBuf, "BMP", new File("scaledBlock.bmp"));
@@ -89,6 +93,7 @@ public class ImageContentExtractionAndCompression {
         int rgbCount = 0;
         int rgbNum=0;
         char[][][] grid = new char[3][block.getBlockSize()][block.getBlockSize()];
+        //redLayer
         for (int i = 0; i < block.getBlockSize(); i++) {
             for (int j = 0; j < block.getBlockSize(); j++) {
                 if(count<binary.length())
@@ -98,6 +103,7 @@ public class ImageContentExtractionAndCompression {
                         rgbCount=0;
                     }
                     grid[rgbNum][i][j] = binary.charAt(count);
+                    rgbCount++;
                     count++;
                 }else{
                     break;
@@ -106,7 +112,52 @@ public class ImageContentExtractionAndCompression {
             if(count>=binary.length())
                 break;
         }
+        
+        //greenLayer
+        for (int i = 0; i < block.getBlockSize(); i++) {
+            for (int j = 0; j < block.getBlockSize(); j++) {
+                if(count<binary.length())
+                {
+                    if(rgbCount>=64){
+                        rgbNum++;
+                        rgbCount=0;
+                    }
+                    grid[rgbNum][i][j] = binary.charAt(count);
+                    rgbCount++;
+                    count++;
+                }else{
+                    break;
+                }
+            }
+            if(count>=binary.length())
+                break;
+        }
+        
+        //blueLayer
+        for (int i = 0; i < block.getBlockSize(); i++) {
+            for (int j = 0; j < block.getBlockSize(); j++) {
+                if(count<binary.length())
+                {
+                    if(rgbCount>=64){
+                        rgbNum++;
+                        rgbCount=0;
+                    }
+                    grid[rgbNum][i][j] = binary.charAt(count);
+                    rgbCount++;
+                    count++;
+                }else{
+                   grid[rgbNum][i][j] = '0'; 
+                }
+            }
+            if(count>=binary.length())
+                break;
+        }
+        //System.out.println(rgbCount);
+        
         block.setBlock(grid);
+        block.message = true;
+        
+        block.calculateComplexity();
         return block;
     }
     
