@@ -51,7 +51,7 @@ Reversible watermarking by difference expansion
 	I do however notice drastic quality degradation as the payload gets larger and larger.
 
 Wavelet-based reversible watermarking for authentication
-	--TODO
+	--TODO (Looks promising)
 	
 Secret and public key authentication watermarking schemes that resist vector quantization attack
 	--TODO (wong2000secret)
