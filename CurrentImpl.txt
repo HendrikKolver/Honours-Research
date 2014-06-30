@@ -1,6 +1,6 @@
 This will serve as a breakdown of the current implementation
 
-//TODO means no implementation exists yet
+--TODO means no implementation exists yet
 !- means that further research is still required
 
 --------------
@@ -59,9 +59,10 @@ Extraction/Recovery
 -------------------
 Testing process
 -------------------
-For all testing calculate the PSNR between the original unaltered image and the image that is being tested
+-For all testing calculate the PSNR between the original unaltered image and the image that is being tested
+-Visual analysis on the images must also be completed
 
-Create a test program that can calculate the % of the image that was modified
+--TODO Create a test program that can calculate the % of the image that was modified
 
 1.Compare the Cover image after embedding with the original
 2.Compare the Standalone Compressed image with the original
