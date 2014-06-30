@@ -5,6 +5,7 @@ import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import loadImage.MyImage;
@@ -18,21 +19,20 @@ public class SelfEmbed {
     private static int cornerRow =0;
     private static int cornerCol=0;
     //0.636
-    private static final double embeddingRate = 0.3;
+    private static final double embeddingRate = 0.65;
     
-    public static MyImage selfEmbed(MyImage image) throws IOException{
+    public static MyImage selfEmbed(MyImage image) throws IOException, NoSuchAlgorithmException{
         ArrayList<Block> blockList = getBlocks(image);
         int suitableBlockCount = 0;
         int lsbPlane = 0;
         for(Block block : blockList){
-            if(block.getComplexity()>embeddingRate && block.lsbLayer!=7){
-                if(block.lsbLayer==7)
-                   lsbPlane++; 
+            if(block.getComplexity()>embeddingRate){
                 suitableBlockCount++;
             }
         }
         
         System.out.println("There are "+suitableBlockCount+ " complex blocks out of: "+ blockList.size() + " blocks");
+         
         double embeddingCapacity = 0;
         //actual capacity
         //embeddingCapacity = ((suitableBlockCount *((8*8)-1))*3);
@@ -41,8 +41,28 @@ public class SelfEmbed {
         System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
         ArrayList<Block> messageBlocks = ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
         ArrayList<Block> embeddedImageList = embedMessage(blockList,messageBlocks);
-        reAssembleImage(blockList);
+        embeddedImageList = embedWaterMark(embeddedImageList);
+        reAssembleImage(embeddedImageList);
         return null;
+    }
+    
+    public static ArrayList<Block> embedWaterMark(ArrayList<Block> blockList) throws NoSuchAlgorithmException, IOException{
+        ArrayList<Block> tmpBlockList = new ArrayList<>();
+        String blockBinaryHash;
+        for(Block block: blockList)
+        {
+            System.out.println(block.lsbLayer);
+            if(block.lsbLayer <7)
+                tmpBlockList.add(block);
+            else{
+                //Embed the hash into this block
+                blockBinaryHash = ShaHashHelper.getBlockHash(tmpBlockList);
+                System.out.println("blockBinaryHash: "+ blockBinaryHash);
+                blockBinaryHash = null;
+                tmpBlockList = new ArrayList<>(); 
+            }
+        }
+        return blockList;
     }
     
     public static ArrayList<Block> embedMessage(ArrayList<Block> imageBlocks,ArrayList<Block> messageBlocks){
@@ -51,7 +71,10 @@ public class SelfEmbed {
         int messageBlockCount =0;
         for (int i = 0; i < imageBlocks.size(); i++) {
             if(imageBlocks.get(i).getComplexity()>embeddingRate){
-                imageBlocks.set(i, messageBlocks.get(messageBlockCount));
+                Block imageBlock = imageBlocks.get(i);
+                Block messageBlock = messageBlocks.get(messageBlockCount);
+                messageBlock.lsbLayer = imageBlock.lsbLayer;
+                imageBlocks.set(i, messageBlock);
                 messageBlockCount++;
             }
             if(messageBlockCount==messageBlocks.size())
