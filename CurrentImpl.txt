@@ -1,0 +1,73 @@
+This will serve as a breakdown of the current implementation
+
+//TODO means no implementation exists yet
+!- means that further research is still required
+
+--------------
+Embedding
+--------------
+1.Read Image from file
+2.Apply bpcs steg
+	-convert image to binary
+	-convert binary to grey code
+	-split image into bit planes
+	-split image into blocks of 8x8
+	-find complex enough blocks
+3.Calculate embedding capacity
+4.Resize copy of original image to be able to fit in avaliable space (This is the compression phase
+ that can be improved)
+	-Resize this image back to full size and save (This will be used for testing)
+5.Embed the pixels of the resized image into the suitable blocks
+	-embed 7 pixels per block
+	-embed x and y location (integers) of first of the 7 pixels to know original location
+		-This is needed since blocks might be destroyed and order of the pixels may be lost
+		-every block is thus treated as a seperate embedding vessel
+	-Conjugate message blocks that are not noisy enough
+!-		-possibly use 4 remaining bits in block to indicate it is conjugated or not... 
+!-	-Replace suitable blocks for embedding with embedded blocks (look into how information is spread
+		across the image, possibly randomize this spread or look into an algorithm to facilitate this
+		spread so that pixels will likely not be close to their original counterparts)
+
+--TODO 6.Embed reversible fragile watermark into the lsb block of each 8x8 block of pixels
+	-Use adapted wavelet-based reversible watermarking method 
+7.Reconstruct image from blocks
+	-Convert grey code back to binary
+	-Reconstruct image pixels from binary
+8.Save image to file
+
+-------------------
+Extraction/Recovery
+-------------------
+
+1.Read Image from file
+2.Apply bpcs steg
+	-convert image to binary
+	-convert binary to grey code
+	-split image into bit planes
+	-split image into blocks of 8x8
+--TODO 3.Extract the embedded watermark from the lsb blocks
+	-Check if block is authentic and mark
+--TODO 4.Extract embedded data
+	-For the embedded blocks extract the embedded image data
+!-	-check if conjugated and un-conjugate if needed
+--TODO 5.Reconstruct image from the avaliable extracted pixels
+	-use black of something for the missing pixels
+	-enlarge the image back to original size (part of the compression process again)
+--TODO 6.Replace modified pixels in cover image with the pixels from the extracted image.
+--TODO 7.Save image to file
+
+-------------------
+Testing process
+-------------------
+For all testing calculate the PSNR between the original unaltered image and the image that is being tested
+
+Create a test program that can calculate the % of the image that was modified
+
+1.Compare the Cover image after embedding with the original
+2.Compare the Standalone Compressed image with the original
+3.Compare the recovered image with the original
+
+Start by modifying 1 pixel then 1% of pixels, the 2%,3%,4% etc
+	-modify these pixels randomly first 
+	-photoshop the image in a more normal and natural way of editing as well
+

@@ -4,9 +4,9 @@ At the moment I feel like my current direction and steps to follow would be:
 	Compare strengts and weaknesses
 
 -Study into current High capacity algorithms
-	Compare strengtsh and weaknesses
+	Compare strengtsh and weaknesses 
 
--Choose a prommesing High capacity algorithm
+-Choose a prommesing High capacity algorithm (BPCS Steg)
 -Choose a prommesing self recovery method which I can modify
 
 -Attempt to apply the High capacity algorithm to the modified self recovery problem
@@ -18,4 +18,11 @@ through the cover image as to get good modifiability while still being able to r
 effectively
 
 -Look into if compression is needed or not
+
+//2014/06/30
+-Update Compression needed. (look into compression)
+-Looking at reversible fragile watermarking inorder to detect which blocks are modified.
+	-currently wavelet based reversible watermarking for authentication.
+
+	-looks like a very prommesing method. Will attempt to apply it 
 
