@@ -14,24 +14,12 @@ import java.util.ArrayList;
  * @author Hendrik
  */
 public class ShaHashHelper {
-    public static String getBlockHash(ArrayList<Block> blockList) throws FileNotFoundException, NoSuchAlgorithmException
+    public static String getBlockHash(String binaryString) throws FileNotFoundException, NoSuchAlgorithmException
     {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-        String binaryString ="";
-        for(Block block: blockList){
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                   binaryString+=block.getBlock()[0][i][j];
-                   binaryString+=block.getBlock()[1][i][j];
-                   binaryString+=block.getBlock()[2][i][j];
-                }  
-            }
-        }
+        byte[] array = binaryString.getBytes();
         
-        byte[] array = new BigInteger(binaryString, 2).toByteArray();
-        
-        System.out.println("Length: "+array.length);
         md.update(array, 0, array.length);
         
         String binaryStringFinal = toBinary(md.digest());

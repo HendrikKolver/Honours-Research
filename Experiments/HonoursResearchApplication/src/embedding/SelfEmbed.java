@@ -41,28 +41,64 @@ public class SelfEmbed {
         System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
         ArrayList<Block> messageBlocks = ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
         ArrayList<Block> embeddedImageList = embedMessage(blockList,messageBlocks);
-        embeddedImageList = embedWaterMark(embeddedImageList);
-        reAssembleImage(embeddedImageList);
+        Color[][] reAssembleImageColours = reAssembleImage(embeddedImageList);
+        embedWaterMark(reAssembleImageColours);
+        
         return null;
     }
     
-    public static ArrayList<Block> embedWaterMark(ArrayList<Block> blockList) throws NoSuchAlgorithmException, IOException{
-        ArrayList<Block> tmpBlockList = new ArrayList<>();
+    public static Color[][] embedWaterMark(Color[][] imageGrid) throws NoSuchAlgorithmException, IOException{
         String blockBinaryHash;
-        for(Block block: blockList)
-        {
-            System.out.println(block.lsbLayer);
-            if(block.lsbLayer <7)
-                tmpBlockList.add(block);
-            else{
-                //Embed the hash into this block
-                blockBinaryHash = ShaHashHelper.getBlockHash(tmpBlockList);
-                System.out.println("blockBinaryHash: "+ blockBinaryHash);
-                blockBinaryHash = null;
-                tmpBlockList = new ArrayList<>(); 
+        //calculate hash for each 8x8 block
+        int rowCorner = 0;
+        int colCorner = 0;
+        while(rowCorner <512 && colCorner <512){
+
+            String blockContentString = "";
+
+            
+            //get hash for block
+            for (int i = rowCorner; i < rowCorner+8; i++) {
+                for (int j = colCorner; j < colCorner+8; j++){
+                    blockContentString+= imageGrid[i][j].getRed();
+                    blockContentString+= imageGrid[i][j].getGreen();
+                    blockContentString+= imageGrid[i][j].getBlue();
+                } 
             }
+            
+            //get hash for block
+            blockBinaryHash = ShaHashHelper.getBlockHash(blockContentString);
+            
+            int binaryCount = 0;
+            //embed hash into block
+            for (int i = rowCorner; i < rowCorner+8; i++) {
+                for (int j = colCorner; j < colCorner+8; j+=2){
+                    int redLeft = imageGrid[i][j].getRed();
+                    int greenLeft = imageGrid[i][j].getGreen();
+                    int blueLeft = imageGrid[i][j].getBlue();
+                    
+                    int redRight = imageGrid[i][j+1].getRed();
+                    int greenRight = imageGrid[i][j+1].getGreen();
+                    int blueRight = imageGrid[i][j+1].getBlue();
+                    
+                    //System.out.println("["+redLeft+","+redRight+"]");
+                    int[] newRed = embedFragileWatermark(redLeft,redRight,blockBinaryHash.charAt(binaryCount));
+                    binaryCount++;
+                }  
+            }
+
+            if(colCorner+8 >=512)
+            {
+                colCorner = 0;
+                rowCorner +=8;
+            }else{
+                colCorner+=8;
+            }
+            
         }
-        return blockList;
+        //embed hash in that block
+        //goto next block
+        return imageGrid;
     }
     
     public static ArrayList<Block> embedMessage(ArrayList<Block> imageBlocks,ArrayList<Block> messageBlocks){
@@ -84,7 +120,7 @@ public class SelfEmbed {
     }
          
     
-    public static void reAssembleImage(ArrayList<Block> blocks) throws IOException{
+    public static Color[][] reAssembleImage(ArrayList<Block> blocks) throws IOException{
         int blockLayerCount = 0;
         int row = 0;
         int col = 0;
@@ -159,7 +195,8 @@ public class SelfEmbed {
                 saveImage.setRGB(i, j, imageColors[i][j].getRGB());
             }
         }
-        boolean success = ImageIO.write(saveImage, "BMP", new File("reAssembledAndSavedImage.bmp"));
+        boolean success = ImageIO.write(saveImage, "BMP", new File("reAssembledAndSavedImageBeforeWatermark.bmp"));
+        return imageColors;
     } 
     
     public static ArrayList<Block> getBlocks(MyImage image)
@@ -267,6 +304,99 @@ public class SelfEmbed {
             gray >>>= 1;
         }
         return natural;
+    }
+     
+    private static int[] embedFragileWatermark(int num1, int num2, char binaryBit){
+        //l = avarage, h=difference
+        boolean num1Larger = false;
+        int l = (num1+num2)/2;
+        int h;
+        if(num1>num2){
+            num1Larger=true;
+            h =num1-num2;
+        }
+        else
+            h=num2-num1;
+        
+        //System.out.println("Original bit: "+ binaryBit);
+        //System.out.println("bb["+num1+","+num2+"]");
+        
+        String differenceBinary = getBinary(h);
+        differenceBinary = differenceBinary.substring(0, 1) + binaryBit + differenceBinary.substring(1, differenceBinary.length());
+        int hAfter = Integer.parseInt(differenceBinary, 2);
+        int num1After=0;
+        int num2After=0;
+        if(num1Larger){
+            num1After = l+((hAfter+1)/2);
+            num2After = num1After-hAfter;
+        }
+        else{
+            num2After = l+((hAfter+1)/2);
+            num1After = num2After-hAfter;
+        }
+            
+        
+        //System.out.println("af["+num1After+","+num2After+"]");
+        
+        int testL =(num1After+num2After)/2;
+        int testH;
+        if(num1After>num2After){
+            num1Larger = true;
+            testH =num1After-num2After;
+        }
+        else{
+            num1Larger = false;
+            testH=num2After-num1After;
+        }
+        
+        String differenceBinaryTest = getBinary(testH);
+        String embeddedBitAfter="";
+        int checkHBeforeBitExtracted= Integer.parseInt(differenceBinaryTest, 2);
+        if(differenceBinaryTest.length()==2){
+            embeddedBitAfter += differenceBinaryTest.charAt(1);
+            differenceBinaryTest = ""+differenceBinaryTest.charAt(0);
+            
+        }else if(differenceBinaryTest.length()>2){
+            embeddedBitAfter += differenceBinaryTest.charAt(1);
+            differenceBinaryTest = differenceBinaryTest.substring(0, 1)+ differenceBinaryTest.substring(2, differenceBinaryTest.length());
+        }else
+        {
+          embeddedBitAfter += differenceBinaryTest;  
+        }
+        
+        int hAfterTest = Integer.parseInt(differenceBinaryTest, 2);
+        
+        int num1AfterTest=0;
+        int num2AfterTest=0;
+        if(num1Larger){
+            num1AfterTest = testL+((hAfterTest+1)/2);
+            num2AfterTest = num1AfterTest-hAfterTest;
+        }
+        else if(checkHBeforeBitExtracted==1){
+            num2AfterTest = testL+((hAfterTest+1)/2);
+            num1AfterTest = num2AfterTest-hAfterTest;
+            num2AfterTest = num1AfterTest;
+        }else{
+            num2AfterTest = testL+((hAfterTest+1)/2);
+            num1AfterTest = num2AfterTest-hAfterTest;
+        }
+        
+        if(num2AfterTest!= num2 || num1AfterTest!=num1 || !embeddedBitAfter.contains(binaryBit+""))
+            System.out.println("false");
+        
+         //System.out.println("af2["+num1AfterTest+","+num2AfterTest+"]");
+        // System.out.println("Extracted bit: "+ embeddedBitAfter);
+        int[] newNumbers = new int[2];
+        newNumbers[0] = num1AfterTest;
+        newNumbers[1] = num2AfterTest;
+        
+        return newNumbers;
+    }
+    
+    public static String getBinary(int val)
+    {
+        String binaryValue =Integer.toBinaryString(val);
+        return binaryValue;
     }
     
 }
