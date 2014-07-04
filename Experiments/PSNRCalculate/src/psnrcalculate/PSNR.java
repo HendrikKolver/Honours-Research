@@ -7,16 +7,17 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class PSNR {
-    
+    final static String originalName = "lena.bmp";
+    final static String modifiedName = "finalImage.bmp";
     public static void calculate() throws IOException{
     int     nrows, ncols;
     int     img1[][], img2[][];
     double  peakr,peakg,peakb, signalr,signalg,signalb, noiser,noiseg,noiseb, mse;
 
-    nrows = 8;
-    ncols = 8;
-    img1 = getImageRGB("originalBlock.bmp",0);
-    img2 = getImageRGB("reAssembledAndSavedImage.bmp",0);
+    nrows = 512;
+    ncols = 512;
+    img1 = getImageRGB(originalName,0);
+    img2 = getImageRGB(modifiedName,0);
     
 
     signalr = noiser = peakr = 0;
@@ -29,8 +30,8 @@ public class PSNR {
       }
     }
     
-    img1 = getImageRGB("originalBlock.bmp",1);
-    img2 = getImageRGB("reAssembledAndSavedImage.bmp",1);
+    img1 = getImageRGB(originalName,1);
+    img2 = getImageRGB(modifiedName,1);
     
 
     signalg = noiseg = peakg = 0;
@@ -43,8 +44,8 @@ public class PSNR {
       }
     }
     
-    img1 = getImageRGB("originalBlock.bmp",2);
-    img2 = getImageRGB("reAssembledAndSavedImage.bmp",2);
+    img1 = getImageRGB(originalName,2);
+    img2 = getImageRGB(modifiedName,2);
     
 
     signalb = noiseb = peakb = 0;
@@ -74,7 +75,6 @@ public class PSNR {
     
   public static int[][] getImageRGB(String imagePath, int RGB) throws IOException
   {
-      System.out.println(imagePath);
        File img = new File(imagePath);
        BufferedImage bufferedImage = ImageIO.read(img);
        int[][] imgArray = new int[bufferedImage.getHeight()][bufferedImage.getWidth()];

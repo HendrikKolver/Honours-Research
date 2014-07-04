@@ -1,5 +1,7 @@
 package embedding;
 
+import static extraction.Extract.couldThisbeOutOfBounds;
+import static extraction.Extract.ultimateEmbeddingCheck;
 import java.awt.Color;
 import java.awt.List;
 import java.awt.image.BufferedImage;
@@ -8,8 +10,8 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import loadImage.MyImage;
 import static loadImage.ImageHolder.encodeGray;
+import loadImage.MyImage;
 
 /**
  *
@@ -19,7 +21,7 @@ public class SelfEmbed {
     private static int cornerRow =0;
     private static int cornerCol=0;
     //0.636
-    private static final double embeddingRate = 0.65;
+    private static final double embeddingRate = 0.9;
     
     public static MyImage selfEmbed(MyImage image) throws IOException, NoSuchAlgorithmException{
         ArrayList<Block> blockList = getBlocks(image);
@@ -42,7 +44,8 @@ public class SelfEmbed {
         ArrayList<Block> messageBlocks = ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
         ArrayList<Block> embeddedImageList = embedMessage(blockList,messageBlocks);
         Color[][] reAssembleImageColours = reAssembleImage(embeddedImageList);
-        embedWaterMark(reAssembleImageColours);
+        Color[][] imageColors = embedWaterMark(reAssembleImageColours);
+        saveImageFromColor(imageColors,"finalImage.bmp");
         
         return null;
     }
@@ -82,8 +85,24 @@ public class SelfEmbed {
                     int blueRight = imageGrid[i][j+1].getBlue();
                     
                     //System.out.println("["+redLeft+","+redRight+"]");
-                    int[] newRed = embedFragileWatermark(redLeft,redRight,blockBinaryHash.charAt(binaryCount));
-                    binaryCount++;
+                    WatermarkHelper newRed = embedFragileWatermark(redLeft,redRight,blockBinaryHash.charAt(binaryCount));
+                    if(newRed.isEmbedded)
+                        binaryCount++;
+                    
+                    WatermarkHelper newGreen = embedFragileWatermark(greenLeft,greenRight,blockBinaryHash.charAt(binaryCount));
+                    if(newGreen.isEmbedded)
+                        binaryCount++;
+
+                    WatermarkHelper newBlue = embedFragileWatermark(blueLeft,blueRight,blockBinaryHash.charAt(binaryCount));
+                    if(newBlue.isEmbedded)
+                        binaryCount++;
+                    
+                    //embedding the watermark
+                    Color newFirstColor = new Color(newRed.num1,newGreen.num1,newBlue.num1);
+                    imageGrid[i][j] =newFirstColor;
+                    Color newSecondColor = new Color(newRed.num2,newGreen.num2,newBlue.num2);
+                    imageGrid[i][j+1] =newSecondColor;
+                    
                 }  
             }
 
@@ -96,8 +115,6 @@ public class SelfEmbed {
             }
             
         }
-        //embed hash in that block
-        //goto next block
         return imageGrid;
     }
     
@@ -188,16 +205,19 @@ public class SelfEmbed {
                 
             }
         }
-        
+        saveImageFromColor(imageColors,"reAssembledAndSavedImageBeforeWatermark.bmp");
+        return imageColors;
+    }
+    
+    private static void saveImageFromColor(Color [][] imageColorGrid,String name) throws IOException{
         BufferedImage saveImage = new BufferedImage(512,512,BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < 512; i++) {
             for (int j = 0; j < 512; j++) {
-                saveImage.setRGB(i, j, imageColors[i][j].getRGB());
+                saveImage.setRGB(i, j, imageColorGrid[i][j].getRGB());
             }
         }
-        boolean success = ImageIO.write(saveImage, "BMP", new File("reAssembledAndSavedImageBeforeWatermark.bmp"));
-        return imageColors;
-    } 
+        boolean success = ImageIO.write(saveImage, "BMP", new File(name));
+    }
     
     public static ArrayList<Block> getBlocks(MyImage image)
     {
@@ -306,8 +326,18 @@ public class SelfEmbed {
         return natural;
     }
      
-    private static int[] embedFragileWatermark(int num1, int num2, char binaryBit){
+    private static WatermarkHelper embedFragileWatermark(int num1, int num2, char binaryBit){
         //l = avarage, h=difference
+        if(!ultimateEmbeddingCheck(num1,num2))
+        {
+            //System.out.println("bb["+num1+","+num2+"]");
+            WatermarkHelper helper = new WatermarkHelper();
+            helper.num1 = num1;
+            helper.num2 = num2;
+            helper.isEmbedded = false;
+            return helper;
+        }
+        
         boolean num1Larger = false;
         int l = (num1+num2)/2;
         int h;
@@ -334,7 +364,6 @@ public class SelfEmbed {
             num2After = l+((hAfter+1)/2);
             num1After = num2After-hAfter;
         }
-            
         
         //System.out.println("af["+num1After+","+num2After+"]");
         
@@ -386,11 +415,27 @@ public class SelfEmbed {
         
          //System.out.println("af2["+num1AfterTest+","+num2AfterTest+"]");
         // System.out.println("Extracted bit: "+ embeddedBitAfter);
-        int[] newNumbers = new int[2];
-        newNumbers[0] = num1AfterTest;
-        newNumbers[1] = num2AfterTest;
+
         
-        return newNumbers;
+        if(couldThisbeOutOfBounds(num1After,num2After))
+        {
+          // System.out.println("aa["+num1+","+num2+"]");
+            WatermarkHelper helper = new WatermarkHelper();
+            helper.num1 = num1;
+            helper.num2 = num2;
+            helper.isEmbedded = false;
+            return helper;
+        }
+        
+        
+        
+        
+        WatermarkHelper helper = new WatermarkHelper();
+        helper.num1 = num1After;
+        helper.num2 = num2After;
+        helper.isEmbedded = true;
+        return helper;
+
     }
     
     public static String getBinary(int val)
