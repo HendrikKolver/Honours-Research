@@ -2,11 +2,12 @@ package extraction;
 
 import embedding.Block;
 import embedding.SelfEmbed;
-import static embedding.SelfEmbed.getBinary;
+import static embedding.SelfEmbed.*;
 import static embedding.SelfEmbed.getBinary;
 import embedding.ShaHashHelper;
 import embedding.WatermarkHelper;
 import java.awt.Color;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -37,11 +38,13 @@ public class Extract {
     
     public static Color[][] removeWaterMarkFromImage(Color[][] imageGrid) throws NoSuchAlgorithmException, IOException{
         String blockBinaryHash ="";
+        int confusionCount = 0;
+        int notAuthenticCount = 0;
         //calculate hash for each 8x8 block
         int rowCorner = 0;
         int colCorner = 0;
         while(rowCorner <512 && colCorner <512){
-
+            ArrayList<WatermarkHelper> helperList = new ArrayList<>();
             String blockContentString = "";
             String extractedWatermark = "";
 
@@ -69,12 +72,21 @@ public class Extract {
                     if(newBlue.isEmbedded)
                         extractedWatermark += ""+newBlue.embeddedBit; 
                     
+                    if (newRed.confusion)
+                        confusionCount++;
+                    if (newGreen.confusion)
+                        confusionCount++;
+                    if (newBlue.confusion)
+                        confusionCount++;
                     //restoring the image
                     Color newFirstColor = new Color(newRed.num1,newGreen.num1,newBlue.num1);
                     imageGrid[i][j] =newFirstColor;
                     Color newSecondColor = new Color(newRed.num2,newGreen.num2,newBlue.num2);
                     imageGrid[i][j+1] =newSecondColor;
                     
+                    helperList.add(newRed);
+                    helperList.add(newGreen);
+                    helperList.add(newBlue);
                 }  
             }
             
@@ -88,18 +100,17 @@ public class Extract {
             }
             
             //get hash for block
-            
+            boolean blockNotAuthentic = false;
             blockBinaryHash = ShaHashHelper.getBlockHash(blockContentString);
-            //System.out.println("1: "+ blockBinaryHash);
-           // System.out.println("2: "+ extractedWatermark);
+
             if(blockBinaryHash.contains(extractedWatermark)){
                 //System.out.println("Authentic");
             }else
             {
-                System.out.println("Not authentic");
-//                 System.out.println("1: "+ blockBinaryHash);
-//                 System.out.println("2: "+ extractedWatermark);
+                System.out.println("Not Authentic");
+                blockNotAuthentic=true;
             }
+            
 
             if(colCorner+8 >=512)
             {
@@ -110,18 +121,15 @@ public class Extract {
             }
             
         }
+        
+        
         return imageGrid;
     }
     
     private static WatermarkHelper removeFragileWatermark(int num1, int num2){
-        if(couldThisbeOutOfBounds(num1,num2))
-        {
-            WatermarkHelper helper = new WatermarkHelper();
-            helper.num1 = num1;
-            helper.num2 = num2;
-            helper.isEmbedded = false;
-            return helper;
-        }
+        
+        WatermarkHelper helper = new WatermarkHelper();
+
 
         //l = avarage, h=difference
         boolean num1Larger = false;
@@ -136,6 +144,16 @@ public class Extract {
             num1Larger = false;
             testH=num2-num1;
         }
+        
+        if(!isExpandable(testH,testL))
+        {
+            helper.num1 = num1;
+            helper.num2 = num2;
+            helper.isEmbedded = false;
+            helper.confusion = false;
+            return helper;
+        }
+        
         
         String differenceBinaryTest = getBinary(testH);
         String embeddedBitAfter="";
@@ -170,7 +188,6 @@ public class Extract {
         }
        // System.out.println("after: ["+num1AfterTest+"],["+num2AfterTest+"]");
         
-        WatermarkHelper helper = new WatermarkHelper();
 
         helper.num1 = num1AfterTest;
         helper.num2 = num2AfterTest;
@@ -180,122 +197,5 @@ public class Extract {
         
         
         return helper;
-    }
-     
-    
-    public static boolean couldThisbeOutOfBounds(int num1, int num2){
-        int binaryBit = 0;
-        boolean num1Larger = false;
-        int l = (num1+num2)/2;
-        int h;
-        if(num1>num2){
-            num1Larger=true;
-            h =num1-num2;
-        }
-        else
-            h=num2-num1;
-        
-        //System.out.println("Original bit: "+ binaryBit);
-        //System.out.println("bb["+num1+","+num2+"]");
-        
-        String differenceBinary = getBinary(h);
-        differenceBinary = differenceBinary.substring(0, 1) + binaryBit + differenceBinary.substring(1, differenceBinary.length());
-        int hAfter = Integer.parseInt(differenceBinary, 2);
-        int num1After=0;
-        int num2After=0;
-        if(num1Larger){
-            num1After = l+((hAfter+1)/2);
-            num2After = num1After-hAfter;
-        }
-        else{
-            num2After = l+((hAfter+1)/2);
-            num1After = num2After-hAfter;
-        }
-        
-        if(num1After>255 | num1After<0 || num2After>255 | num2After<0 )
-            return true;
-        
-        binaryBit = 1;
-        num1Larger = false;
-        l = (num1+num2)/2;
-        h =0;
-        if(num1>num2){
-            num1Larger=true;
-            h =num1-num2;
-        }
-        else
-            h=num2-num1;
-        
-        //System.out.println("Original bit: "+ binaryBit);
-        //System.out.println("bb["+num1+","+num2+"]");
-        
-        differenceBinary = getBinary(h);
-        differenceBinary = differenceBinary.substring(0, 1) + binaryBit + differenceBinary.substring(1, differenceBinary.length());
-        hAfter = Integer.parseInt(differenceBinary, 2);
-        num1After=0;
-        num2After=0;
-        if(num1Larger){
-            num1After = l+((hAfter+1)/2);
-            num2After = num1After-hAfter;
-        }
-        else{
-            num2After = l+((hAfter+1)/2);
-            num1After = num2After-hAfter;
-        }
-        
-        if(num1After>255 | num1After<0 || num2After>255 | num2After<0 )
-            return true;
-        
-        return false;
-
-    }
-    
-    public static boolean ultimateEmbeddingCheck(int num1,int num2){
-
-        WatermarkHelper helper1 = dummyEmbedFragileWatermark(num1,num2,'0');
-        WatermarkHelper helper2 = dummyEmbedFragileWatermark(num1,num2,'1');
-        
-        if(couldThisbeOutOfBounds(helper1.num1,helper1.num2)||couldThisbeOutOfBounds(helper2.num1,helper2.num2)){
-            return false;
-        }else{
-            return true;
-        }
-    }
-    
-        private static WatermarkHelper dummyEmbedFragileWatermark(int num1, int num2, char binaryBit){
-        
-        boolean num1Larger = false;
-        int l = (num1+num2)/2;
-        int h;
-        if(num1>num2){
-            num1Larger=true;
-            h =num1-num2;
-        }
-        else
-            h=num2-num1;
-        
-        //System.out.println("Original bit: "+ binaryBit);
-        //System.out.println("bb["+num1+","+num2+"]");
-        
-        String differenceBinary = getBinary(h);
-        differenceBinary = differenceBinary.substring(0, 1) + binaryBit + differenceBinary.substring(1, differenceBinary.length());
-        int hAfter = Integer.parseInt(differenceBinary, 2);
-        int num1After=0;
-        int num2After=0;
-        if(num1Larger){
-            num1After = l+((hAfter+1)/2);
-            num2After = num1After-hAfter;
-        }
-        else{
-            num2After = l+((hAfter+1)/2);
-            num1After = num2After-hAfter;
-        }
-
-        WatermarkHelper helper = new WatermarkHelper();
-        helper.num1 = num1After;
-        helper.num2 = num2After;
-        helper.isEmbedded = true;
-        return helper;
-
     }
 }

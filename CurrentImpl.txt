@@ -23,13 +23,14 @@ Embedding
 		-This is needed since blocks might be destroyed and order of the pixels may be lost
 		-every block is thus treated as a seperate embedding vessel
 	-Conjugate message blocks that are not noisy enough
-!-		-possibly use 4 remaining bits in block to indicate it is conjugated or not... 
+		-Use Extra space left over from fragile watermark to embed the map
 !-	-Replace suitable blocks for embedding with embedded blocks (look into how information is spread
 		across the image, possibly randomize this spread or look into an algorithm to facilitate this
 		spread so that pixels will likely not be close to their original counterparts)
 
---TODO 6.Embed reversible fragile watermark into the lsb block of each 8x8 block of pixels
+ 6.Embed reversible fragile watermark into the lsb block of each 8x8 block of pixels
 	-Use adapted wavelet-based reversible watermarking method 
+	--TODO -Look into compression of the bit stream 
 7.Reconstruct image from blocks
 	-Convert grey code back to binary
 	-Reconstruct image pixels from binary

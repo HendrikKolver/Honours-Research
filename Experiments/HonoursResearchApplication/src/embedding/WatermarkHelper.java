@@ -15,4 +15,5 @@ public class WatermarkHelper {
     public int num2 =0;
     public int embeddedBit = 0;
     public boolean isEmbedded = false;
+    public boolean confusion = false;
 }

@@ -22,7 +22,7 @@ public class HonoursResearchApplication {
        
        SelfEmbed.selfEmbed(holder.getImage());
        System.out.println("Exiting After Successfull execution: "+ ((System.currentTimeMillis()-start)/1000.0)+"s");
-       Extract.ExtractImage("finalImage.bmp");
+       //Extract.ExtractImage("finalImage.bmp");
     }
     
 }
