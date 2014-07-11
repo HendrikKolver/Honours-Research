@@ -27,7 +27,7 @@ public class SelfEmbed {
         int suitableBlockCount = 0;
         int lsbPlane = 0;
         for(Block block : blockList){
-            if(block.getComplexity()>embeddingRate){
+            if(block.getComplexity()>embeddingRate && block.lsbLayer !=7){
                 suitableBlockCount++;
             }
         }
@@ -88,7 +88,7 @@ public class SelfEmbed {
         //remember the message is not in grey code
         int messageBlockCount =0;
         for (int i = 0; i < imageBlocks.size(); i++) {
-            if(imageBlocks.get(i).getComplexity()>embeddingRate){
+            if(imageBlocks.get(i).getComplexity()>embeddingRate  && imageBlocks.get(i).lsbLayer !=7){
                 Block imageBlock = imageBlocks.get(i);
                 Block messageBlock = messageBlocks.get(messageBlockCount);
                 if(messageBlock.getComplexity()<embeddingRate){
