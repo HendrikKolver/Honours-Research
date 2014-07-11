@@ -58,8 +58,8 @@ public class ImageContentExtractionAndCompression {
                     binary = "";
                     //binary += binaryImageSize;
                     
-                    binary += "0"+getBinary(i,9);
-                    binary += "1"+getBinary(j,9);
+                    binary += getBinary(i,9);
+                    binary += getBinary(j,9);
                 }
                     
                 Color pixelColor = new Color(scaledBuf.getRGB(i, j));

@@ -1,6 +1,6 @@
 \select@language {english}
 \contentsline {section}{\numberline {1}Introduction}{1}
-\contentsline {subsection}{\numberline {1.1}Overview}{1}
+\contentsline {subsection}{\numberline {1.1}Overview}{2}
 \contentsline {subsection}{\numberline {1.2}Steganography}{2}
 \contentsline {subsection}{\numberline {1.3}Fragile Watermarking}{2}
 \contentsline {subsection}{\numberline {1.4}Self embedding and recovery}{2}
@@ -13,3 +13,9 @@
 \contentsline {subsubsection}{\numberline {2.1.2}Method using difference expansion}{4}
 \contentsline {subsubsection}{\numberline {2.1.3}Dynamic block allocation for self embedding}{4}
 \contentsline {subsection}{\numberline {2.2}Comparison}{5}
+\contentsline {section}{\numberline {3}Implementation}{5}
+\contentsline {subsection}{\numberline {3.1}Embedding}{5}
+\contentsline {subsubsection}{\numberline {3.1.1}BPCS Steg}{5}
+\contentsline {paragraph}{Image Compression}{6}
+\contentsline {paragraph}{Block Spread}{6}
+\contentsline {subsubsection}{\numberline {3.1.2}Fragile Watermark}{6}

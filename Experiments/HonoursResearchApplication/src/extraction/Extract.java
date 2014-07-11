@@ -25,8 +25,40 @@ public class Extract {
         
         //blocks of image
         ArrayList<Block> blocks = SelfEmbed.getBlocks(holder.getImage());
-        extractWatermark(holder.getImage());
+        checkAllBlockAuthenticity(blocks);
+        //extractWatermark(holder.getImage());
         
+    }
+    
+    public static void checkAllBlockAuthenticity(ArrayList<Block> blocks) throws FileNotFoundException, NoSuchAlgorithmException{
+        for(Block block: blocks){
+            if(checkBlockAuthenticity(block)){
+                System.out.println("dammit"); 
+            }else
+            {
+                //System.out.println("whoo");
+            }
+        }
+    }
+    
+    public static boolean checkBlockAuthenticity(Block block) throws FileNotFoundException, NoSuchAlgorithmException{
+        char[][][] blockBits = block.getBlock();
+        String blockBinary = "";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                blockBinary+= blockBits[0][i][j];
+                blockBinary+= blockBits[1][i][j];
+                blockBinary+= blockBits[2][i][j];
+            }  
+        }
+        
+        String testHash = blockBinary.substring(blockBinary.length()-30,blockBinary.length());
+        blockBinary = blockBinary.substring(0,blockBinary.length()-30);
+        
+        String calculatedHash = ShaHashHelper.getBlockHash(blockBinary);
+        calculatedHash = calculatedHash.substring(0,30);
+        
+        return calculatedHash.equals(testHash);
     }
     
     //

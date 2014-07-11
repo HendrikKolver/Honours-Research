@@ -197,7 +197,73 @@ The method described in \ref{differenceExpansionOverview} provides decent qualit
 \hspace{0pt} \\
 All three methods thus provide good results and would serve as a good benchmark for comparing the method described later in this paper.
 
-  
+\section{Implementation}
+\label{Implementation}
+
+\subsection{Embedding}
+
+\subsubsection{BPCS Steg}
+In order to be able to recover the image after it has been tampered with the image needs to be embedded into itself. 
+For this embedding the proposed method used BPCS Steganography \cite{beaullieubpcs}.
+\hspace{0pt} \\
+//TODO explain algorithm briefly
+
+
+\hspace{0pt} \\
+BPCS Steg has an inherent property that if any part of the image is modified the embedded message will be lost.
+This would obviously be a problem for the proposed method since the image will definitely be modified.
+
+\hspace{0pt} \\
+As a solution to this problem each block used for embedding is treated as a separate embedding entity.
+The is thus not overlap between two different blocks used for embedding.
+With the compression method used (\ref{ImageCompression}) this means that effectively 7 pixels are embedded in each embedding block. Along with these 7 pixels the location of the first pixel is also embedded using two integers.
+This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
+
+
+\hspace{0pt} \\
+Total space available for embedding per block = (8*8)*3 = 64*3 = 192
+\hspace{0pt} \\
+Total embedded bits = (7*24) + (2*9) = 186
+
+\hspace{0pt} \\
+This means that there is an excess of 6 bits per block that are not used for embedding. This is effectively means there are 6 bits of embedding space being wasted with each block.
+This is caused by the need to be able to identify blocks even after the image has been modified. 
+
+\paragraph{Image Compression}
+\label{ImageCompression}
+The image that is embedded into the cover image cannot be embedded with perfect quality due to space restrictions caused by the embedding algorithm. 
+Compression however is not the focus of this study.
+The embedded image is thus just a resized version of the original image.
+A higher quality reconstruction could be achieved if a better compression algorithm is used.
+
+\paragraph{Block Spread}
+//TODO
+\hspace{0pt} \\
+It is very important how the embedded content is spread across the image because this affects the tamper rate
+\hspace{0pt} \\
+//put reference here
+\hspace{0pt} \\
+And explain further
+
+\subsubsection{Fragile Watermark}
+In order to be able to detect which parts of the image have been tampered with a fragile watermark can be used.
+
+\hspace{0pt} \\
+An initial attempt was made to apply the method proposed in \cite{tian2002wavelet}.
+This method is a reversible fragile watermark which means that the watermark can be removed to restore the original content bit by bit before watermarking if the image was found to be authentic.
+
+\hspace{0pt} \\
+The method needed to be adapted to authenticate the image on a block level, the image is divided into 8x8 blocks.
+The method requires compression of bit streams in order to embed the watermark and to be able to extract the watermark again.
+The bit streams are rather small in the proposed method because they are only applicable to a specific 8x8 pixel block. This results in the fact that there is not always enough redundancy to be able to compress the bit streams enough for embedding.
+
+\hspace{0pt} \\
+Another problem with this method was the large amount of noise that this method of watermarking introduces into the cover image since it also uses difference expansion as mentioned in \cite{tian2002reversible}.
+
+ 
+
+
+
 
 \bibliography{main}
 \bibliographystyle{plain}

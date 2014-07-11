@@ -5,8 +5,12 @@
         <group>
             <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/extraction/Extract.java</file>
             <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/embedding/WatermarkHelper.java</file>
+            <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/embedding/Compression.java</file>
             <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/embedding/SelfEmbed.java</file>
+            <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/embedding/ImageContentExtractionAndCompression.java</file>
+            <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/embedding/FragileWatermark.java</file>
             <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/honoursresearchapplication/HonoursResearchApplication.java</file>
+            <file>file:/C:/Users/Hendrik/Documents/ResearchProject/Honours-Research/Experiments/HonoursResearchApplication/src/embedding/Block.java</file>
         </group>
     </open-files>
 </project-private>
