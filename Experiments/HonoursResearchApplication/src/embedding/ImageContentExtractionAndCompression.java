@@ -48,16 +48,21 @@ public class ImageContentExtractionAndCompression {
         for (int i = 0; i < scaledBuf.getHeight(); i++) {
             for (int j = 0; j < scaledBuf.getWidth(); j++) {
                 //7 is used because that is the amount of pixels that will be stored per block
-                if(perBlockCheck%7==0)
+                if(perBlockCheck==7)
                 {
                     //System.out.println("binarysize:" + binary.length());
                     if(perBlockCheck!=0 && !binary.equals("")){
-                        blockList.add(makeBlock(binary));
+//                        System.out.println("binary: "+ binary);
+//                        System.out.println("ImediateBinary: "+ FragileWatermark.getBlockBinary(makeBlockRGBTogether(binary)));
+                        Block tmpBlock = makeBlockRGBTogether(binary);
+                        tmpBlock.calculateComplexity();
+                        blockList.add(tmpBlock);
+                        
                     }
                     perBlockCheck = 0;
                     binary = "";
                     //binary += binaryImageSize;
-                    
+                    //System.out.println(getBinary(i,9)+" \\ "+getBinary(j,9));
                     binary += getBinary(i,9);
                     binary += getBinary(j,9);
                 }
@@ -75,27 +80,58 @@ public class ImageContentExtractionAndCompression {
         }
         scaledBuf = getScaledImage(scaledBuf,512,512);
         ImageIO.write(scaledBuf, "BMP", new File("scaledBlockNew.bmp"));
+        
         return blockList;
         
         //System.out.println("MessageBlocks: "+blockList.size());
 //        scaledBuf = getScaledImage(scaledBuf,512,512);
 //        System.out.println(ImageIO.write(bufImage, "BMP", new File("originalBlock.bmp")));
 //        ImageIO.write(scaledBuf, "BMP", new File("scaledBlock.bmp"));
-        
-        
-        
-        
+
     }
     
+    public static Block makeBlockRGBTogether(String binary){
+        char[][][] grid = new char[3][8][8];
+        int binaryCount = 0;
+        Block block = new Block();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if(binaryCount>=binary.length()){
+                    grid[0][i][j] = '0'; 
+                }else{
+                    grid[0][i][j] = binary.charAt(binaryCount);
+                    binaryCount++;
+                }
+                if(binaryCount>=binary.length()){
+                    grid[1][i][j] = '0'; 
+                }else{
+                    grid[1][i][j] = binary.charAt(binaryCount);
+                    binaryCount++;
+                }
+                if(binaryCount>=binary.length()){
+                    grid[2][i][j] = '0'; 
+                }else{
+                    grid[2][i][j] = binary.charAt(binaryCount);
+                    binaryCount++;
+                }
+                
+            }
+        }
+        block.setBlock(grid);
+        return block;
+    }
+    
+    
+    //do RGB seperately
     public static Block makeBlock(String binary){
         Block block = new Block();
         int count = 0;
         int rgbCount = 0;
         int rgbNum=0;
-        char[][][] grid = new char[3][block.getBlockSize()][block.getBlockSize()];
+        char[][][] grid = new char[3][8][8];
         //redLayer
-        for (int i = 0; i < block.getBlockSize(); i++) {
-            for (int j = 0; j < block.getBlockSize(); j++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 if(count<binary.length())
                 {
                     if(rgbCount>=64){

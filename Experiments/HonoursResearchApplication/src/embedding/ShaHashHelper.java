@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Hendrik
  */
 public class ShaHashHelper {
-    public static String getBlockHash(String binaryString) throws FileNotFoundException, NoSuchAlgorithmException
+    public static String getBlockHash(String binaryString, int size) throws FileNotFoundException, NoSuchAlgorithmException
     {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
@@ -23,7 +23,7 @@ public class ShaHashHelper {
         md.update(array, 0, array.length);
         
         String binaryStringFinal = toBinary(md.digest());
-        binaryStringFinal = binaryStringFinal.substring(0,96);
+        binaryStringFinal = binaryStringFinal.substring(0,size);
         return  binaryStringFinal;
     }
     

@@ -8,6 +8,7 @@ package embedding;
 
 import static embedding.SelfEmbed.embedFragileWatermark;
 import static embedding.SelfEmbed.getBinary;
+import static embedding.SelfEmbed.getBinary;
 import static embedding.SelfEmbed.getChangableBits;
 import static embedding.SelfEmbed.getChangableBitsCount;
 import static embedding.SelfEmbed.getDifference;
@@ -17,12 +18,62 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 /**
  *
  * @author Hendrik
  */
 public class FragileWatermark {
+    public static ArrayList<Block> embedWaterMark(ArrayList<Block> imageBlocks) throws NoSuchAlgorithmException, IOException{
+        return embedWaterMarkInLSBLayer(imageBlocks);
+    }
+    
+    public static ArrayList<Block> embedWaterMarkInLSBLayer(ArrayList<Block> imageBlocks) throws NoSuchAlgorithmException, IOException{
+        String blockBinary = "";
+        ArrayList<Block> newBlocks = new ArrayList();
+        for(Block block: imageBlocks){
+            if(block.lsbLayer!=7){
+                blockBinary+=getBlockBinary(block);
+                newBlocks.add(block);
+            }
+            else{
+                //192 = 8x8x3
+                String hashString = ShaHashHelper.getBlockHash(blockBinary,192);
+                char[][][] newLsbContent;
+                newLsbContent = block.getBlock();
+                int hashBitCounter = 0;
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
+                        newLsbContent[0][i][j] = hashString.charAt(hashBitCounter);
+                        hashBitCounter++;
+                        newLsbContent[1][i][j] = hashString.charAt(hashBitCounter);
+                        hashBitCounter++;
+                        newLsbContent[2][i][j] = hashString.charAt(hashBitCounter);
+                        hashBitCounter++;
+                    }
+                }
+                block.setBlock(newLsbContent);
+                newBlocks.add(block);
+                blockBinary="";
+            }
+        }
+
+        return newBlocks;
+    }
+    
+    public static String getBlockBinary(Block block){
+        String blockBinary = "";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                blockBinary += block.getBlock()[0][i][j];
+                blockBinary += block.getBlock()[1][i][j];
+                blockBinary += block.getBlock()[2][i][j];
+            }
+        }
+        return blockBinary;
+    }
+    
      public static Color[][] embedWaterMark(Color[][] imageGrid) throws NoSuchAlgorithmException, IOException{
          return WavletBased(imageGrid);
      }
@@ -47,7 +98,7 @@ public class FragileWatermark {
             }
             
             //get hash for block
-            blockBinaryHash = ShaHashHelper.getBlockHash(blockContentString);
+            blockBinaryHash = ShaHashHelper.getBlockHash(blockContentString,96);
             int[][][] biLevelLocationMap = new int[3][8][8];
             String changableBitString ="";
             int binaryCount = 0;

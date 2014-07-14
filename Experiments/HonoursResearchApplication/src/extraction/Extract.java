@@ -1,6 +1,7 @@
 package extraction;
 
 import embedding.Block;
+import static embedding.FragileWatermark.getBlockBinary;
 import embedding.SelfEmbed;
 import static embedding.SelfEmbed.*;
 import static embedding.SelfEmbed.getBinary;
@@ -25,18 +26,51 @@ public class Extract {
         
         //blocks of image
         ArrayList<Block> blocks = SelfEmbed.getBlocks(holder.getImage());
-        checkAllBlockAuthenticity(blocks);
+        extractImageContent(blocks);
         //extractWatermark(holder.getImage());
         
     }
     
-    public static void checkAllBlockAuthenticity(ArrayList<Block> blocks) throws FileNotFoundException, NoSuchAlgorithmException{
+    public static void extractImageContent(ArrayList<Block> blocks) throws FileNotFoundException, NoSuchAlgorithmException{
+        String blockBinary = "";
+        for(int x=0 ; x<blocks.size();x++){
+            Block block = blocks.get(x);
+            if(block.lsbLayer!=7){
+                blockBinary+=getBlockBinary(block);
+            }
+            else{
+                //192 = 8x8x3
+                String hashString = ShaHashHelper.getBlockHash(blockBinary,192);
+                String extractedHash = getBlockBinary(block);
+                if(!hashString.equals(extractedHash)){
+                    block.authentic = false;
+                    for (int i = 1; i <= 7; i++) {
+                        Block tempBlock = blocks.get(x-i);
+                        tempBlock.authentic = false;
+                        blocks.set(x-i, tempBlock);
+                        
+                    }
+                    System.out.println("Tampered");
+                }
+                blockBinary="";
+            }
+            block.calculateComplexity();
+        }
+       Color[][] reconColor = new Color[512][512];
         for(Block block: blocks){
-            if(checkBlockAuthenticity(block)){
-                System.out.println("dammit"); 
-            }else
-            {
-                //System.out.println("whoo");
+            if(block.getComplexity()>SelfEmbed.embeddingRate && block.authentic && block.lsbLayer!=7){
+//                System.out.println("block lsb: "+ block.lsbLayer);
+                String blockBinaryString = getBlockBinary(block);
+                if(blockBinaryString.substring(blockBinaryString.length()-6, blockBinaryString.length()).equals("000000")){
+                    
+                
+                    String indexRowBinary = blockBinaryString.substring(0,9);
+                    String indexColBinary = blockBinaryString.substring(9,18);
+                    System.out.println(blockBinaryString);
+                    int indexRow = Integer.parseInt(indexRowBinary, 2);
+                    int indexCol = Integer.parseInt(indexColBinary, 2);
+                    System.out.println(indexRow+""+indexCol);
+                }
             }
         }
     }
@@ -55,7 +89,7 @@ public class Extract {
         String testHash = blockBinary.substring(blockBinary.length()-30,blockBinary.length());
         blockBinary = blockBinary.substring(0,blockBinary.length()-30);
         
-        String calculatedHash = ShaHashHelper.getBlockHash(blockBinary);
+        String calculatedHash = ShaHashHelper.getBlockHash(blockBinary,96);
         calculatedHash = calculatedHash.substring(0,30);
         
         return calculatedHash.equals(testHash);
@@ -133,7 +167,7 @@ public class Extract {
             
             //get hash for block
             boolean blockNotAuthentic = false;
-            blockBinaryHash = ShaHashHelper.getBlockHash(blockContentString);
+            blockBinaryHash = ShaHashHelper.getBlockHash(blockContentString,96);
 
             if(blockBinaryHash.contains(extractedWatermark)){
                 //System.out.println("Authentic");

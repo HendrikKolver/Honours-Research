@@ -10,6 +10,7 @@ public class Block {
     private double complexity = 0;
     public int lsbLayer = 0;
     public boolean message = false;
+    public boolean authentic = true;
 
     public Block() {
         this.block = new char[3][blockSize][blockSize];

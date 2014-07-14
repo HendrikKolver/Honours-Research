@@ -20,7 +20,7 @@ public class SelfEmbed {
     private static int cornerRow =0;
     private static int cornerCol=0;
     //0.636
-    private static final double embeddingRate = 0.65;
+    public static final double embeddingRate = 0.65;
     
     public static MyImage selfEmbed(MyImage image) throws IOException, NoSuchAlgorithmException{
         ArrayList<Block> blockList = getBlocks(image);
@@ -83,7 +83,7 @@ public class SelfEmbed {
         return calculateValuesUsingNewDifference(num1,num2,newH);
     }
     
-    public static ArrayList<Block> embedMessage(ArrayList<Block> imageBlocks,ArrayList<Block> messageBlocks){
+    public static ArrayList<Block> embedMessage(ArrayList<Block> imageBlocks,ArrayList<Block> messageBlocks) throws NoSuchAlgorithmException, IOException{
         //TODO
         //remember the message is not in grey code
         int messageBlockCount =0;
@@ -97,11 +97,14 @@ public class SelfEmbed {
                 }
                 messageBlock.lsbLayer = imageBlock.lsbLayer;
                 imageBlocks.set(i, messageBlock);
+                //System.out.println(FragileWatermark.getBlockBinary(imageBlocks.get(i)));
                 messageBlockCount++;
             }
             if(messageBlockCount==messageBlocks.size())
                 break;
         }
+        //embed the fragile watermark
+        FragileWatermark.embedWaterMark(imageBlocks);
         return imageBlocks;
     }
          
@@ -172,7 +175,7 @@ public class SelfEmbed {
                 
             }
         }
-        saveImageFromColor(imageColors,"reAssembledAndSavedImageBeforeWatermark.bmp");
+        saveImageFromColor(imageColors,"finalImage.bmp");
         return imageColors;
     }
     
