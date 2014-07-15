@@ -2,16 +2,20 @@ package extraction;
 
 import embedding.Block;
 import static embedding.FragileWatermark.getBlockBinary;
+import static embedding.ImageContentExtractionAndCompression.getScaledImage;
 import embedding.SelfEmbed;
 import static embedding.SelfEmbed.*;
 import static embedding.SelfEmbed.getBinary;
 import embedding.ShaHashHelper;
 import embedding.WatermarkHelper;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import loadImage.ImageHolder;
 import loadImage.MyImage;
 
@@ -31,7 +35,7 @@ public class Extract {
         
     }
     
-    public static void extractImageContent(ArrayList<Block> blocks) throws FileNotFoundException, NoSuchAlgorithmException{
+    public static void extractImageContent(ArrayList<Block> blocks) throws FileNotFoundException, NoSuchAlgorithmException, IOException{
         String blockBinary = "";
         for(int x=0 ; x<blocks.size();x++){
             Block block = blocks.get(x);
@@ -40,8 +44,12 @@ public class Extract {
             }
             else{
                 //192 = 8x8x3
-                String hashString = ShaHashHelper.getBlockHash(blockBinary,192);
+                String hashString = ShaHashHelper.getBlockHash(blockBinary,185);
                 String extractedHash = getBlockBinary(block);
+                extractedHash = extractedHash.substring(0,extractedHash.length()-7);
+                
+                String blockConjugationMap = getBlockBinary(block);
+                blockConjugationMap = blockConjugationMap.substring(blockConjugationMap.length()-7,blockConjugationMap.length());
                 if(!hashString.equals(extractedHash)){
                     block.authentic = false;
                     for (int i = 1; i <= 7; i++) {
@@ -51,28 +59,105 @@ public class Extract {
                         
                     }
                     System.out.println("Tampered");
+                }else{
+                    //block is authentic check if there was conjugation
+                    int charCount = 6;
+                    
+                    for (int i = 1; i <= 7; i++) {
+                        
+                        if(blockConjugationMap.charAt(charCount)=='1'){
+                            //block has been conjugated
+                            Block tempBlock = blocks.get(x-i);
+                            tempBlock = SelfEmbed.conjugateBlock(tempBlock);
+                            tempBlock.isComplex = true;
+                            blocks.set(x-i,tempBlock);
+                            
+                        }
+                        charCount--;
+                    }
+                   
                 }
                 blockBinary="";
             }
             block.calculateComplexity();
         }
-       Color[][] reconColor = new Color[512][512];
+       Color[][] reconColor = new Color[SelfEmbed.imageWidth][SelfEmbed.imageWidth];
         for(Block block: blocks){
-            if(block.getComplexity()>SelfEmbed.embeddingRate && block.authentic && block.lsbLayer!=7){
+            if((block.getComplexity()>SelfEmbed.embeddingRate && block.authentic && block.lsbLayer!=7) || block.isComplex){
 //                System.out.println("block lsb: "+ block.lsbLayer);
                 String blockBinaryString = getBlockBinary(block);
+                
                 if(blockBinaryString.substring(blockBinaryString.length()-6, blockBinaryString.length()).equals("000000")){
                     
                 
                     String indexRowBinary = blockBinaryString.substring(0,9);
                     String indexColBinary = blockBinaryString.substring(9,18);
-                    System.out.println(blockBinaryString);
+                    //System.out.println(blockBinaryString);
                     int indexRow = Integer.parseInt(indexRowBinary, 2);
                     int indexCol = Integer.parseInt(indexColBinary, 2);
-                    System.out.println(indexRow+""+indexCol);
+                    //System.out.println(indexRow+""+indexCol);
+                    
+                    int currentRow = indexRow;
+                    int currentCol = indexCol;
+                    int substringStart = 18;
+                    for (int i = 0; i < 7; i++) {
+                        String redBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
+                        substringStart+=8;
+                        String greenBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
+                        substringStart+=8;
+                        String blueBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
+                        substringStart+=8;
+                        
+                        int redColor = Integer.parseInt(redBinaryString, 2);
+                        int greenColor = Integer.parseInt(greenBinaryString, 2);
+                        int blueColor = Integer.parseInt(blueBinaryString, 2);
+                        
+                        Color tempPixelColor = new Color(redColor,greenColor,blueColor);
+                        reconColor[currentRow][currentCol] = tempPixelColor;
+                        
+                        currentCol++;
+                        if(currentCol>=SelfEmbed.imageWidth)
+                        {
+                            currentRow++;
+                            currentCol = 0;
+                        }
+                        
+                    }
                 }
             }
         }
+        BufferedImage bufImage = new BufferedImage(reconColor.length, reconColor[0].length,
+                    BufferedImage.TYPE_INT_RGB);
+        for (int i = 0; i < reconColor.length; i++) {
+            for (int j = 0; j < reconColor[0].length; j++) {
+               if(reconColor[i][j] == null)
+               {
+                  reconColor[i][j] = new Color(0,0,0);
+                  
+               }
+               bufImage.setRGB(i, j, reconColor[i][j].getRGB());
+            }
+            
+        }
+        
+        
+        bufImage = getScaledImage(bufImage,512,512);
+        ImageIO.write(bufImage, "BMP", new File("ReconstructedImageAfterScaleUp.bmp"));
+        //SelfEmbed.saveImageFromColor(reconColor, "reconstructedImage.bmp",SelfEmbed.imageWidth);
+        
+        //reconstruct the image
+        ImageHolder reconstructedHolder = new ImageHolder();
+        reconstructedHolder.extractData(bufImage);
+        ArrayList<Block> reconstructedBlocks = SelfEmbed.getBlocks(reconstructedHolder.getImage());
+        
+        for(int i=0;i<blocks.size();i++){
+            if(!blocks.get(i).authentic)
+            {
+                blocks.set(i, reconstructedBlocks.get(i));
+            }
+        }
+        Color[][] reAssembleImageColours = reAssembleImage(blocks,"finalImageAfterRestoration.bmp");
+        
     }
     
     public static boolean checkBlockAuthenticity(Block block) throws FileNotFoundException, NoSuchAlgorithmException{

@@ -1,6 +1,7 @@
 package embedding;
 
 
+import static embedding.FragileWatermark.getBlockBinary;
 import java.awt.Color;
 import java.awt.List;
 import java.awt.image.BufferedImage;
@@ -8,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import static loadImage.ImageHolder.encodeGray;
 import loadImage.MyImage;
@@ -19,6 +22,7 @@ import loadImage.MyImage;
 public class SelfEmbed {
     private static int cornerRow =0;
     private static int cornerCol=0;
+    public static int imageWidth = 0;
     //0.636
     public static final double embeddingRate = 0.65;
     
@@ -42,11 +46,17 @@ public class SelfEmbed {
         System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
         ArrayList<Block> messageBlocks = ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
         ArrayList<Block> embeddedImageList = embedMessage(blockList,messageBlocks);
-        Color[][] reAssembleImageColours = reAssembleImage(embeddedImageList);
+        Color[][] reAssembleImageColours = reAssembleImage(embeddedImageList,"finalImage.bmp");
         //Color[][] imageColors = FragileWatermark.embedWaterMark(reAssembleImageColours);
         //saveImageFromColor(imageColors,"finalImage.bmp");
         
         return null;
+    }
+    
+    public static ArrayList<Block> shuffelList(ArrayList<Block>  blockList){
+        long seed = System.nanoTime();
+        Collections.shuffle(blockList, new Random(seed));
+        return blockList;
     }
     
     public static String getStringForLocationMap(int[][][] locationMap){
@@ -93,8 +103,17 @@ public class SelfEmbed {
                 Block messageBlock = messageBlocks.get(messageBlockCount);
                 if(messageBlock.getComplexity()<embeddingRate){
                     //TODO should conjugate here and save record of this in conjugation map
-                   // messageBlock = conjugateBlock(messageBlock);
+                    //System.out.println("messageBlock binary before: "+getBlockBinary(messageBlock));
+                    messageBlock = conjugateBlock(messageBlock);
+                    //System.out.println("messageBlock binary after: "+getBlockBinary(messageBlock));
+                    messageBlock.conjugated = true;
+                    messageBlock.calculateComplexity();
                 }
+               
+                if(messageBlock.getComplexity()<embeddingRate){
+                    //System.out.println("dammit");
+                }
+                
                 messageBlock.lsbLayer = imageBlock.lsbLayer;
                 imageBlocks.set(i, messageBlock);
                 //System.out.println(FragileWatermark.getBlockBinary(imageBlocks.get(i)));
@@ -109,7 +128,7 @@ public class SelfEmbed {
     }
          
     
-    public static Color[][] reAssembleImage(ArrayList<Block> blocks) throws IOException{
+    public static Color[][] reAssembleImage(ArrayList<Block> blocks, String name) throws IOException{
         int blockLayerCount = 0;
         int row = 0;
         int col = 0;
@@ -175,14 +194,14 @@ public class SelfEmbed {
                 
             }
         }
-        saveImageFromColor(imageColors,"finalImage.bmp");
+        saveImageFromColor(imageColors,name,512);
         return imageColors;
     }
     
-    private static void saveImageFromColor(Color [][] imageColorGrid,String name) throws IOException{
-        BufferedImage saveImage = new BufferedImage(512,512,BufferedImage.TYPE_INT_RGB);
-        for (int i = 0; i < 512; i++) {
-            for (int j = 0; j < 512; j++) {
+    public static void saveImageFromColor(Color [][] imageColorGrid,String name, int imageWidth) throws IOException{
+        BufferedImage saveImage = new BufferedImage(imageWidth,imageWidth,BufferedImage.TYPE_INT_RGB);
+        for (int i = 0; i < imageWidth; i++) {
+            for (int j = 0; j < imageWidth; j++) {
                 saveImage.setRGB(i, j, imageColorGrid[i][j].getRGB());
             }
         }
@@ -265,17 +284,31 @@ public class SelfEmbed {
         char compareValue= '0';
         char [][][] blockValues = block.getBlock();
         for (int i = 0; i < block.getBlockSize(); i++) {
-            if(i == 0 | i%2==0){
-               compareValue='1'; 
-            }
-            else{
-               compareValue='0'; 
-            }
             for (int j = 0; j < block.getBlockSize(); j++) {
                 if(blockValues[0][i][j] == compareValue)
-                  blockValues[0][i][j] = '0';
-                else
                   blockValues[0][i][j] = '1';
+                else
+                  blockValues[0][i][j] = '0';
+                
+                 if(compareValue == '0')
+                    compareValue = '1';
+                else
+                    compareValue = '0';  
+                
+                if(blockValues[1][i][j] == compareValue)
+                  blockValues[1][i][j] = '1';
+                else
+                  blockValues[1][i][j] = '0';
+                
+                 if(compareValue == '0')
+                    compareValue = '1';
+                else
+                    compareValue = '0';  
+                
+                if(blockValues[2][i][j] == compareValue)
+                  blockValues[2][i][j] = '1';
+                else
+                  blockValues[2][i][j] = '0';
                 
                 if(compareValue == '0')
                     compareValue = '1';

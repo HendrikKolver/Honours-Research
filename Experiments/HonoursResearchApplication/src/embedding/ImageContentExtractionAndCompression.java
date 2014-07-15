@@ -29,7 +29,7 @@ public class ImageContentExtractionAndCompression {
         int newWidth = (int) Math.sqrt(newPixelAmount);
         
         System.out.println("New Width: "+ newWidth);
-        
+        SelfEmbed.imageWidth = newWidth;
         
         BufferedImage bufImage = new BufferedImage(512, 512,
                     BufferedImage.TYPE_INT_RGB);

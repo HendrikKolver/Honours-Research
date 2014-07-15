@@ -11,6 +11,8 @@ public class Block {
     public int lsbLayer = 0;
     public boolean message = false;
     public boolean authentic = true;
+    public boolean conjugated = false;
+    public boolean isComplex = false;
 
     public Block() {
         this.block = new char[3][blockSize][blockSize];

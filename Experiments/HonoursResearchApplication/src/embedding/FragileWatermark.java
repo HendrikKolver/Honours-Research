@@ -31,15 +31,22 @@ public class FragileWatermark {
     
     public static ArrayList<Block> embedWaterMarkInLSBLayer(ArrayList<Block> imageBlocks) throws NoSuchAlgorithmException, IOException{
         String blockBinary = "";
+        String conjugationMap = "";
         ArrayList<Block> newBlocks = new ArrayList();
         for(Block block: imageBlocks){
             if(block.lsbLayer!=7){
                 blockBinary+=getBlockBinary(block);
                 newBlocks.add(block);
+                if(block.conjugated)
+                    conjugationMap+='1';
+                else
+                    conjugationMap+='0';
             }
             else{
                 //192 = 8x8x3
-                String hashString = ShaHashHelper.getBlockHash(blockBinary,192);
+
+                String hashString = ShaHashHelper.getBlockHash(blockBinary,185);
+                hashString += conjugationMap;
                 char[][][] newLsbContent;
                 newLsbContent = block.getBlock();
                 int hashBitCounter = 0;
@@ -51,8 +58,11 @@ public class FragileWatermark {
                         hashBitCounter++;
                         newLsbContent[2][i][j] = hashString.charAt(hashBitCounter);
                         hashBitCounter++;
+                        
                     }
                 }
+                
+                conjugationMap="";
                 block.setBlock(newLsbContent);
                 newBlocks.add(block);
                 blockBinary="";

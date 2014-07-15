@@ -21,6 +21,11 @@ public class ImageHolder {
         //extract the normal image colours
         File img = new File(path);
         BufferedImage bufferedImage = ImageIO.read(img);
+        extractData(bufferedImage);
+        
+    }
+    
+    public void extractData(BufferedImage bufferedImage){
         Color colorArray[][] = new Color[bufferedImage.getHeight()][bufferedImage.getWidth()];
         char[][][][] bitPlanesPixels = new char[8][3][bufferedImage.getHeight()][bufferedImage.getWidth()];
        
