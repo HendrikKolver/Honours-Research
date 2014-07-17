@@ -86,7 +86,6 @@ There exists then a trade-off between the two.
 It might be possible to increase the quality of the image after recovery while still keeping the quality after embedding high.
 It is proposed that applying an embedding algorithm designed for high capacity while retaining quality (as discussed in \ref{introHighCap}) to the problem of self embedding could possibly increase the quality of the image after embedding as well as after recovery.
 This is because such an algorithm should provide higher embedding capacity while producing less noise in the image. 
- 
 
 \subsubsection{High capacity embedding algorithms}
 \label{introHighCap}
@@ -232,6 +231,7 @@ As a solution to this problem each block used for embedding is treated as a sepa
 There is thus no overlap between two different blocks used for embedding.
 With the compression method used (\ref{ImageCompression}) this means that effectively 7 pixels are embedded in each embedding block. Along with these 7 pixels the location of the first pixel is also embedded using two integers.
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
+This serves to give random access to the embedded content which is an essential property of self embedding as defined by (Korus et al. \cite{korus2013efficient})
 
 \hspace{0pt} \\
 Total space available for embedding per block = (8*8)*3 = 64*3 = 192
