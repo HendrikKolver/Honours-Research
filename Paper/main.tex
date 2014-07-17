@@ -203,11 +203,25 @@ All three methods thus provide good results and would serve as a good benchmark 
 \subsection{Embedding}
 
 \subsubsection{BPCS Steg}
+\label{bpcsSteg}
 In order to be able to recover the image after it has been tampered with the image needs to be embedded into itself. 
 For this embedding the proposed method used BPCS Steganography \cite{beaullieubpcs}.
-\hspace{0pt} \\
-//TODO explain algorithm briefly
 
+\hspace{0pt} \\
+This method works with the following steps:
+\begin{enumerate}
+  \item Get the binary representation of the image
+  \item Convert the binary representation into Gray code
+  \item Divide the image into bit planes
+  \item Divide the bit planes into 8x8 blocks
+  \item Calculate the complexity for each block //TODO find reference for how this is done
+  \item Divide the message to be embedded into similar binary 8x8 blocks
+  \item Calculate the complexity for each message block and conjugate if not complex enough
+  \item for each image block that is complex enough, replace that block with the next message block
+  \item Convert the blocks back to binary representation
+  \item reconstruct the image from the processed blocks 
+\end{enumerate}
+The proposed method works with colour images which means that for each pixel there is a red, green and blue value. This means that each block effectively store 3 bits for each pixel. 
 
 \hspace{0pt} \\
 BPCS Steg has an inherent property that if any part of the image is modified the embedded message will be lost.
@@ -215,10 +229,9 @@ This would obviously be a problem for the proposed method since the image will d
 
 \hspace{0pt} \\
 As a solution to this problem each block used for embedding is treated as a separate embedding entity.
-The is thus not overlap between two different blocks used for embedding.
+There is thus no overlap between two different blocks used for embedding.
 With the compression method used (\ref{ImageCompression}) this means that effectively 7 pixels are embedded in each embedding block. Along with these 7 pixels the location of the first pixel is also embedded using two integers.
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
-
 
 \hspace{0pt} \\
 Total space available for embedding per block = (8*8)*3 = 64*3 = 192
@@ -246,6 +259,7 @@ It is very important how the embedded content is spread across the image because
 And explain further
 
 \subsubsection{Fragile Watermark}
+\label{impFragileWatermark}
 In order to be able to detect which parts of the image have been tampered with a fragile watermark can be used.
 
 \hspace{0pt} \\
@@ -260,7 +274,45 @@ The bit streams are rather small in the proposed method because they are only ap
 \hspace{0pt} \\
 Another problem with this method was the large amount of noise that this method of watermarking introduces into the cover image since it also uses difference expansion as mentioned in \cite{tian2002reversible}.
 
- 
+\hspace{0pt} \\
+The fragile watermark used in the proposed method embeds a calculated hash into the image that is used to authenticate the content when the image is processed on the receiving end.
+
+\hspace{0pt} \\
+For each of the 8x8 pixel blocks in the image a hash is calculated by combining the binary of each of the 7 Most significant bit layers of that block. This binary stream is then used as the input to the SHA-256 hash function the output is a 256 bit hash string for that image block.
+This hash string is then truncated to a length of 185 bits.
+This is done to enable the conjugation map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
+
+\hspace{0pt} \\
+//TODO - Find reference for truncation of hash security
+\hspace{0pt} \\
+
+The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
+These 192 bits are finally embedded into the least significant bit plane of that specific block effectively replacing all the bits in that bit plane with the generated bit stream.
+
+\subsection{Extraction and Restoration}
+
+\subsubsection{Image authentication}
+The first step for the image extraction and restoration process is to determine which, if any, parts of the image has been tampered with.
+This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
+for each block (block refers here to 8x8 pixel blocks, thus a block here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
+The embedded hash is then extracted from the Least significant bit plane of that block.
+The extracted hash is then compared with the calculated hash and if they match the block is authentic.
+
+\hspace{0pt} \\
+For each authentic block the 7 most significant bit planes have their complexity calculated.
+If a bit plane block is found to be complex enough it is assumed that there is image information embedded into it.
+The embedded conjugation map is extracted at this point and if it is found that any of the complex enough bit planes were conjugated the conjugation algorithm is applied again to reverse the conjugation.
+
+\hspace{0pt} \\
+//TODO Explain the conjugation in more detail
+\hspace{0pt} \\
+
+The embedded image content is extracted at this point from the processed bit planes and the embedded image is reconstructed.
+The reconstructed image is then also split into pixel blocks.
+The original pixel blocks now get iterated and each block that was found not to be authentic is replaced by the corresponding reconstructed pixel block. 
+
+\hspace{0pt} \\
+This process restores the tampered areas of the image if their matching pixel blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost. 
 
 
 

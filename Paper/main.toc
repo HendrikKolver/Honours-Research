@@ -17,5 +17,7 @@
 \contentsline {subsection}{\numberline {3.1}Embedding}{5}
 \contentsline {subsubsection}{\numberline {3.1.1}BPCS Steg}{5}
 \contentsline {paragraph}{Image Compression}{6}
-\contentsline {paragraph}{Block Spread}{6}
-\contentsline {subsubsection}{\numberline {3.1.2}Fragile Watermark}{6}
+\contentsline {paragraph}{Block Spread}{7}
+\contentsline {subsubsection}{\numberline {3.1.2}Fragile Watermark}{7}
+\contentsline {subsection}{\numberline {3.2}Extraction and Restoration}{7}
+\contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{7}
