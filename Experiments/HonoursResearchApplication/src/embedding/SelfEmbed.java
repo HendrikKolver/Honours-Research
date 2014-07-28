@@ -51,10 +51,44 @@ public class SelfEmbed {
         return null;
     }
     
+    //method used to get the embedded blocks as far as possible from their original location
     public static ArrayList<Block> shuffleList(ArrayList<Block> list){
-        long seed = System.nanoTime();
-        Collections.shuffle(list, new Random(seed));
-        return list;
+        //long seed = System.nanoTime();
+        //Collections.shuffle(list, new Random(seed));
+        int quater = list.size()/8;
+        ArrayList<Block> newList = new ArrayList<Block>();
+        for (int i = quater*7; i < list.size(); i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = quater*2; i < quater*3; i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = quater*5; i < quater*6; i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = 0; i < quater; i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = quater*4; i < quater*5; i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = quater; i < quater*2; i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = quater*6; i < quater*7; i++) {
+            newList.add(list.get(i)); 
+        }
+        
+        for (int i = quater*3; i < quater*4; i++) {
+            newList.add(list.get(i)); 
+        }
+        return newList;
     }
     
     public static ArrayList<Block> shuffelList(ArrayList<Block>  blockList){
