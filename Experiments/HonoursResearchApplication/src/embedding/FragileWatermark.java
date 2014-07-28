@@ -1,13 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package embedding;
 
 import static embedding.SelfEmbed.embedFragileWatermark;
-import static embedding.SelfEmbed.getBinary;
 import static embedding.SelfEmbed.getBinary;
 import static embedding.SelfEmbed.getChangableBits;
 import static embedding.SelfEmbed.getChangableBitsCount;
@@ -32,6 +25,7 @@ public class FragileWatermark {
     public static ArrayList<Block> embedWaterMarkInLSBLayer(ArrayList<Block> imageBlocks) throws NoSuchAlgorithmException, IOException{
         String blockBinary = "";
         String conjugationMap = "";
+        String embeddingLocationMap = "";
         ArrayList<Block> newBlocks = new ArrayList();
         for(Block block: imageBlocks){
             if(block.lsbLayer!=7){
@@ -41,11 +35,15 @@ public class FragileWatermark {
                     conjugationMap+='1';
                 else
                     conjugationMap+='0';
+                
+                embeddingLocationMap+= ImageContentExtractionAndCompression.getBinary(block.row, 9);
+                embeddingLocationMap+= ImageContentExtractionAndCompression.getBinary(block.col, 9);
             }
             else{
                 //192 = 8x8x3
 
-                String hashString = ShaHashHelper.getBlockHash(blockBinary,185);
+                String hashString = ShaHashHelper.getBlockHash(blockBinary,59);
+                hashString += embeddingLocationMap;
                 hashString += conjugationMap;
                 char[][][] newLsbContent;
                 newLsbContent = block.getBlock();
@@ -63,6 +61,7 @@ public class FragileWatermark {
                 }
                 
                 conjugationMap="";
+                embeddingLocationMap = "";
                 block.setBlock(newLsbContent);
                 newBlocks.add(block);
                 blockBinary="";

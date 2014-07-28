@@ -31,7 +31,6 @@ public class Extract {
         //blocks of image
         ArrayList<Block> blocks = SelfEmbed.getBlocks(holder.getImage());
         extractImageContent(blocks);
-        //extractWatermark(holder.getImage());
         
     }
     
@@ -44,9 +43,32 @@ public class Extract {
             }
             else{
                 //192 = 8x8x3
-                String hashString = ShaHashHelper.getBlockHash(blockBinary,185);
+                String hashString = ShaHashHelper.getBlockHash(blockBinary,59);
+                
                 String extractedHash = getBlockBinary(block);
-                extractedHash = extractedHash.substring(0,extractedHash.length()-7);
+                extractedHash = extractedHash.substring(0,extractedHash.length()-133);
+                
+                String embeddingMap = getBlockBinary(block);
+                embeddingMap = embeddingMap.substring(embeddingMap.length()-133,embeddingMap.length()-7);
+                
+                int[][] embeddingMapIntegers = new int[7][2];
+                String indexNumber = embeddingMap;
+                int blockStartIndex = x-7;
+                for (int i = 0; i < 7; i++) {
+                    String numberRow = indexNumber.substring(0,9);
+                    embeddingMapIntegers[i][0] = getIntFromBinary(numberRow);
+                    indexNumber = indexNumber.substring(9,indexNumber.length());
+                    
+                    String numberCol = indexNumber.substring(0,9);
+                    embeddingMapIntegers[i][1] = getIntFromBinary(numberCol);
+                    indexNumber = indexNumber.substring(9,indexNumber.length());
+                    
+                    Block tempBlock = blocks.get(blockStartIndex+i);
+                    tempBlock.row = embeddingMapIntegers[i][0];
+                    tempBlock.col = embeddingMapIntegers[i][1];
+                    
+                    blocks.set(blockStartIndex+i, tempBlock);
+                }
                 
                 String blockConjugationMap = getBlockBinary(block);
                 blockConjugationMap = blockConjugationMap.substring(blockConjugationMap.length()-7,blockConjugationMap.length());
@@ -82,48 +104,51 @@ public class Extract {
             block.calculateComplexity();
         }
        Color[][] reconColor = new Color[SelfEmbed.imageWidth][SelfEmbed.imageWidth];
+       boolean nullAlreadyUsed = false;
         for(Block block: blocks){
             if((block.getComplexity()>SelfEmbed.embeddingRate && block.authentic && block.lsbLayer!=7) || block.isComplex){
-//                System.out.println("block lsb: "+ block.lsbLayer);
                 String blockBinaryString = getBlockBinary(block);
-                
-                if(blockBinaryString.substring(blockBinaryString.length()-6, blockBinaryString.length()).equals("000000")){
                     
                 
-                    String indexRowBinary = blockBinaryString.substring(0,9);
-                    String indexColBinary = blockBinaryString.substring(9,18);
                     //System.out.println(blockBinaryString);
-                    int indexRow = Integer.parseInt(indexRowBinary, 2);
-                    int indexCol = Integer.parseInt(indexColBinary, 2);
-                    //System.out.println(indexRow+""+indexCol);
-                    
-                    int currentRow = indexRow;
-                    int currentCol = indexCol;
-                    int substringStart = 18;
-                    for (int i = 0; i < 7; i++) {
-                        String redBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
-                        substringStart+=8;
-                        String greenBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
-                        substringStart+=8;
-                        String blueBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
-                        substringStart+=8;
+                    int indexRow = block.row;
+                    int indexCol = block.col;
+                    if(indexRow == 0 && indexCol == 0 && nullAlreadyUsed){
+                        //not embedded block simply left over
+                    }else
+                    {
+   
+                        if(indexRow==0 && indexCol==0)
+                            nullAlreadyUsed = true;
                         
-                        int redColor = Integer.parseInt(redBinaryString, 2);
-                        int greenColor = Integer.parseInt(greenBinaryString, 2);
-                        int blueColor = Integer.parseInt(blueBinaryString, 2);
-                        
-                        Color tempPixelColor = new Color(redColor,greenColor,blueColor);
-                        reconColor[currentRow][currentCol] = tempPixelColor;
-                        
-                        currentCol++;
-                        if(currentCol>=SelfEmbed.imageWidth)
-                        {
-                            currentRow++;
-                            currentCol = 0;
+                        int currentRow = indexRow;
+                        int currentCol = indexCol;
+                        int substringStart = 0;
+                        for (int i = 0; i < 8; i++) {
+                            String redBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
+                            substringStart+=8;
+                            String greenBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
+                            substringStart+=8;
+                            String blueBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
+                            substringStart+=8;
+
+                            int redColor = Integer.parseInt(redBinaryString, 2);
+                            int greenColor = Integer.parseInt(greenBinaryString, 2);
+                            int blueColor = Integer.parseInt(blueBinaryString, 2);
+
+                            Color tempPixelColor = new Color(redColor,greenColor,blueColor);
+                           
+                            reconColor[currentRow][currentCol] = tempPixelColor;
+
+                            currentCol++;
+                            if(currentCol>=SelfEmbed.imageWidth)
+                            {
+                                currentRow++;
+                                currentCol = 0;
+                            }
+
                         }
-                        
                     }
-                }
             }
         }
         BufferedImage bufImage = new BufferedImage(reconColor.length, reconColor[0].length,

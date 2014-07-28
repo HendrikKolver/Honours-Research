@@ -1,9 +1,7 @@
 package embedding;
 
 
-import static embedding.FragileWatermark.getBlockBinary;
 import java.awt.Color;
-import java.awt.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import static loadImage.ImageHolder.encodeGray;
 import loadImage.MyImage;
 
 /**
@@ -24,7 +21,7 @@ public class SelfEmbed {
     private static int cornerCol=0;
     public static int imageWidth = 0;
     //0.636
-    public static final double embeddingRate = 0.65;
+    public static final double embeddingRate = 0.7;
     
     public static MyImage selfEmbed(MyImage image) throws IOException, NoSuchAlgorithmException{
         ArrayList<Block> blockList = getBlocks(image);
@@ -45,12 +42,19 @@ public class SelfEmbed {
         embeddingCapacity = (suitableBlockCount *186);
         System.out.println("Available embedding capacity (bits): "+embeddingCapacity );
         ArrayList<Block> messageBlocks = ImageContentExtractionAndCompression.getCompressedImageContent(image, embeddingCapacity);
+        messageBlocks = shuffleList(messageBlocks);
         ArrayList<Block> embeddedImageList = embedMessage(blockList,messageBlocks);
         Color[][] reAssembleImageColours = reAssembleImage(embeddedImageList,"finalImage.bmp");
         //Color[][] imageColors = FragileWatermark.embedWaterMark(reAssembleImageColours);
         //saveImageFromColor(imageColors,"finalImage.bmp");
         
         return null;
+    }
+    
+    public static ArrayList<Block> shuffleList(ArrayList<Block> list){
+        long seed = System.nanoTime();
+        Collections.shuffle(list, new Random(seed));
+        return list;
     }
     
     public static ArrayList<Block> shuffelList(ArrayList<Block>  blockList){
@@ -102,21 +106,15 @@ public class SelfEmbed {
                 Block imageBlock = imageBlocks.get(i);
                 Block messageBlock = messageBlocks.get(messageBlockCount);
                 if(messageBlock.getComplexity()<embeddingRate){
-                    //TODO should conjugate here and save record of this in conjugation map
-                    //System.out.println("messageBlock binary before: "+getBlockBinary(messageBlock));
+                    //conjugate here and save record of this in conjugation map
                     messageBlock = conjugateBlock(messageBlock);
-                    //System.out.println("messageBlock binary after: "+getBlockBinary(messageBlock));
                     messageBlock.conjugated = true;
                     messageBlock.calculateComplexity();
-                }
-               
-                if(messageBlock.getComplexity()<embeddingRate){
-                    //System.out.println("dammit");
                 }
                 
                 messageBlock.lsbLayer = imageBlock.lsbLayer;
                 imageBlocks.set(i, messageBlock);
-                //System.out.println(FragileWatermark.getBlockBinary(imageBlocks.get(i)));
+
                 messageBlockCount++;
             }
             if(messageBlockCount==messageBlocks.size())

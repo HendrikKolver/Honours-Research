@@ -23,7 +23,7 @@ public class ImageContentExtractionAndCompression {
         *18 = the two position integers that get embedded
         *7 the two position integers only get embedded once for every 7 pixels
         */
-        double newPixelAmount = embeddingCapacity/(24.0+(18/7.0));
+        double newPixelAmount = embeddingCapacity/(24.0);
         double percentageLoss = (newPixelAmount/(512*512)*100);
         System.out.println("Size of embedded image: "+percentageLoss);
         int newWidth = (int) Math.sqrt(newPixelAmount);
@@ -42,29 +42,33 @@ public class ImageContentExtractionAndCompression {
         }
 
         BufferedImage scaledBuf = getScaledImage(bufImage,newWidth,newWidth);
-        int perBlockCheck = 7;
+        int perBlockCheck = 8;
         String binary = "";
         ArrayList<Block> blockList = new ArrayList<>();
+        int rowIndex = 0;
+        int colIndex = 0;
         for (int i = 0; i < scaledBuf.getHeight(); i++) {
             for (int j = 0; j < scaledBuf.getWidth(); j++) {
                 //7 is used because that is the amount of pixels that will be stored per block
-                if(perBlockCheck==7)
+                if(perBlockCheck==8)
                 {
                     //System.out.println("binarysize:" + binary.length());
                     if(perBlockCheck!=0 && !binary.equals("")){
 //                        System.out.println("binary: "+ binary);
 //                        System.out.println("ImediateBinary: "+ FragileWatermark.getBlockBinary(makeBlockRGBTogether(binary)));
                         Block tmpBlock = makeBlockRGBTogether(binary);
+                        //setting the index of the embedded pixels that will be added to the embedding map in the lsb layer
+                        tmpBlock.row = rowIndex;
+                        tmpBlock.col = colIndex;
                         tmpBlock.calculateComplexity();
                         blockList.add(tmpBlock);
                         
                     }
+                    rowIndex = i;
+                    colIndex = j;
                     perBlockCheck = 0;
                     binary = "";
-                    //binary += binaryImageSize;
-                    //System.out.println(getBinary(i,9)+" \\ "+getBinary(j,9));
-                    binary += getBinary(i,9);
-                    binary += getBinary(j,9);
+                    
                 }
                     
                 Color pixelColor = new Color(scaledBuf.getRGB(i, j));
@@ -82,11 +86,6 @@ public class ImageContentExtractionAndCompression {
         ImageIO.write(scaledBuf, "BMP", new File("scaledBlockNew.bmp"));
         
         return blockList;
-        
-        //System.out.println("MessageBlocks: "+blockList.size());
-//        scaledBuf = getScaledImage(scaledBuf,512,512);
-//        System.out.println(ImageIO.write(bufImage, "BMP", new File("originalBlock.bmp")));
-//        ImageIO.write(scaledBuf, "BMP", new File("scaledBlock.bmp"));
 
     }
     
