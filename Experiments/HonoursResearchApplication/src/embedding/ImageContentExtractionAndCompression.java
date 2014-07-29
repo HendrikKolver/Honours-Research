@@ -24,6 +24,8 @@ public class ImageContentExtractionAndCompression {
         *7 the two position integers only get embedded once for every 7 pixels
         */
         double newPixelAmount = embeddingCapacity/(24.0);
+        
+        //This divide by 2 creates space for the second embed
         newPixelAmount/=2;
         double percentageLoss = (newPixelAmount/(512*512)*100);
         System.out.println("Size of embedded image: "+percentageLoss);
@@ -81,7 +83,7 @@ public class ImageContentExtractionAndCompression {
             }
    
         }
-        
+        //Embedding for a second time to increase the tamper rate
         perBlockCheck = 8;
         binary = "";
         rowIndex = 0;
