@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 import javax.imageio.ImageIO;
 import loadImage.MyImage;
 
@@ -55,46 +53,29 @@ public class SelfEmbed {
     public static ArrayList<Block> shuffleList(ArrayList<Block> list){
         //long seed = System.nanoTime();
         //Collections.shuffle(list, new Random(seed));
-        int quater = list.size()/8;
-        ArrayList<Block> newList = new ArrayList<Block>();
-        for (int i = quater*7; i < list.size(); i++) {
+        int quater = list.size()/4;
+        ArrayList<Block> newList = new ArrayList<>();
+        for (int i = quater*3; i < list.size(); i++) {
+            //System.out.println("Quater4: "+list.get(i).row +" ; "+ "Quater1: "+list.get(i).col);
             newList.add(list.get(i)); 
         }
         
         for (int i = quater*2; i < quater*3; i++) {
-            newList.add(list.get(i)); 
-        }
-        
-        for (int i = quater*5; i < quater*6; i++) {
-            newList.add(list.get(i)); 
-        }
-        
-        for (int i = 0; i < quater; i++) {
-            newList.add(list.get(i)); 
-        }
-        
-        for (int i = quater*4; i < quater*5; i++) {
+            //System.out.println("Quater3: "+list.get(i).row +" ; "+ "Quater1: "+list.get(i).col);
             newList.add(list.get(i)); 
         }
         
         for (int i = quater; i < quater*2; i++) {
+            //System.out.println("Quater2: "+list.get(i).row +" ; "+ "Quater1: "+list.get(i).col);
             newList.add(list.get(i)); 
         }
         
-        for (int i = quater*6; i < quater*7; i++) {
+        for (int i = 0; i < quater; i++) {
+            //System.out.println("Quater1: "+list.get(i).row +" ; "+ "Quater1: "+list.get(i).col);
             newList.add(list.get(i)); 
         }
         
-        for (int i = quater*3; i < quater*4; i++) {
-            newList.add(list.get(i)); 
-        }
         return newList;
-    }
-    
-    public static ArrayList<Block> shuffelList(ArrayList<Block>  blockList){
-        long seed = System.nanoTime();
-        Collections.shuffle(blockList, new Random(seed));
-        return blockList;
     }
     
     public static String getStringForLocationMap(int[][][] locationMap){
@@ -132,9 +113,10 @@ public class SelfEmbed {
     }
     
     public static ArrayList<Block> embedMessage(ArrayList<Block> imageBlocks,ArrayList<Block> messageBlocks) throws NoSuchAlgorithmException, IOException{
-        //TODO
+
         //remember the message is not in grey code
-        int messageBlockCount =0;
+        int messageBlockCount =0;    
+
         for (int i = 0; i < imageBlocks.size(); i++) {
             if(imageBlocks.get(i).getComplexity()>embeddingRate  && imageBlocks.get(i).lsbLayer !=7){
                 Block imageBlock = imageBlocks.get(i);
@@ -158,6 +140,7 @@ public class SelfEmbed {
         FragileWatermark.embedWaterMark(imageBlocks);
         return imageBlocks;
     }
+    
          
     
     public static Color[][] reAssembleImage(ArrayList<Block> blocks, String name) throws IOException{
