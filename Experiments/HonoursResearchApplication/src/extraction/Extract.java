@@ -3,6 +3,7 @@ package extraction;
 import embedding.Block;
 import static embedding.FragileWatermark.getBlockBinary;
 import static embedding.ImageContentExtractionAndCompression.getScaledImage;
+import static embedding.ImageContentExtractionAndCompression.scaleIntToRange;
 import embedding.SelfEmbed;
 import static embedding.SelfEmbed.*;
 import static embedding.SelfEmbed.getBinary;
@@ -124,17 +125,22 @@ public class Extract {
                         int currentRow = indexRow;
                         int currentCol = indexCol;
                         int substringStart = 0;
-                        for (int i = 0; i < 8; i++) {
-                            String redBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
-                            substringStart+=8;
-                            String greenBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
-                            substringStart+=8;
-                            String blueBinaryString = blockBinaryString.substring(substringStart,substringStart+8);
-                            substringStart+=8;
-
+                        for (int i = 0; i < 12; i++) {
+                            String redBinaryString = blockBinaryString.substring(substringStart,substringStart+5);
+                            substringStart+=5;
+                            String greenBinaryString = blockBinaryString.substring(substringStart,substringStart+6);
+                            substringStart+=6;
+                            String blueBinaryString = blockBinaryString.substring(substringStart,substringStart+5);
+                            substringStart+=5;
+                            
+                            
                             int redColor = Integer.parseInt(redBinaryString, 2);
                             int greenColor = Integer.parseInt(greenBinaryString, 2);
                             int blueColor = Integer.parseInt(blueBinaryString, 2);
+                            
+                            redColor = scaleIntToRange(redColor,31,255);
+                            greenColor = scaleIntToRange(greenColor,63,255);
+                            blueColor = scaleIntToRange(blueColor,31,255);
 
                             Color tempPixelColor = new Color(redColor,greenColor,blueColor);
                            

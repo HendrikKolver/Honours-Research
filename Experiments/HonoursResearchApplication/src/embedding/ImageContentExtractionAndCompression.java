@@ -20,10 +20,9 @@ public class ImageContentExtractionAndCompression {
     public static ArrayList<Block> getCompressedImageContent(MyImage image, double embeddingCapacity) throws IOException{
         System.out.println(embeddingCapacity );
         /*24 = bit per pixel
-        *18 = the two position integers that get embedded
         *7 the two position integers only get embedded once for every 7 pixels
         */
-        double newPixelAmount = embeddingCapacity/(24.0);
+        double newPixelAmount = embeddingCapacity/(16.0);
         double percentageLoss = (newPixelAmount/(512*512)*100);
         System.out.println("Size of embedded image: "+percentageLoss);
         int newWidth = (int) Math.sqrt(newPixelAmount);
@@ -42,7 +41,7 @@ public class ImageContentExtractionAndCompression {
         }
 
         BufferedImage scaledBuf = getScaledImage(bufImage,newWidth,newWidth);
-        int perBlockCheck = 8;
+        int perBlockCheck = 12;
         String binary = "";
         ArrayList<Block> blockList = new ArrayList<>();
         int rowIndex = 0;
@@ -50,7 +49,7 @@ public class ImageContentExtractionAndCompression {
         for (int i = 0; i < scaledBuf.getHeight(); i++) {
             for (int j = 0; j < scaledBuf.getWidth(); j++) {
                 //7 is used because that is the amount of pixels that will be stored per block
-                if(perBlockCheck==8)
+                if(perBlockCheck==12)
                 {
                     //System.out.println("binarysize:" + binary.length());
                     if(perBlockCheck!=0 && !binary.equals("")){
@@ -72,10 +71,12 @@ public class ImageContentExtractionAndCompression {
                 }
                     
                 Color pixelColor = new Color(scaledBuf.getRGB(i, j));
-
-                binary+=(getBinary(pixelColor.getRed(),8));
-                binary+=(getBinary(pixelColor.getGreen(),8));
-                binary+=(getBinary(pixelColor.getBlue(),8));
+                int red = scaleIntToRange(pixelColor.getRed(),255,31);
+                int green = scaleIntToRange(pixelColor.getGreen(),255,63);
+                int blue = scaleIntToRange(pixelColor.getBlue(),255,31);
+                binary+=(getBinary(red,5));
+                binary+=(getBinary(green,6));
+                binary+=(getBinary(blue,5));
                 perBlockCheck++;
                     
                     
@@ -87,6 +88,12 @@ public class ImageContentExtractionAndCompression {
         
         return blockList;
 
+    }
+    
+    public static int scaleIntToRange(int number, double oldMax, double newMax){
+        int newNumber;
+        newNumber = (int)Math.round(((number/oldMax)* newMax)); 
+        return newNumber;
     }
     
     public static Block makeBlockRGBTogether(String binary){
