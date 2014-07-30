@@ -19,7 +19,7 @@ public class SelfEmbed {
     private static int cornerCol=0;
     public static int imageWidth = 0;
     //0.636
-    public static final double embeddingRate = 0.636;
+    public static final double embeddingRate = 0.7;
     
     public static MyImage selfEmbed(MyImage image) throws IOException, NoSuchAlgorithmException{
         ArrayList<Block> blockList = getBlocks(image);
