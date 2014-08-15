@@ -7,8 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class PSNR {
-    final static String originalName = "lena.bmp";
-    final static String modifiedName = "ReconstructedImageAfterScaleUp.bmp";
+    final static String originalName = "tree.bmp";
+    final static String modifiedName = "finalImage.bmp";
     public static void calculate() throws IOException{
     int     nrows, ncols;
     int     img1[][], img2[][];
