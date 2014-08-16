@@ -214,9 +214,9 @@ This method works with the following steps:
   \item Divide the image into bit planes
   \item Divide the bit planes into 8x8 blocks
   \item Calculate the complexity for each block //TODO find reference for how this is done
-  \item Divide the message to be embedded into similar binary 8x8 blocks
-  \item Calculate the complexity for each message block and conjugate if not complex enough
-  \item for each image block that is complex enough, replace that block with the next message block
+  \item Divide the image content reference to be embedded into similar binary 8x8 blocks
+  \item Calculate the complexity for each image reference block and conjugate if not complex enough
+  \item for each image block that is complex enough, replace that block with the next image reference block
   \item Convert the blocks back to binary representation
   \item reconstruct the image from the processed blocks 
 \end{enumerate}
@@ -229,34 +229,59 @@ This would obviously be a problem for the proposed method since the image will d
 \hspace{0pt} \\
 As a solution to this problem each block used for embedding is treated as a separate embedding entity.
 There is thus no overlap between two different blocks used for embedding.
-With the compression method used (\ref{ImageCompression}) this means that effectively 7 pixels are embedded in each embedding block. Along with these 7 pixels the location of the first pixel is also embedded using two integers.
+The image reference is first process using the method explained later in this section.
+Each block has 12 pixels (with a bit depth of 16 bits) of the reference image embedded into it.
+An embedding map containing the location of the first pixel to be embedded in the block is also created.
+Since the reference image pixels are embedded in order it is only necessary to know the location of the first pixel.
+This embedding map is then embedded into the LSB layer of that specific 8x8 block of pixels 
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
 This serves to give random access to the embedded content which is an essential property of self embedding as defined by (Korus et al. \cite{korus2013efficient})
 
 \hspace{0pt} \\
 Total space available for embedding per block = (8*8)*3 = 64*3 = 192
 \hspace{0pt} \\
-Total embedded bits = (7*24) + (2*9) = 186
+Total embedded bits = 12*16 = 192
 
-\hspace{0pt} \\
-This means that there is an excess of 6 bits per block that are not used for embedding. This is effectively means there are 6 bits of embedding space being wasted with each block.
-This is caused by the need to be able to identify blocks even after the image has been modified. 
-
-\paragraph{Image Compression}
+\paragraph{Image resizing}
 \label{ImageCompression}
 The image that is embedded into the cover image cannot be embedded with perfect quality due to space restrictions caused by the embedding algorithm. 
-Compression however is not the focus of this study.
-The embedded image is thus just a resized version of the original image.
-A higher quality reconstruction could be achieved if a better compression algorithm is used.
+The proposed method however does not utilize compression as it is beyond the scope of this paper.
+The proposed method rather reduces the bit rate of the image from 24 bits to 16 which reduces the size of each pixel by 6 bits.
+The image's size is also reduced according to the space available for embedding.
+When extracting the image reference data again the image is scaled up to it's original size of 512x512 pixels before restoration
 
 \paragraph{Block Spread}
-//TODO
-\hspace{0pt} \\
 It is very important how the embedded content is spread across the image because this affects the tamper rate
 \hspace{0pt} \\
-//put reference here
+//TODO put reference here
 \hspace{0pt} \\
-And explain further
+The proposed method uses a simple method for spreading the image reference content across the image.
+The image reference content to be embedded is first divided into blocks as per the BPCS steg algorithm.
+These blocks are subsequently stored in a list. 
+The created list is then reversed before embedding.
+Reversing the list means that the image reference content that contains the bottom right part of the original image will now be embedded into the top left part of the cover image.
+This creates an effect where the embedded reference content is far away from the content that it is referencing.
+This is important because if a piece of the cover image is destroyed it would not be able to recover it if that destroyed piece's reference content was destroyed with it.
+
+\paragraph{Conjugation}
+//TODO Look into references for this 
+\hspace{0pt} \\
+If a image content reference block is found to not be complex enough that block needs to be conjugated before embedding.
+This is important because if a block is not complex enough it cannot be detected when extracting and it may cause visual distortions to the image since it is replacing a complex block.
+
+\hspace{0pt} \\
+The block complexity is calculated by using a border complexity method.
+That is for each binary bit that has an adjacent binary bit that is different that it the border count is increased. 
+The final border count is then divided with the theoretical maximum border count, which would be a grid with a checkerboard pattern of 1's and 0's.
+
+\hspace{0pt} \\
+To conjugate a block each value in the grid needs to be changed to the XOR value of the original grid value and the corresponding value in a checkerboard grid (starting with a 1 in the top left hand corner).
+To reverse the conjugation this process simply needs to be repeated.
+
+\hspace{0pt} \\
+This method of conjugation is a simple method that makes a block more complex while still allowing the original values of the block to be retrieved.
+
+
 
 \subsubsection{Fragile Watermark}
 \label{impFragileWatermark}
@@ -278,16 +303,16 @@ Another problem with this method was the large amount of noise that this method 
 The fragile watermark used in the proposed method embeds a calculated hash into the image that is used to authenticate the content when the image is processed on the receiving end.
 
 \hspace{0pt} \\
-For each of the 8x8 pixel blocks in the image a hash is calculated by combining the binary of each of the 7 Most significant bit layers of that block. This binary stream is then used as the input to the SHA-256 hash function the output is a 256 bit hash string for that image block.
-This hash string is then truncated to a length of 185 bits.
-This is done to enable the conjugation map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
+For each of the 8x8 pixel section in the image a hash is calculated by combining the binary of each of the 7 Most significant bit layers of that section. This binary stream is then used as the input to the SHA-256 hash function the output is a 256 bit hash string for that image block.
+This hash string is then truncated to a length of 57 bits.
+This is done to enable the conjugation map as well as the embedding map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
 
 \hspace{0pt} \\
-//TODO - Find reference for truncation of hash security
+//TODO - Find reference for truncation of hash security, also explain why a 57 bit hash is sufficient
 \hspace{0pt} \\
 
 The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
-These 192 bits are finally embedded into the least significant bit plane of that specific block effectively replacing all the bits in that bit plane with the generated bit stream.
+These 192 bits are finally embedded into the least significant bit plane of that specific section of the cover image effectively replacing all the bits in that bit plane with the generated bit stream.
 
 \subsection{Extraction and Restoration}
 
@@ -298,23 +323,23 @@ for each block (block refers here to 8x8 pixel blocks, thus a block here contain
 The embedded hash is then extracted from the Least significant bit plane of that block.
 The extracted hash is then compared with the calculated hash and if they match the block is authentic.
 
+\subsubsection{Image restoration}
 \hspace{0pt} \\
 For each authentic block the 7 most significant bit planes have their complexity calculated.
 If a bit plane block is found to be complex enough it is assumed that there is image information embedded into it.
 The embedded conjugation map is extracted at this point and if it is found that any of the complex enough bit planes were conjugated the conjugation algorithm is applied again to reverse the conjugation.
 
 \hspace{0pt} \\
-//TODO Explain the conjugation in more detail
-\hspace{0pt} \\
-
 The embedded image content is extracted at this point from the processed bit planes and the embedded image is reconstructed.
+In order to know the location of the extracted pixels the embedding map that was embedded into the LSB bit plane of that image section is consulted \ref{bpcsSteg}.
+The reconstructed image is then scaled up back to it's original size of 512x512 pixels.
 The reconstructed image is then also split into pixel blocks.
 The original pixel blocks now get iterated and each block that was found not to be authentic is replaced by the corresponding reconstructed pixel block. 
 
 \hspace{0pt} \\
-This process restores the tampered areas of the image if their matching pixel blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost. 
+This process restores the tampered areas of the image if their matching pixel blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost.
 
-
+\section{Results} 
 
 
 \bibliography{main}

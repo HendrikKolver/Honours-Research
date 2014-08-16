@@ -16,8 +16,11 @@
 \contentsline {section}{\numberline {3}Implementation}{6}
 \contentsline {subsection}{\numberline {3.1}Embedding}{6}
 \contentsline {subsubsection}{\numberline {3.1.1}BPCS Steg}{6}
-\contentsline {paragraph}{Image Compression}{7}
-\contentsline {paragraph}{Block Spread}{7}
+\contentsline {paragraph}{Image resizing}{7}
+\contentsline {paragraph}{Block Spread}{8}
+\contentsline {paragraph}{Conjugation}{8}
 \contentsline {subsubsection}{\numberline {3.1.2}Fragile Watermark}{8}
-\contentsline {subsection}{\numberline {3.2}Extraction and Restoration}{8}
-\contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{8}
+\contentsline {subsection}{\numberline {3.2}Extraction and Restoration}{9}
+\contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{9}
+\contentsline {subsubsection}{\numberline {3.2.2}Image restoration}{9}
+\contentsline {section}{\numberline {4}Results}{10}
