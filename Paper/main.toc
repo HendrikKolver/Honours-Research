@@ -24,3 +24,4 @@
 \contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{9}
 \contentsline {subsubsection}{\numberline {3.2.2}Image restoration}{9}
 \contentsline {section}{\numberline {4}Results}{10}
+\contentsline {section}{\numberline {5}Conclusion}{12}

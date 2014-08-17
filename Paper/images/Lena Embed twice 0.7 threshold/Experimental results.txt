@@ -1,0 +1,3 @@
+Final Image:			34.9 dB
+Restored Image:			32.52 dB
+Embedded reference Image:	31 dB

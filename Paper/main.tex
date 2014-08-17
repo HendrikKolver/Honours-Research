@@ -8,8 +8,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[margin=1.0in]{geometry}
 
+\usepackage{graphicx}
+\graphicspath{ {images/}}
 
-\title{High quality content reconstruction in images using a high capacity self-embedding algorithm}
+\title{High quality content reconstruction in images using the BPCS Steganography algorithm}
 
 \author{Hendrik J Kolver}
 
@@ -25,9 +27,13 @@ This will give the reader a short overview of what they can expect to find in th
 
 \end{abstract}
 
-\tableofcontents
+\iffalse 
+\tableofcontents 
+\fi
 
 \section{Introduction}
+
+
 This section gives a brief description of the concepts used in this report.
 The reasoning behind the proposed method will also be explained in \ref{introQualityIncrease} and \ref{introHighCap}.
 This will serve to to show the applicability of the proposed method as well as the shortcomings it attempts to address. 
@@ -200,6 +206,7 @@ All three methods thus provide good results and would serve as a good benchmark 
 \label{Implementation}
 
 \subsection{Embedding}
+\label{embedding}
 
 \subsubsection{BPCS Steg}
 \label{bpcsSteg}
@@ -315,7 +322,7 @@ The conjugation map is appended to the truncated hash string to create a binary 
 These 192 bits are finally embedded into the least significant bit plane of that specific section of the cover image effectively replacing all the bits in that bit plane with the generated bit stream.
 
 \subsection{Extraction and Restoration}
-
+\label{extractRestore}
 \subsubsection{Image authentication}
 The first step for the image extraction and restoration process is to determine which, if any, parts of the image has been tampered with.
 This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
@@ -340,7 +347,141 @@ The original pixel blocks now get iterated and each block that was found not to 
 This process restores the tampered areas of the image if their matching pixel blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost.
 
 \section{Results} 
-//TODO add the images for the results
+In testing the proposed method a simple experiment was set up in which the image was processed using the embedding process described in \ref{embedding}.
+The results of that process can be seen in the following two images, showing the original Image and the image after the embedding process.
+Note that in this case the Image Reference content was only embedded once
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"lena"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImage"}%
+}%
+\caption{Embedding Once. Left: Original Image, Right: Image After embedding}
+\label{fig:lenaEmbedOnceEmbedding}
+\end{figure}
+
+//TODO get reference for PSNR
+\hspace{0pt} \\
+After the image after embedding was generated the PSNR of the embedded image in relation to the original image was calculated.
+In this instance the PSNR after embedding was: 34.92dB 
+
+\hspace{0pt} \\
+The next step in the experiment conducted was to modify the Image after embedding (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+After the Image was modified it was processed using the method described in \ref{extractRestore}.
+The results of this process can be seen in the following two images, showing the Image after Tampering and the Image after Restoration.
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImage - Copy"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImageAfterRestoration"}%
+}%
+\caption{Embedding Once. Left: Image After Tampering, Right: Image After Restoration}
+\label{fig:lenaEmbedOnceRestoration}
+\end{figure}
+
+\hspace{0pt} \\
+After the image (shown in figure \ref{fig:lenaEmbedOnceRestoration}) was restored the PSNR of the Image After Restoration was calculated in relation to the Original Image (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+In this instance the PSNR after restoration was: 34.89dB.
+
+\hspace{0pt} \\
+It was found in the experimentation process that if the Image reference content is only embedded once that the quality of the Image after embedding as well as the quality of the Image after restoration was relatively high.
+It was however found that the tamper rate possible was quite low at \textless 3\%.
+To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the Image reference content now being embedded twice.
+The results can be seen below
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"lena"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImage"}%
+}%
+\caption{Embedding Twice. Left: Original Image, Right: Image After embedding}
+\label{fig:lenaEmbedTwiceEmbedding}
+\end{figure}
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImage - Copy"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImageAfterRestoration"}%
+}%
+\caption{Embedding Twice. Left: Image After Tampering, Right: Image After Restoration}
+\label{fig:lenaEmbedTwiceRestoration}
+\end{figure}
+
+\hspace{0pt} \\
+In order to embed the Image reference content twice the content needs to be half the size that is used when embedding once.
+This reduces the quality of the Image after Restoration from the previous 34.89dB to 32.52 dB.
+The tamper rate however is now increased from \textless 3\% to \textless 35\%
+
+\hspace{0pt} \\
+This experiment was also completed on the following image.
+First Embedding the Image reference content once:
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.3375]{"tree"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImage"}%
+}%
+\caption{Embedding Once. Left: Original Image, Right: Image After embedding}
+\label{fig:treeEmbedOnceEmbedding}
+\end{figure}
+
+\hspace{0pt} \\
+The PSNR of the Image after embedding (show in figure \ref{fig:treeEmbedOnceEmbedding}) was 27.94dB.
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImage - Copy"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImageAfterRestoration"}%
+}%
+\caption{Embedding Once. Left: Image After Tampering, Right: Image After Restoration}
+\label{fig:treeEmbedOnceRestoration}
+\end{figure}
+
+\hspace{0pt} \\
+The PSNR of the Image after restoration (show in figure \ref{fig:treeEmbedOnceRestoration}) was 27.72dB.
+The tamper rate, as was the case with the lena image, was also \textless 3\%.
+The experiment was also conducted by embedding the Image reference content twice.
+As is shown below.
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.3375]{"tree"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImage"}%
+}%
+\caption{Embedding Twice. Left: Original Image, Right: Image After embedding}
+\label{fig:treeEmbedTwiceEmbedding}
+\end{figure}
+
+\hspace{0pt} \\
+The PSNR of the Image after embedding (show in figure \ref{fig:treeEmbedTwiceEmbedding}) was 27.93dB.
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImage - Copy"}%
+\hspace{0.1cm}
+\includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImageAfterRestoration"}%
+}%
+\caption{Embedding Twice. Left: Image After Tampering, Right: Image After Restoration}
+\label{fig:treeEmbedTwiceRestoration}
+\end{figure}
+
+\hspace{0pt} \\
+The PSNR of the Image after restoration (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
+The tamper rate, as was the case with the lena image, was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
+
+\hspace{0pt} \\
+The second image used thus behaved in a similiar manner to the first image with the only significant difference being the much lower PSNR values produced
+
+\section{Conclusion}
+//TODO Write the conclusion 
+
 
 
 \bibliography{main}
