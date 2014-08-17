@@ -7,6 +7,7 @@
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[T1]{fontenc}
 \usepackage[margin=1.0in]{geometry}
+\usepackage{mathtools}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -220,7 +221,7 @@ This method works with the following steps:
   \item Convert the binary representation into Gray code
   \item Divide the image into bit planes
   \item Divide the bit planes into 8x8 blocks
-  \item Calculate the complexity for each block //TODO find reference for how this is done
+  \item Calculate the complexity for each block
   \item Divide the image content reference to be embedded into similar binary 8x8 blocks
   \item Calculate the complexity for each image reference block and conjugate if not complex enough
   \item for each image block that is complex enough, replace that block with the next image reference block
@@ -315,9 +316,21 @@ This hash string is then truncated to a length of 57 bits.
 This is done to enable the conjugation map as well as the embedding map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
 
 \hspace{0pt} \\
-//TODO - Find reference for truncation of hash security, also explain why a 57 bit hash is sufficient
-\hspace{0pt} \\
+The SHA-256 hash used is truncated to a 57 bit hash. 
+This means that the hash has y possible unique values 
+\[ y = 57^2 = 3249 \]
+The image has 512x512 pixels that are divided into 8x8 sections.
+This means that there are k amount of unique sections in the image
+\[x = \frac{512}{8} = 64 \]
+\[k = x^2 =64^2 = 4096 \]
+Since k \textgreater y the proposed solution is subject to the pigeonhole principle \cite{cook1976short}.
+The pigeonhole principle states that since the input for the hash function (k) is greater than the amount of unique outputs of the hash function (y) there will be duplicate hash values produced.
+However since the generated hash values are calculated from each section and then compared to the bits stored in the LSB layer of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur.
+Extensive testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
+However should this case arise, the proposed method would simple restore that section as well.
+Thus not having a major impact on the final result of the restoration.
 
+\hspace{0pt} \\
 The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
 These 192 bits are finally embedded into the least significant bit plane of that specific section of the cover image effectively replacing all the bits in that bit plane with the generated bit stream.
 
@@ -361,8 +374,8 @@ Note that in this case the Image Reference content was only embedded once
 \label{fig:lenaEmbedOnceEmbedding}
 \end{figure}
 
-//TODO get reference for PSNR
 \hspace{0pt} \\
+All images will be evaluated using Peak Signal to Noise Ratio (PSNR) because it is the most widely used measurement for objective image quality and is easily comparable with previous research. \cite{wang2002image}
 After the image after embedding was generated the PSNR of the embedded image in relation to the original image was calculated.
 In this instance the PSNR after embedding was: 34.92dB 
 
