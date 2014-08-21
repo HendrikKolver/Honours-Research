@@ -261,8 +261,9 @@ When extracting the image reference data again the image is scaled up to it's or
 \paragraph{Block Spread}
 It is very important how the embedded content is spread across the image because this affects the tamper rate
 \hspace{0pt} \\
-//TODO put reference here
-\hspace{0pt} \\
+\cite{korus2013efficient} Has found that it is important that the image reference content should be uniformly distributed across the cover image and that each part of the cover image should contain equal information about the image reference content.
+Due to the fact that the proposed method uses an adaptive embedding algorithm it is not possible for each part of the cover image to contain equal information about the image content reference.
+The proposed method does however distribute the embedded image reference content evenly among the blocks that were identified as suitable for embedding.
 The proposed method uses a simple method for spreading the image reference content across the image.
 The image reference content to be embedded is first divided into blocks as per the BPCS steg algorithm.
 These blocks are subsequently stored in a list. 
@@ -272,15 +273,13 @@ This creates an effect where the embedded reference content is far away from the
 This is important because if a piece of the cover image is destroyed it would not be able to recover it if that destroyed piece's reference content was destroyed with it.
 
 \paragraph{Conjugation}
-//TODO Look into references for this 
-\hspace{0pt} \\
 If a image content reference block is found to not be complex enough that block needs to be conjugated before embedding.
 This is important because if a block is not complex enough it cannot be detected when extracting and it may cause visual distortions to the image since it is replacing a complex block.
 
 \hspace{0pt} \\
-The block complexity is calculated by using a border complexity method.
-That is for each binary bit that has an adjacent binary bit that is different that it the border count is increased. 
-The final border count is then divided with the theoretical maximum border count, which would be a grid with a checkerboard pattern of 1's and 0's.
+The block complexity is calculated by using a border complexity method. \cite{beaullieubpcs}
+That is for each binary bit that has an adjacent binary bit that is different than it the border count is increased. 
+The final border count is then divided with the theoretical maximum border count, which would be the same a the border count for a grid with a checkerboard pattern.
 
 \hspace{0pt} \\
 To conjugate a block each value in the grid needs to be changed to the XOR value of the original grid value and the corresponding value in a checkerboard grid (starting with a 1 in the top left hand corner).
