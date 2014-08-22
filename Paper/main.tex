@@ -12,7 +12,7 @@
 \usepackage{graphicx}
 \graphicspath{ {images/}}
 
-\title{High quality content reconstruction in images using the BPCS Steganography algorithm}
+\title{Self recovering capabilities in images using the BPCS Steganography algorithm}
 
 \author{Hendrik J Kolver}
 
@@ -29,8 +29,9 @@ This will give the reader a short overview of what they can expect to find in th
 \end{abstract}
 
 \iffalse 
-\tableofcontents 
+ 
 \fi
+\tableofcontents
 
 \section{Introduction}
 
@@ -322,7 +323,7 @@ The image has 512x512 pixels that are divided into 8x8 sections.
 This means that there are k amount of unique sections in the image
 \[x = \frac{512}{8} = 64 \]
 \[k = x^2 =64^2 = 4096 \]
-Since k \textgreater y the proposed solution is subject to the pigeonhole principle \cite{cook1976short}.
+Since k \textgreater y the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
 The pigeonhole principle states that since the input for the hash function (k) is greater than the amount of unique outputs of the hash function (y) there will be duplicate hash values produced.
 However since the generated hash values are calculated from each section and then compared to the bits stored in the LSB layer of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur.
 Extensive testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
@@ -489,12 +490,46 @@ The PSNR of the Image after restoration (show in figure \ref{fig:treeEmbedOnceRe
 The tamper rate, as was the case with the lena image, was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
 
 \hspace{0pt} \\
-The second image used thus behaved in a similiar manner to the first image with the only significant difference being the much lower PSNR values produced
+The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced
+
+\section{Interpretation of results}
+The proposed method for self-recovering images using the BPCS Steg embedding algorithm described in the preceding sections was shown to be effective.
+According to Appendix B in \cite{korus2013efficient} the proposed method achieved Average to High quality restoration in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
+The proposed method achieved Low quality restoration in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
+
+\hspace{0pt} \\
+The quality measures mentioned were measured using the PSNR method. \cite{huynh2008scope} However determined that the validity of PSNR is limited to modifications within the same image.
+It is thus not reliable to compare PSNR values between two different images.
+With that in mind the image from figures \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} was specifically chosen because it is well used in the literature and can serve to compare to proposed method to other methods available in the literature.
+Such comparisons follow below 
+
+\hspace{0pt} \\
+The proposed method does not perform as well as the method described in \ref{ErasureChannelOverview}.
+The proposed method achieves PSNR values that are about 5dB worse than the method described in \ref{ErasureChannelOverview}.
+Compared to the method described in \ref{differenceExpansionOverview} the proposed method performs in a similar manner.
+The PSNR values achieved are worse than that of the method in \ref{differenceExpansionOverview} but the difference is around 1-2dB and is thus almost negligible.
+It should also be mentioned that the proposed method uses no compression on the image reference content, similar to the method in \ref{differenceExpansionOverview}.
+This method thus serves as a more equal comparison. 
+
+\hspace{0pt} \\
+\cite{wang2002image} Points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
+PSNR is a useful measure for objective image quality assessment to a certain degree however there are other important factors to consider. The one important factor is how a person would perceive the image quality.
+Another important factor is if the meaning of the image is still clear even after reconstruction.
+This would typically mean being able to identify key features of the image easily. 
+The proposed method performs well under this form a visual analysis.
+
+\hspace{0pt} \\
+It was found during experimenting that Image quality can vary greatly among different image using the proposed method.
+This can be attributed to the fact that an adaptive embedding method is used and the embedding thus differs depending on the chosen cover image.
+The embedding rate and effects of the embedding rate seemed consistent across the different images used.
 
 \section{Conclusion}
-//TODO Write the conclusion 
-
-
+The proposed method described used an adaptive embedding algorithm described in \ref{bpcsSteg}.
+The proposed method was shown to provide good quality as well as a good tamper rate.
+It was also shown that the quality of the cover image after embedding the image reference content and the image quality after restoration differs depending on the cover image chosen.
+This was attributed to the adaptive embedding algorithm used.
+It was also mentioned that no compression was used on the image reference content that was embedded into the cover image.
+If compression is used it may result in higher quality of the image after restoration as well as the cover image due to fewer modifications that will be made during embedding.
 
 \bibliography{main}
 \bibliographystyle{plain}

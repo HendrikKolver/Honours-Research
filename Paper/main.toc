@@ -20,8 +20,9 @@
 \contentsline {paragraph}{Block Spread}{8}
 \contentsline {paragraph}{Conjugation}{8}
 \contentsline {subsubsection}{\numberline {3.1.2}Fragile Watermark}{8}
-\contentsline {subsection}{\numberline {3.2}Extraction and Restoration}{9}
-\contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{9}
-\contentsline {subsubsection}{\numberline {3.2.2}Image restoration}{9}
+\contentsline {subsection}{\numberline {3.2}Extraction and Restoration}{10}
+\contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{10}
+\contentsline {subsubsection}{\numberline {3.2.2}Image restoration}{10}
 \contentsline {section}{\numberline {4}Results}{10}
-\contentsline {section}{\numberline {5}Conclusion}{12}
+\contentsline {section}{\numberline {5}Interpretation of results}{14}
+\contentsline {section}{\numberline {6}Conclusion}{15}
