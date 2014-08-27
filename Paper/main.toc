@@ -22,7 +22,7 @@
 \contentsline {subsubsection}{\numberline {3.1.2}Fragile Watermark}{9}
 \contentsline {subsection}{\numberline {3.2}Extraction and Reconstruction}{10}
 \contentsline {subsubsection}{\numberline {3.2.1}Image authentication}{10}
-\contentsline {subsubsection}{\numberline {3.2.2}Image reconstruction}{10}
+\contentsline {subsubsection}{\numberline {3.2.2}Image reconstruction}{11}
 \contentsline {section}{\numberline {4}Results}{11}
 \contentsline {section}{\numberline {5}Interpretation of results}{14}
 \contentsline {section}{\numberline {6}Conclusion}{16}

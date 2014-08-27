@@ -311,21 +311,25 @@ In order to be able to detect which parts of the image have been tampered with a
 
 \hspace{0pt} \\
 An initial attempt was made to apply the method proposed in \cite{tian2002wavelet}.
-This method is a reversible fragile watermark which means that the watermark can be removed to restore the original content bit by bit before watermarking if the image was found to be authentic.
+This method is a reversible fragile watermark which means that the watermark can be removed, during the extraction and reconstruction process, to restore the original content bit by bit to what it was before watermarking, if the image was found to be authentic.
 
 \hspace{0pt} \\
-The method needed to be adapted to authenticate the image on a block level, the image is divided into 8x8 blocks.
+The method needed to be adapted to authenticate the image on a block level, because the image is divided into 8x8 blocks.
 The method requires compression of bit streams in order to embed the watermark and to be able to extract the watermark again.
-The bit streams are rather small in the proposed method because they are only applicable to a specific 8x8 pixel block. This results in the fact that there is not always enough redundancy to be able to compress the bit streams enough for embedding.
+These bit streams are used to store the embedding locations of watermark.
+The bit streams are rather small in the proposed method because they are only applicable to a specific 8x8 pixel block. 
+This is because each block is treated as a separate embedding entity.
+This results in the fact that there is not always enough redundancy to be able to compress the bit streams for embedding.
 
 \hspace{0pt} \\
 Another problem with this method was the large amount of noise that this method of watermarking introduces into the cover image since it also uses difference expansion as mentioned in \cite{tian2002reversible}.
 
 \hspace{0pt} \\
-The fragile watermark used in the proposed method embeds a calculated hash into the image that is used to authenticate the content when the image is processed on the receiving end.
+The fragile watermark used in the proposed method embeds a calculated hash into the image that is used to authenticate the content when the image is reconstructed on the receiving end.
 
 \hspace{0pt} \\
-For each of the 8x8 pixel section in the image a hash is calculated by combining the binary of each of the 7 Most significant bit layers of that section. This binary stream is then used as the input to the SHA-256 hash function the output is a 256 bit hash string for that image block.
+For each of the 8x8 pixel section in the image after embedding a hash is calculated by combining the binary of each of the 7 Most significant bit planes of that section. This binary hash stream is then used as the input to the SHA-256 hash function.
+The output is a 256 bit hash string for that image section.
 This hash string is then truncated to a length of 57 bits.
 This is done to enable the conjugation map as well as the embedding map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
 
@@ -339,43 +343,46 @@ This means that there are k amount of unique sections in the image
 \[k = x^2 =64^2 = 4096 \]
 Since k \textgreater y the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
 The pigeonhole principle states that since the input for the hash function (k) is greater than the amount of unique outputs of the hash function (y) there will be duplicate hash values produced.
-However since the generated hash values are calculated from each section and then compared to the bits stored in the LSB layer of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur.
+However since the generated hash values are calculated from the 7 MSB planes of each section and then compared to the bits stored in the LSB plane of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur.
 Extensive testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
-However should this case arise, the proposed method would simple restore that section as well.
-Thus not having a major impact on the final result of the restoration.
+However should this case arise, the proposed method would simply restore that section as well.
+Thus not having a major impact on the final result of the reconstruction.
 
 \hspace{0pt} \\
 The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
-These 192 bits are finally embedded into the least significant bit plane of that specific section of the cover image effectively replacing all the bits in that bit plane with the generated bit stream.
+These 192 bits are finally embedded into the LSB plane of that specific section of the image after embedding effectively replacing all the bits in that bit plane with the generated bit stream.
 
 \subsection{Extraction and Reconstruction}
 \label{extractRestore}
 \subsubsection{Image authentication}
-The first step for the image extraction and restoration process is to determine which, if any, parts of the image has been tampered with.
+The first step for the image extraction and reconstruction process is to determine which, if any, parts of the image after embedding has been tampered with.
 This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
-for each block (block refers here to 8x8 pixel blocks, thus a block here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
-The embedded hash is then extracted from the Least significant bit plane of that block.
-The extracted hash is then compared with the calculated hash and if they match the block is authentic.
+for each section (section refers here to 8x8 pixel section, thus a section here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
+The embedded hash is then extracted from the LSB plane of that block.
+The extracted hash is then compared with the calculated hash and if they match the section is authentic.
+If they do not match then that section has been tampered with.
 
 \subsubsection{Image reconstruction}
 \hspace{0pt} \\
-For each authentic block the 7 most significant bit planes have their complexity calculated.
+For each authentic block the 7 MSB planes have their complexity calculated.
 If a bit plane block is found to be complex enough it is assumed that there is image information embedded into it.
-The embedded conjugation map is extracted at this point and if it is found that any of the complex enough bit planes were conjugated the conjugation algorithm is applied again to reverse the conjugation.
+The embedded conjugation map is extracted at this point and if it is found that any of the complex enough bit plane blocks were conjugated the conjugation algorithm is applied again to reverse the conjugation.
 
 \hspace{0pt} \\
-The embedded image content is extracted at this point from the processed bit planes and the embedded image is reconstructed.
+The embedded image content is extracted at this point from the processed bit plane blocks and the embedded image is reconstructed.
 In order to know the location of the extracted pixels the embedding map that was embedded into the LSB bit plane of that image section is consulted \ref{bpcsSteg}.
 The reconstructed image is then scaled up back to it's original size of 512x512 pixels.
-The reconstructed image is then also split into pixel blocks.
-The original pixel blocks now get iterated and each block that was found not to be authentic is replaced by the corresponding reconstructed pixel block. 
+The reconstructed image is then also split into bit plane blocks.
+This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
+The bit plane blocks generated from the image after embedding now get iterated and each block that was found not to be authentic is replaced by the corresponding reconstructed bit plane block. 
 
 \hspace{0pt} \\
-This process restores the tampered areas of the image if their matching pixel blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost.
+This process restores the tampered areas of the image if their matching bit plane blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. 
+Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost.
 
 \section{Results} 
-In testing the proposed method a simple experiment was set up in which the image was processed using the embedding process described in \ref{embedding}.
-The results of that process can be seen in the following two images, showing the original Image and the image after the embedding process.
+In testing the proposed method a simple experiment was set up in which the original image was processed using the embedding process described in \ref{embedding}.
+The results of that process can be seen in figure \ref{fig:lenaEmbedOnceEmbedding}, showing the original image and the image after the embedding process.
 Note that in this case the Image Reference content was only embedded once
 
 \begin{figure}[h]
@@ -390,13 +397,13 @@ Note that in this case the Image Reference content was only embedded once
 
 \hspace{0pt} \\
 All images will be evaluated using Peak Signal to Noise Ratio (PSNR) because it is the most widely used measurement for objective image quality and is easily comparable with previous research. \cite{wang2002image}
-After the image after embedding was generated the PSNR of the embedded image in relation to the original image was calculated.
+After the image after embedding was generated the PSNR of the image after embedding in relation to the original image was calculated.
 In this instance the PSNR after embedding was: 34.92dB 
 
 \hspace{0pt} \\
-The next step in the experiment conducted was to modify the Image after embedding (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
-After the Image was modified it was processed using the method described in \ref{extractRestore}.
-The results of this process can be seen in the following two images, showing the Image after Tampering and the Image after Restoration.
+The next step in the experiment conducted was to modify the image after embedding (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+After the image was modified it was reconstructed using the method described in \ref{extractRestore}.
+The results of this reconstruction can be seen in figure \ref{fig:lenaEmbedOnceRestoration}, showing the image after tampering and the image after reconstruction.
 
 \begin{figure}[h]
 \centerline{%
@@ -409,14 +416,14 @@ The results of this process can be seen in the following two images, showing the
 \end{figure}
 
 \hspace{0pt} \\
-After the image (shown in figure \ref{fig:lenaEmbedOnceRestoration}) was restored the PSNR of the Image After Restoration was calculated in relation to the Original Image (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+After the image (shown in figure \ref{fig:lenaEmbedOnceRestoration}) was reconstructed the PSNR of the image after reconstruction (figure \ref{fig:lenaEmbedOnceRestoration}) was calculated in relation to the Original Image (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
 In this instance the PSNR after restoration was: 34.89dB.
 
 \hspace{0pt} \\
-It was found in the experimentation process that if the Image reference content is only embedded once that the quality of the Image after embedding as well as the quality of the Image after restoration was relatively high.
+It was found in the experimentation process that if the image reference content is only embedded once into the original image that the quality of the Image after embedding as well as the quality of the image after reconstruction was relatively high.
 It was however found that the tamper rate possible was quite low at \textless 3\%.
-To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the Image reference content now being embedded twice.
-The results can be seen below
+To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the Image reference content was now being embedded twice.
+The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding} and figure \ref{fig:lenaEmbedTwiceRestoration}
 
 \begin{figure}[h]
 \centerline{%
@@ -439,13 +446,13 @@ The results can be seen below
 \end{figure}
 
 \hspace{0pt} \\
-In order to embed the Image reference content twice the content needs to be half the size that is used when embedding once.
-This reduces the quality of the Image after Restoration from the previous 34.89dB to 32.52 dB.
+In order to embed the image reference content twice the image reference content needs to be half the size that is used when embedding once.
+This reduces the quality of the image after reconstruction from the previous 34.89dB to 32.52 dB.
 The tamper rate however is now increased from \textless 3\% to \textless 35\%
 
 \hspace{0pt} \\
 This experiment was also completed on the following image.
-First Embedding the Image reference content once:
+First Embedding the Image reference content once (figure \ref{fig:treeEmbedOnceEmbedding} and figure \ref{fig:treeEmbedOnceRestoration}):
 
 \begin{figure}[h]
 \centerline{%
@@ -458,7 +465,7 @@ First Embedding the Image reference content once:
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the Image after embedding (show in figure \ref{fig:treeEmbedOnceEmbedding}) was 27.94dB.
+The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedOnceEmbedding}) was 27.94dB.
 
 \begin{figure}[h]
 \centerline{%
@@ -471,10 +478,9 @@ The PSNR of the Image after embedding (show in figure \ref{fig:treeEmbedOnceEmbe
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the Image after restoration (show in figure \ref{fig:treeEmbedOnceRestoration}) was 27.72dB.
-The tamper rate, as was the case with the lena image, was also \textless 3\%.
-The experiment was also conducted by embedding the Image reference content twice.
-As is shown below.
+The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 27.72dB.
+The tamper rate, as was the case with the first image (figure \ref{fig:lenaEmbedOnceRestoration}), was also \textless 3\%.
+The experiment was also conducted by embedding the Image reference content twice (figure \ref{fig:treeEmbedTwiceEmbedding} and figure \ref{fig:treeEmbedTwiceRestoration}).
 
 \begin{figure}[h]
 \centerline{%
@@ -487,7 +493,7 @@ As is shown below.
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the Image after embedding (show in figure \ref{fig:treeEmbedTwiceEmbedding}) was 27.93dB.
+The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedTwiceEmbedding}) was 27.93dB.
 
 \begin{figure}[h]
 \centerline{%
@@ -500,50 +506,60 @@ The PSNR of the Image after embedding (show in figure \ref{fig:treeEmbedTwiceEmb
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the Image after restoration (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
-The tamper rate, as was the case with the lena image, was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
+The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
+The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
 
 \hspace{0pt} \\
-The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced
+The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced.
+
+As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self recovering capabilities.
+This is discussed further in  section \ref{interpretation}.
 
 \section{Interpretation of results}
+\label{interpretation}
 The proposed method for self-recovering images using the BPCS Steg embedding algorithm described in the preceding sections was shown to be effective.
-According to Appendix B in \cite{korus2013efficient} the proposed method achieved Average to High quality restoration in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
-The proposed method achieved Low quality restoration in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
+According to Appendix B in \cite{korus2013efficient} the proposed method achieved Average to High quality reconstruction in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
+The proposed method achieved Low quality reconstruction in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
 
 \hspace{0pt} \\
 The quality measures mentioned were measured using the PSNR method. \cite{huynh2008scope} However determined that the validity of PSNR is limited to modifications within the same image.
 It is thus not reliable to compare PSNR values between two different images.
 With that in mind the image from figures \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} was specifically chosen because it is well used in the literature and can serve to compare to proposed method to other methods available in the literature.
-Such comparisons follow below 
+Such comparisons follow below. 
 
 \hspace{0pt} \\
 The proposed method does not perform as well as the method described in \ref{ErasureChannelOverview}.
 The proposed method achieves PSNR values that are about 5dB worse than the method described in \ref{ErasureChannelOverview}.
 Compared to the method described in \ref{differenceExpansionOverview} the proposed method performs in a similar manner.
-The PSNR values achieved are worse than that of the method in \ref{differenceExpansionOverview} but the difference is around 1-2dB and is thus almost negligible.
+The PSNR values achieved are worse than that of the method in \ref{differenceExpansionOverview} but the difference is around 1-2dB and is thus almost not noticeable to the human eye.
 It should also be mentioned that the proposed method uses no compression on the image reference content, similar to the method in \ref{differenceExpansionOverview}.
 This method thus serves as a more equal comparison. 
 
 \hspace{0pt} \\
 \cite{wang2002image} Points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
-PSNR is a useful measure for objective image quality assessment to a certain degree however there are other important factors to consider. The one important factor is how a person would perceive the image quality.
+PSNR is a useful measure for objective image quality assessment to a certain degree however there are other important factors to consider. 
+The one important factor is how a person would perceive the image quality.
 Another important factor is if the meaning of the image is still clear even after reconstruction.
 This would typically mean being able to identify key features of the image easily. 
 The proposed method performs well under this form a visual analysis.
 
 \hspace{0pt} \\
-It was found during experimenting that Image quality can vary greatly among different image using the proposed method.
-This can be attributed to the fact that an adaptive embedding method is used and the embedding thus differs depending on the chosen cover image.
+It was found during experimentation that image quality can vary greatly among different image using the proposed method.
+This can be attributed to the fact that an adaptive embedding method is used and where the image reference content is embedded thus differs depending on the chosen original image.
+
+\hspace{0pt} \\
 The embedding rate and effects of the embedding rate seemed consistent across the different images used.
+The embedding rate was low where the image reference content was only embedded once into the original image and compared poorly to methods such as the one described in \ref{DynamicBlockOverview}.
+However it was found that if the image reference content is embedded twice into the original image that the tamper rate compares equally to that of methods such as the one described in \ref{DynamicBlockOverview}.
+
 
 \section{Conclusion}
 The proposed method described used an adaptive embedding algorithm described in \ref{bpcsSteg}.
 The proposed method was shown to provide good quality as well as a good tamper rate.
-It was also shown that the quality of the cover image after embedding the image reference content and the image quality after restoration differs depending on the cover image chosen.
+It was also shown that the quality of the image after embedding the image reference content and the image quality after reconstruction differs depending on the cover image chosen.
 This was attributed to the adaptive embedding algorithm used.
-It was also mentioned that no compression was used on the image reference content that was embedded into the cover image.
-If compression is used it may result in higher quality of the image after restoration as well as the cover image due to fewer modifications that will be made during embedding.
+It was also mentioned that no compression was used on the image reference content that was embedded into the original image.
+If compression is used it may result in higher quality of the image after reconstruction as well as the image after embedding due to fewer modifications that will be made during embedding.
 
 \bibliography{main}
 \bibliographystyle{plain}
