@@ -8,6 +8,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[margin=1.0in]{geometry}
 \usepackage{mathtools}
+\usepackage{setspace}
+\setstretch{1.0}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -28,26 +30,58 @@ This will give the reader a short overview of what they can expect to find in th
 
 \end{abstract}
 
-\iffalse 
- 
-\fi
 \tableofcontents
-\section{Terms used}
+\section{Introduction}
+
+\subsection{Introduction}
+This paper proposes a novel method for self-recovering images.
+
+\hspace{0pt} \\
+Self-recovering images: Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. 
+This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that the image was damaged.
+
+\hspace{0pt} \\
+Current self-recovering image techniques generally have poor quality restoration capabilities, damage the original image greatly or does not allow a large amount of the original image to be damaged before recovery is no longer possible.
+The proposed method will focus on improving the quality of self-recovering images.
+
+\subsection{Problem statement}
+The proposed method attempts to achieve the following
+\begin{itemize}
+	\item The proposed method should achieve a high quality image after the self-embedding process as well as after the restoration process with a reasonable tamper rate(compared to currently available methods)
+	\item There should not be clear visual evidence that the image has been modified after embedding as well as after restoration and the image should still carry it's original semantic meaning
+\end{itemize}
+
+\subsection{Research methodology}
+Firstly a literature review was conducted to determine the currently available methods for self-recovering images. 
+After a shortcoming was identified the proposed method was designed and then implemented in the form of a Java software application in order to attempt to improve on the identified shortcoming. 
+The results of the proposed method were then compared to the results of other relevant self-recovering image methods.
+
+\subsection{Terminology}
 This paper makes use of several terms and acronyms.
 This section serves to make the meaning of those terms clear.
 
 \begin{itemize}
   \item Original Image: This refers to the original image without any modifications.
+  \item Embedding: Embedding in the context of this paper refers to the process of storing digital information in an image's content in such a way that the original image is still distinguishable.
   \item Image after embedding: This refers to the the original image after the embedding process has been applied.
   \item Image after reconstruction: This refers to the reconstructed version of the original image that was obtained by applying the reconstruction process to the image after embedding.
   \item LSB: This refers to the least significant bit in a binary string.
   \item MSB: This refers to the most significant bit/bits in a binary string.
-  \item Section, Image section, Pixel section: This refers to a section 8x8 pixels in an image.
+  \item Section, Image section, Pixel section: This refers to a section of 8x8 pixels in an image.
+  \item Bit plane: A bit plane is a 8x8 grid representation of a specific bit value's for a specific pixel section. Each pixel has 24 bits which in total represents each colour, 8 bits per colour. these bits are the 8 binary bits that represent the numerical value of the colour. These 8 bits are separated from each other and are each stored in a 8x8 grid in the same location as that of the pixel in the pixel section. This process is repeated for each pixel in the pixel section and the result is 8, 8x8 grids of binary numbers. Each one of these 8 grids represent a single bit plane. 
   \item Block: This refers to an individual bit plane of a specific section of the image. There are 8 such blocks in each section since each pixel is represented by 8 bits for each colour.
   \item BPCS Steganography: Bit-Plane Complexity Segmentation Steganography
 \end{itemize}
 
-\section{Introduction}
+\subsection{Conclusion}
+This chapter discussed the purpose behind self-recovering images as well as the aim of this research and the proposed method. 
+The research methodology followed was described. A list of terminologies used in this paper was also given.
+The next chapter will give a more detailed overview of all the components that make up self-recovering images. 
+
+\section{Self-recovering images}
+
+\subsection{Introduction}
+//TODO
 
 This section gives a brief description of the concepts used in this report.
 The reasoning behind the proposed method will also be explained in \ref{introQualityIncrease} and \ref{introHighCap}.
@@ -127,8 +161,13 @@ One section may thus only embed into one bit plane while another may use all 7 a
 The BPCS algorithm can achieve a very high capacity while still remaining undetectable through human perception.
 This makes the BPCS algorithm a possible good choice to increase the capacity of a self recovering image scheme and possible increase the quality through this process.
 
+\subsection{Conclusion}
+//TODO 
 
 \section{Current self recovering image schemes and algorithms}
+
+\subsection{Introduction}
+//TODO
 
 This section compares current Content reconstruction algorithms using self embedding.
 This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
@@ -223,8 +262,13 @@ The method described in \ref{differenceExpansionOverview} provides decent qualit
 \hspace{0pt} \\
 All three methods thus provide good results and would serve as a good benchmark for comparing the method proposed in this paper.
 
+\subsection{Conclusion}
+//TODO 
+
 \section{Implementation}
 \label{Implementation}
+\subsection{Introduction}
+//TODO
 
 \subsection{Embedding}
 \label{embedding}
@@ -393,7 +437,14 @@ The bit plane blocks generated from the image after embedding now get iterated a
 This process restores the tampered areas of the image if their matching bit plane blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. 
 Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost.
 
+\subsection{Conclusion}
+//TODO 
+
+
 \section{Results} 
+\subsection{Introduction}
+//TODO
+
 In testing the proposed method a simple experiment was set up in which the original image was processed using the embedding process described in \ref{embedding}.
 The results of that process can be seen in figure \ref{fig:lenaEmbedOnceEmbedding}, showing the original image and the image after the embedding process.
 Note that in this case the Image Reference content was only embedded once
@@ -527,8 +578,14 @@ The second image used thus behaved in a similar manner to the first image with t
 
 As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self recovering capabilities.
 This is discussed further in  section \ref{interpretation}.
+\subsection{Conclusion}
+//TODO 
+
 
 \section{Interpretation of results}
+\subsection{Introduction}
+//TODO
+
 \label{interpretation}
 The proposed method for self-recovering images using the BPCS Steg embedding algorithm described in the preceding sections was shown to be effective.
 According to Appendix B in \cite{korus2013efficient} the proposed method achieved Average to High quality reconstruction in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
@@ -565,6 +622,8 @@ The embedding rate and effects of the embedding rate seemed consistent across th
 The embedding rate was low where the image reference content was only embedded once into the original image and compared poorly to methods such as the one described in \ref{DynamicBlockOverview}.
 However it was found that if the image reference content is embedded twice into the original image that the tamper rate compares equally to that of methods such as the one described in \ref{DynamicBlockOverview}.
 
+\subsection{Conclusion}
+//TODO 
 
 \section{Conclusion}
 The proposed method described used an adaptive embedding algorithm described in \ref{bpcsSteg}.
