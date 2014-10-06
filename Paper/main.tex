@@ -82,15 +82,22 @@ The next chapter will give a more detailed overview of all the components that m
 
 \subsection{Introduction}
 //TODO
+Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. 
+This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that the image was damaged.
 
-This section gives a brief description of the concepts used in this report.
-The reasoning behind the proposed method will also be explained in \ref{introQualityIncrease} and \ref{introHighCap}.
-This will serve to to show the applicability of the proposed method as well as the shortcomings it attempts to address. 
+\hspace{0pt} \\
+In order to understand the self-recovering system proposed in this dissertation, one has to understand the underlying technologies.  This chapter will look at image steganography in more detail in section \ref{introSteganography} and at watermarking in section \ref{introFragWatermarking}  Self-embedding and recovery will be discussed in section \ref{introSelfEmbedRecovery} as well as the inherent quality trade off in section \ref{introQualityTrade} with a conclusion in section \ref{introConclusion}
 
-\subsection{Overview}
-Self recovering images (described in \ref{introSelfEmbedRecovery}) poses an interesting problem.
-There is an inherent trade-off (described in \ref{introQualityTrade}) between the quality of the image after embedding and the quality of the image after recovery.
+Self recovering images poses an interesting problem.
+\hspace{0pt} \\
+//TODO insert formal definition here
+\hspace{0pt} \\
+There is an inherent trade-off between the quality of the image after embedding and the quality of the image after recovery.
+
+\iffalse
+//TODO possibly remove this
 This report proposes a method in which a high capacity image steganography embedding algorithm (described in \ref{introHighCap}) is applied to the problem of self-recovering images to attempt to increase the quality of the images (described in \ref{introQualityIncrease}) both after embedding and after recovery.
+\fi
 
 
 \subsection{Steganography}
@@ -162,6 +169,7 @@ The BPCS algorithm can achieve a very high capacity while still remaining undete
 This makes the BPCS algorithm a possible good choice to increase the capacity of a self recovering image scheme and possible increase the quality through this process.
 
 \subsection{Conclusion}
+\label{introConclusion}
 //TODO 
 
 \section{Current self recovering image schemes and algorithms}

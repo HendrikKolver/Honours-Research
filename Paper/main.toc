@@ -7,14 +7,13 @@
 \contentsline {subsection}{\numberline {1.5}Conclusion}{4}
 \contentsline {section}{\numberline {2}Self-recovering images}{4}
 \contentsline {subsection}{\numberline {2.1}Introduction}{4}
-\contentsline {subsection}{\numberline {2.2}Overview}{4}
-\contentsline {subsection}{\numberline {2.3}Steganography}{4}
-\contentsline {subsection}{\numberline {2.4}Fragile Watermarking}{4}
-\contentsline {subsection}{\numberline {2.5}Self embedding and recovery}{5}
-\contentsline {subsection}{\numberline {2.6}Quality Trade-off}{5}
-\contentsline {subsubsection}{\numberline {2.6.1}Increasing quality with capacity}{5}
-\contentsline {subsubsection}{\numberline {2.6.2}High capacity embedding algorithms}{6}
-\contentsline {subsection}{\numberline {2.7}Conclusion}{6}
+\contentsline {subsection}{\numberline {2.2}Steganography}{4}
+\contentsline {subsection}{\numberline {2.3}Fragile Watermarking}{4}
+\contentsline {subsection}{\numberline {2.4}Self embedding and recovery}{5}
+\contentsline {subsection}{\numberline {2.5}Quality Trade-off}{5}
+\contentsline {subsubsection}{\numberline {2.5.1}Increasing quality with capacity}{5}
+\contentsline {subsubsection}{\numberline {2.5.2}High capacity embedding algorithms}{6}
+\contentsline {subsection}{\numberline {2.6}Conclusion}{6}
 \contentsline {section}{\numberline {3}Current self recovering image schemes and algorithms}{6}
 \contentsline {subsection}{\numberline {3.1}Introduction}{6}
 \contentsline {subsection}{\numberline {3.2}Overview}{7}
