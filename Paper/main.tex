@@ -147,7 +147,7 @@ This means that if modifications are made to the watermarked image it would be p
 This is a necessary component in self recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so what parts of the image was modified.
 
 \iffalse 
-	//TODO this needs to move to a different section
+	//TODO this already covered in section \ref{impFragileWatermark}
 	The proposed method will use this information to determine which parts of the image should be recovered from the image reference content.
 	A fragile watermark is used for this purpose. 
 \fi
@@ -201,45 +201,59 @@ The next chapter will discuss related work in existing self embedding techniques
 \subsection{Introduction}
 //TODO
 
-This section compares current Content reconstruction algorithms using self embedding.
+This section compares current content reconstruction algorithms using self embedding.
 This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
 This would be useful to determine if the proposed method does indeed improve on existing methods. 
 It would also help highlight strengths and shortcomings in the proposed method.
-The methods analyzed were chosen because they all provide good quality images after embedding as well as good quality images after reconstructed.
-They also each offer an unique approach or aspect to the self recovering image problem and would thus provide a good overview of the different approaches that have already been tested.
+The methods analysed were chosen because they all provide good quality images after embedding as well as good quality images after reconstructed.
+They also each offer an unique approach or aspect to the self recovering image problem.
+
+\hspace{0pt} \\
+There are 3 methods tested. An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}. A comparison between these 3 methods are provided in section \ref{litStudyCamparison}
 
 \subsection{Overview}
+//TODO <All the terms that have not been defined yet in the paper that will be used in this section should be defined here>
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
-The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
-The method uses LSB embedding to embed the image reference content into the image itself.
-The method also uses a global spreading technique to spread the image reference content across the image.
-They also propose that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
+The method proposed in \cite {korus2013efficient} uses an erasure channel
+//TODO <define erasure channel> 
+as a model for the content reconstruction problem.
+The method uses LSB embedding to embed the image reference content into the image itself and uses a global spreading technique to spread the image reference content across the image.
+The method also proposes that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
 
 \hspace{0pt} \\
-The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR \textgreater 35dB. 
+The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR 
+//TODO <define PSNR and why is it important, this is possibly explained in another section> 
+\textgreater 35dB. 
 The method also achieves an image after reconstruction quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with tamper rates of 50\% and 33\% respectively.
 The method does not let the quality of the image after reconstruction deteriorate much if the tampering rate is increased up to a value of 50\%.
-They do however note that they can only achieve minimal reconstruction performance increases by decreasing the amount of information in the image reference content.
-By using only 50\% of the available capacity the maximal tampering rate increases form 50\% to 59\%.
+They do however note that they can only achieve a minimal increase in reconstruction performance by decreasing the amount of information in the image reference content.
+By using only 50\% of the available capacity the maximal 
+//TODO <define tampering rate earlier>
+ tampering rate increases form 50\% to 59\%.
 
 \hspace{0pt} \\
 This method \cite {korus2013efficient} is thus quite robust since 50\% of the image may be tampered with before reconstruction ability starts to deteriorate.
-The security for this method is also very good since the quality of the cover image is not very susceptible to visual checks.
+The security //TODO <define security> for this method is also very good since the quality of the cover image is not very susceptible to visual checks.
 The authors did not do any statistical analysis on the image.
 The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the reconstruction process the quality of the image, before and after reconstruction, is still very good even without a very high embedding capacity.  
 
 \subsubsection{Method using difference expansion}
 \label{differenceExpansionOverview}
-\cite {tian2003high} Proposed a method that uses difference expansion and generalized LSB embedding.
-Difference expansion works by exploiting the high redundancy that are present in images.
+Another method \cite {tian2003high} uses difference expansion and generalized LSB embedding.
+Difference expansion works by exploiting the high redundancy that are present in images 
+//TODO <Reference this, basically this reference \cite {tian2003high}>.
 With difference expansion the payload is embedded in the difference of pixel values. 
-For a pair of pixel values (x,y). \cite {tian2002reversible}
-It should however be noted that image quality reduces rapidly as the payload size is increased when using difference expansion. 
-The method uses these two techniques in combination to achieve a high embedding capacity while keeping distortion relatively low.
+For a pair of pixel values (x,y) \cite {tian2002reversible}. 
+It should however be noted that image quality reduces rapidly as the  
+//TODO <define payload size>
+payload size is increased when using difference expansion. 
+The method uses difference expansion and to achieve a high embedding capacity while keeping distortion relatively low.
 The method achieves a PSNR \textgreater 35dB after embedding.
-The method achieves an embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
+The method achieves an 
+//TODO <define embedding capacity>
+embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
 
 \hspace{0pt} \\
 The method's \cite {tian2003high} quality regarding the image after reconstruction is acceptable at roughly 50\%. 
@@ -254,26 +268,31 @@ The authors do not mention the image tamper rate that this method \cite {tian200
 
 \subsubsection{Dynamic block allocation for self embedding}
 \label{DynamicBlockOverview}
-(Qian et al) \cite{qian2011image} proposes a method for fragile watermarking with good image restoration capabilities.
+Qian et al \cite{qian2011image} proposes a method for fragile watermarking with good image restoration capabilities.
 The proposed method differs from the other methods mentioned in \ref{ErasureChannelOverview} and \ref{differenceExpansionOverview} due to the fact that the method does not embed the information into all blocks uniformly.
 The method classifies different blocks of the image according to the block smoothness.
 The less smooth the block is the more information will be embedded into it.
 The authors argue that the current methods that use a fixed embedding size for each block are inadequate since less information should be embedded into the very smooth blocks and more should be embedded into the rough blocks \cite{qian2011image}.
 
 \hspace{0pt} \\
-The advantage of using this dynamic scheme is that there would be less visual distortion to the image after embedding. 
-This is because if the specific block is already very rough (very busy visually) the human eye would not notice small changes.
+The advantage of using this dynamic scheme is that there is visual distortion to the image after embedding. 
+This is because if the specific block is already very rough (very busy visually) the human eye does not notice small changes.
 If however the specific block is very smooth (very uniform visually) the human eye is more likely to notice small changes.
 The method thus creates less distortion in the image after embedding than fixed size methods while still retaining good image after reconstruction quality \cite{qian2011image}. 
 
 \hspace{0pt} \\
-The method proposed by (Qian et al) \cite{qian2011image} uses the 3 LSB bit planes to embed the needed information in.
+The method proposed by Qian et al \cite{qian2011image} uses 3 LSB bit planes
+\iffalse 
+	//TODO possibly define bit planes here although it is already defined in the terminology
+\fi 
+to embed the needed information in.
 The method achieves good results in experimentation with a image after embedding PSNR \textgreater 37dB as well as a image after reconstruction PSNR = 35dB.
 The method also allows for a tamper rate \textless 35\%.
 The authors do not analyze the security of the algorithm.
 
 \subsection{Comparison}
-Each of the methods described in \ref{DynamicBlockOverview}, \ref{ErasureChannelOverview} and \ref{differenceExpansionOverview} provide good quality images after embedding as well as good quality images after reconstruction.
+\label{litStudyCamparison}
+Each of the methods described in \ref{ErasureChannelOverview}, \ref{differenceExpansionOverview} and \ref{DynamicBlockOverview} provide good quality images after embedding as well as good quality images after reconstruction.
 There are however important differences.
 The method described in \ref{ErasureChannelOverview} offers a very good tamper rate of 50\% compared to the method described in \ref{DynamicBlockOverview} which has a tamper rate of 35\%.
 This means that a larger part of the image after embedding can be tampered with while still being able to reconstruct the image.
@@ -295,7 +314,10 @@ The method described in \ref{differenceExpansionOverview} provides decent qualit
 All three methods thus provide good results and would serve as a good benchmark for comparing the method proposed in this paper.
 
 \subsection{Conclusion}
-//TODO 
+This chapter looked at currently available methods for self-recovering images.
+An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}.
+A comparison between these methods was also provided in section \ref{litStudyCamparison}.
+The next chapter will discuss the implementation of the of the self-recovering image method proposed in this paper.  
 
 \section{Implementation}
 \label{Implementation}
@@ -640,12 +662,18 @@ However it was found that if the image reference content is embedded twice into 
 //TODO 
 
 \section{Conclusion}
+\subsection{Introduction}
+//TODO 
+
 The proposed method described used an adaptive embedding algorithm described in \ref{bpcsSteg}.
 The proposed method was shown to provide good quality as well as a good tamper rate.
 It was also shown that the quality of the image after embedding the image reference content and the image quality after reconstruction differs depending on the cover image chosen.
 This was attributed to the adaptive embedding algorithm used.
 It was also mentioned that no compression was used on the image reference content that was embedded into the original image.
 If compression is used it may result in higher quality of the image after reconstruction as well as the image after embedding due to fewer modifications that will be made during embedding.
+
+\subsection{Future work}
+//TODO 
 
 \bibliography{main}
 \bibliographystyle{plain}
