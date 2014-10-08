@@ -89,7 +89,10 @@ In order to understand the self-recovering system proposed in this dissertation,
 
 Self recovering images poses an interesting problem.
 \hspace{0pt} \\
-//TODO <add formal definition here>
+\iffalse
+	//TODO <add formal definition here>
+	Already mentioned the definition in the intro so I am not really sure what sort of definition to put here
+\fi
 \hspace{0pt} \\
 There is an inherent trade-off between the quality of the image after embedding and the quality of the image after recovery.
 
@@ -140,17 +143,13 @@ Bit planes are dynamically allocated for embedding.
 One section may thus only embed into one bit plane while another may use all 7 available bit planes.
 
 \subsection{Fragile Watermarking}
-//TODO <add formal definition here> 
 \label{introFragWatermarking}
+Fragile watermarks are used to determine if a piece of watermarked digital content has been tampered, and distinguish tampered areas from non-tampered areas without referring to the original digital content \cite{liu2007image}.
+
+\hspace{0pt} \\
 Fragile watermarking is a variation of traditional watermarking where a watermark is embedded into an image such that subsequent alterations to the watermarked image can be detected with high probability \cite{lin1999review}.
 This means that if modifications are made to the watermarked image it would be possible to detect that modifications were made as well as what parts of the image were modified.
 This is a necessary component in self recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so what parts of the image was modified.
-
-\iffalse 
-	//TODO this already covered in section \ref{impFragileWatermark}
-	The proposed method will use this information to determine which parts of the image should be recovered from the image reference content.
-	A fragile watermark is used for this purpose. 
-\fi
 
 \subsection{Self embedding and recovery}
 \label{introSelfEmbedRecovery}
@@ -199,8 +198,6 @@ The next chapter will discuss related work in existing self embedding techniques
 \section{Current self recovering image schemes and algorithms}
 
 \subsection{Introduction}
-//TODO
-
 This section compares current content reconstruction algorithms using self embedding.
 This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
 This would be useful to determine if the proposed method does indeed improve on existing methods. 
@@ -209,51 +206,53 @@ The methods analysed were chosen because they all provide good quality images af
 They also each offer an unique approach or aspect to the self recovering image problem.
 
 \hspace{0pt} \\
-There are 3 methods tested. An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}. A comparison between these 3 methods are provided in section \ref{litStudyCamparison}
+There are 3 current methods discussed in this section. An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}. A comparison between these 3 methods are provided in section \ref{litStudyCamparison}
 
 \subsection{Overview}
-//TODO <All the terms that have not been defined yet in the paper that will be used in this section should be defined here>
+\begin{itemize}
+	\item Erasure channel: An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or the bit or it receives a message that the bit was not received, ie the bit was erased.
+	\item Peak signal to noise ratio (PSNR): PSNR is an expression for the ratio between the maximum possible value (power) of a signal and the power of distorting noise that affects the quality of its representation. PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
+	As the mean squared error between the two images approaches 0 the PSNR approaches infinity. A higher PSNR value thus provides a higher quality image. 
+	A small PSNR value implies a high numerical difference between the two images \cite{hore2010image}.  
+	The quality measures mentioned in the 3 methods discussed were measured using the PSNR method. \cite{huynh2008scope} However determined that the validity of PSNR is limited to modifications within the same image.
+	It is thus not reliable to compare PSNR values between two different images.
+	\item Tampering rate: tampering rate is the percentage of image content that can be modified in the image after embedding, while still being able to reconstruct all the modified parts of that image.
+	If too much of the image is modified the embedded image content would be lost and reconstruction would not be possible.
+	\item Security: security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is simple t detect.
+	\item Payload size: Payload size is defined as the amount of bits that is embedded in to an image using steganographic embedding techniques. 
+	\item Embedding capacity: embedding capacity is defined as the maximum amount of bits that can be embedded into an image using steganographic embedding techniques.
+\end{itemize}
+//TODO <All the terms that have not been defined yet in the paper that will be used in this section should be defined here, query if this is indeed a correct assumption>
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
-The method proposed in \cite {korus2013efficient} uses an erasure channel
-//TODO <define erasure channel> 
-as a model for the content reconstruction problem.
+The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
 The method uses LSB embedding to embed the image reference content into the image itself and uses a global spreading technique to spread the image reference content across the image.
 The method also proposes that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
 
 \hspace{0pt} \\
-The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR 
-//TODO <define PSNR and why is it important, this is possibly explained in another section> 
-\textgreater 35dB. 
+The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR \textgreater 35dB. 
 The method also achieves an image after reconstruction quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with tamper rates of 50\% and 33\% respectively.
 The method does not let the quality of the image after reconstruction deteriorate much if the tampering rate is increased up to a value of 50\%.
 They do however note that they can only achieve a minimal increase in reconstruction performance by decreasing the amount of information in the image reference content.
-By using only 50\% of the available capacity the maximal 
-//TODO <define tampering rate earlier>
- tampering rate increases form 50\% to 59\%.
+By using only 50\% of the available capacity the maximal tampering rate increases form 50\% to 59\%.
 
 \hspace{0pt} \\
 This method \cite {korus2013efficient} is thus quite robust since 50\% of the image may be tampered with before reconstruction ability starts to deteriorate.
-The security //TODO <define security> for this method is also very good since the quality of the cover image is not very susceptible to visual checks.
+The security for this method is also very good since the quality of the cover image is not very susceptible to visual checks.
 The authors did not do any statistical analysis on the image.
 The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the reconstruction process the quality of the image, before and after reconstruction, is still very good even without a very high embedding capacity.  
 
 \subsubsection{Method using difference expansion}
 \label{differenceExpansionOverview}
 Another method \cite {tian2003high} uses difference expansion and generalized LSB embedding.
-Difference expansion works by exploiting the high redundancy that are present in images 
-//TODO <Reference this, basically this reference \cite {tian2003high}>.
+Difference expansion works by exploiting the high redundancy that are present in images \cite {tian2002reversible}.
 With difference expansion the payload is embedded in the difference of pixel values. 
 For a pair of pixel values (x,y) \cite {tian2002reversible}. 
-It should however be noted that image quality reduces rapidly as the  
-//TODO <define payload size>
-payload size is increased when using difference expansion. 
+It should however be noted that image quality reduces rapidly as the payload size is increased when using difference expansion. 
 The method uses difference expansion and to achieve a high embedding capacity while keeping distortion relatively low.
 The method achieves a PSNR \textgreater 35dB after embedding.
-The method achieves an 
-//TODO <define embedding capacity>
-embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
+The method achieves an embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
 
 \hspace{0pt} \\
 The method's \cite {tian2003high} quality regarding the image after reconstruction is acceptable at roughly 50\%. 
@@ -628,9 +627,7 @@ According to Appendix B in \cite{korus2013efficient} the proposed method achieve
 The proposed method achieved Low quality reconstruction in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
 
 \hspace{0pt} \\
-The quality measures mentioned were measured using the PSNR method. \cite{huynh2008scope} However determined that the validity of PSNR is limited to modifications within the same image.
-It is thus not reliable to compare PSNR values between two different images.
-With that in mind the image from figures \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} was specifically chosen because it is well used in the literature and can serve to compare to proposed method to other methods available in the literature.
+The image from figures \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} was specifically chosen for the experiment because it is well used in the literature and can serve to compare the proposed method to other methods available in the literature.
 Such comparisons follow below. 
 
 \hspace{0pt} \\

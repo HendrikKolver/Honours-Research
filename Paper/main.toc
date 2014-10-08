@@ -14,27 +14,29 @@
 \contentsline {section}{\numberline {3}Current self recovering image schemes and algorithms}{7}
 \contentsline {subsection}{\numberline {3.1}Introduction}{7}
 \contentsline {subsection}{\numberline {3.2}Overview}{7}
-\contentsline {subsubsection}{\numberline {3.2.1}Erasure channel model utilizing the remaining authentic content}{7}
-\contentsline {subsubsection}{\numberline {3.2.2}Method using difference expansion}{8}
-\contentsline {subsubsection}{\numberline {3.2.3}Dynamic block allocation for self embedding}{8}
-\contentsline {subsection}{\numberline {3.3}Comparison}{9}
-\contentsline {subsection}{\numberline {3.4}Conclusion}{9}
-\contentsline {section}{\numberline {4}Implementation}{10}
-\contentsline {subsection}{\numberline {4.1}Introduction}{10}
-\contentsline {subsection}{\numberline {4.2}Embedding}{10}
-\contentsline {subsubsection}{\numberline {4.2.1}BPCS steganography}{10}
-\contentsline {paragraph}{Image resizing}{10}
-\contentsline {paragraph}{Block Spread}{10}
-\contentsline {paragraph}{Conjugation}{11}
-\contentsline {subsubsection}{\numberline {4.2.2}Fragile Watermark}{12}
-\contentsline {subsection}{\numberline {4.3}Extraction and Reconstruction}{13}
-\contentsline {subsubsection}{\numberline {4.3.1}Image authentication}{13}
-\contentsline {subsubsection}{\numberline {4.3.2}Image reconstruction}{13}
-\contentsline {subsection}{\numberline {4.4}Conclusion}{14}
-\contentsline {section}{\numberline {5}Results}{14}
-\contentsline {subsection}{\numberline {5.1}Introduction}{14}
-\contentsline {subsection}{\numberline {5.2}Conclusion}{18}
-\contentsline {section}{\numberline {6}Interpretation of results}{18}
-\contentsline {subsection}{\numberline {6.1}Introduction}{18}
-\contentsline {subsection}{\numberline {6.2}Conclusion}{19}
-\contentsline {section}{\numberline {7}Conclusion}{19}
+\contentsline {subsubsection}{\numberline {3.2.1}Erasure channel model utilizing the remaining authentic content}{8}
+\contentsline {subsubsection}{\numberline {3.2.2}Method using difference expansion}{9}
+\contentsline {subsubsection}{\numberline {3.2.3}Dynamic block allocation for self embedding}{9}
+\contentsline {subsection}{\numberline {3.3}Comparison}{10}
+\contentsline {subsection}{\numberline {3.4}Conclusion}{10}
+\contentsline {section}{\numberline {4}Implementation}{11}
+\contentsline {subsection}{\numberline {4.1}Introduction}{11}
+\contentsline {subsection}{\numberline {4.2}Embedding}{11}
+\contentsline {subsubsection}{\numberline {4.2.1}BPCS steganography}{11}
+\contentsline {paragraph}{Image resizing}{11}
+\contentsline {paragraph}{Block Spread}{11}
+\contentsline {paragraph}{Conjugation}{12}
+\contentsline {subsubsection}{\numberline {4.2.2}Fragile Watermark}{13}
+\contentsline {subsection}{\numberline {4.3}Extraction and Reconstruction}{14}
+\contentsline {subsubsection}{\numberline {4.3.1}Image authentication}{14}
+\contentsline {subsubsection}{\numberline {4.3.2}Image reconstruction}{14}
+\contentsline {subsection}{\numberline {4.4}Conclusion}{15}
+\contentsline {section}{\numberline {5}Results}{15}
+\contentsline {subsection}{\numberline {5.1}Introduction}{15}
+\contentsline {subsection}{\numberline {5.2}Conclusion}{19}
+\contentsline {section}{\numberline {6}Interpretation of results}{19}
+\contentsline {subsection}{\numberline {6.1}Introduction}{19}
+\contentsline {subsection}{\numberline {6.2}Conclusion}{20}
+\contentsline {section}{\numberline {7}Conclusion}{20}
+\contentsline {subsection}{\numberline {7.1}Introduction}{20}
+\contentsline {subsection}{\numberline {7.2}Future work}{20}
