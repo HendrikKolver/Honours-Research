@@ -9,7 +9,7 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{mathtools}
 \usepackage{setspace}
-\setstretch{1.0}
+\setstretch{1.5}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -25,8 +25,8 @@
 
 \begin{abstract}
 
-\noindent Abstract of this paper and what I wrote in it.
-This will give the reader a short overview of what they can expect to find in this paper.
+\noindent Abstract of this dissertation and what I wrote in it.
+This will give the reader a short overview of what they can expect to find in this dissertation.
 
 \end{abstract}
 
@@ -34,7 +34,7 @@ This will give the reader a short overview of what they can expect to find in th
 \section{Introduction}
 
 \subsection{Introduction}
-This paper proposes a novel method for self-recovering images.
+This dissertation proposes a novel method for self-recovering images.
 
 \hspace{0pt} \\
 Self-recovering images: Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. 
@@ -57,12 +57,12 @@ After a shortcoming was identified the proposed method was designed and then imp
 The results of the proposed method were then compared to the results of other relevant self-recovering image methods.
 
 \subsection{Terminology}
-This paper makes use of several terms and acronyms.
+This dissertation makes use of several terms and acronyms.
 This section serves to make the meaning of those terms clear.
 
 \begin{itemize}
   \item Original Image: This refers to the original image without any modifications.
-  \item Embedding: Embedding in the context of this paper refers to the process of storing digital information in an image's content in such a way that the original image is still distinguishable.
+  \item Embedding: Embedding in the context of this dissertation refers to the process of storing digital information in an image's content in such a way that the original image is still distinguishable.
   \item Image after embedding: This refers to the the original image after the embedding process has been applied.
   \item Image after reconstruction: This refers to the reconstructed version of the original image that was obtained by applying the reconstruction process to the image after embedding.
   \item LSB: This refers to the least significant bit in a binary string.
@@ -75,7 +75,7 @@ This section serves to make the meaning of those terms clear.
 
 \subsection{Conclusion}
 This chapter discussed the purpose behind self-recovering images as well as the aim of this research and the proposed method. 
-The research methodology followed was described. A list of terminologies used in this paper was also given.
+The research methodology followed was described. A list of terminologies used in this dissertation was also given.
 The next chapter will give a more detailed overview of all the components that make up self-recovering images. 
 
 \section{Self-recovering images}
@@ -134,7 +134,7 @@ This method works with the following steps:
 
 \hspace{0pt} \\
 The BPCS algorithm is a high capacity embedding algorithm. The goal of the BPCS algorithm is thus to embed as much data as possible into a cover image without detection \cite{beaullieubpcs}.
-This refers to detection by human perception as well as statistical analysis although the latter is not the focus of this paper.
+This refers to detection by human perception as well as statistical analysis although the latter is not the focus of this dissertation.
 The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding (similar to \ref{DynamicBlockOverview}).
 BPCS steg differs however in the fact that the blocks can be conjugated in a checker board pattern to increase complexity and decrease detectability if needs be.
 BPCS steg also differs in the way in which embedding takes place.
@@ -184,7 +184,7 @@ It might be possible to increase the quality of the image after reconstruction w
 By using a high capacity embedding algorithm the overall embedding capacity is increased and a higher quality restoration image can be embedded. 
 
 \hspace{0pt} \\
-The proposed method in this paper attempts to apply the algorithm for BPCS Steganography
+The proposed method in this dissertation attempts to apply the algorithm for BPCS steganography
 to the problem of self recovering images, specifically to increase overall quality.
 The BPCS algorithm can achieve a very high capacity while still remaining undetectable through human perception.
 This makes the BPCS algorithm a good choice to increase the capacity of a self recovering image scheme and possibly increase the quality through this process.
@@ -222,7 +222,7 @@ There are 3 current methods discussed in this section. An erasure channel model 
 	\item Payload size: Payload size is defined as the amount of bits that is embedded in to an image using steganographic embedding techniques. 
 	\item Embedding capacity: embedding capacity is defined as the maximum amount of bits that can be embedded into an image using steganographic embedding techniques.
 \end{itemize}
-//TODO <All the terms that have not been defined yet in the paper that will be used in this section should be defined here, query if this is indeed a correct assumption>
+//TODO <All the terms that have not been defined yet in the dissertation that will be used in this section should be defined here, query if this is indeed a correct assumption>
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
@@ -310,23 +310,38 @@ This means that the method described in \ref{ErasureChannelOverview} provides th
 The method described in \ref{differenceExpansionOverview} provides decent quality of the image after embedding as well as the image after reconstruction.
 
 \hspace{0pt} \\
-All three methods thus provide good results and would serve as a good benchmark for comparing the method proposed in this paper.
+All three methods thus provide good results and would serve as a good benchmark for comparing the method proposed in this dissertation.
 
 \subsection{Conclusion}
 This chapter looked at currently available methods for self-recovering images.
 An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}.
 A comparison between these methods was also provided in section \ref{litStudyCamparison}.
-The next chapter will discuss the implementation of the of the self-recovering image method proposed in this paper.  
+This information will be used to determine the success of the self-recovering image method proposed in this dissertation by comparing the results from the proposed method with the results achieved by the methods discussed in this chapter.
+The next chapter will discuss the implementation of the of the self-recovering image method proposed in this dissertation.  
 
-\section{Implementation}
+\section{Overview of the proposed system}
 \label{Implementation}
 \subsection{Introduction}
-//TODO
+This chapter discusses the details of the implementation for the self-recovering image method proposed in this dissertation. Embedding is discussed under which BPCS staganography and fragile watermarking will also be discussed.
+The extraction and restoration process will be discussed under which authentication and restoration will also be discussed.
+Diagrams are also provided to visualize the embedding as well as the extraction process
+
+\subsection{Overview of proposed system}
+\label{impOverview}
+The self-recovering method proposed in this dissertation uses BPCS steganography to increase the payload capacity of the cover image in order to be able to embed more reference content into the image without introducing visual distortion.
+In addition a fragile watermark was used to detect which parts of the image was damaged and thus needs to be reconstructed.
 
 \subsection{Embedding}
 \label{embedding}
+In the embedding phase BPCS steganography and fragile watermarks were used.  How these two technologies were implemented are discussed in sections \ref{bpcsSteg} and \ref{impFragileWatermark}
 
-The proposed method works with colour images which means that for each pixel there is a red, green and blue value. This means that each block effectively stores 3 bits for each pixel.
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.6]{"EmbeddingProcess"}%
+} %
+\caption{The embedding process of the proposed self-recovering method}
+\label{fig:embeddingProcess}
+\end{figure}
 
 \subsubsection{BPCS steganography} 
 \label{bpcsSteg}
@@ -343,8 +358,11 @@ An embedding map containing the location of the first pixel to be embedded in th
 Since the individual image reference content pixels are embedded in order it is only necessary to know the location of the first pixel.
 This embedding map is then embedded into the LSB (Least significant bit) layer of that specific 8x8 block of pixels 
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
-This serves to give random access to the embedded content which is an essential property of self embedding as defined by (Korus et al. \cite{korus2013efficient}).
+This serves to give random access to the embedded content which is an essential property of self embedding as defined by Korus et al. \cite{korus2013efficient}.
 This is essential in order for the reconstruction process to function properly.
+
+\hspace{0pt} \\
+The proposed method works with colour images which means that for each pixel there is a red, green and blue value. This means that each block effectively stores 3 bits for each pixel.
 
 \hspace{0pt} \\
 Total space available for embedding per block = (8*8)*3 = 64*3 = 192
@@ -354,7 +372,7 @@ Total embedded bits = 12*16 = 192
 \paragraph{Image resizing}
 \label{ImageCompression}
 The image reference content that is embedded into the original image cannot be embedded with perfect quality due to space restrictions caused by the embedding algorithm. 
-The proposed method however does not utilize compression as it is beyond the scope of this paper.
+The proposed method however does not utilize compression as it is beyond the scope of this dissertation.
 The proposed method rather reduces the bit rate of the image from 24 bits to 16 which reduces the size of each pixel by 6 bits.
 The image's size is also reduced according to the space available for embedding.
 When extracting the image reference content again the assembled image reference content is scaled up to it's original size of 512x512 pixels before completing the reconstruction.
@@ -386,7 +404,7 @@ If an image reference content block is found to not be complex enough that block
 This is important because if a block is not complex enough it cannot be detected when extracting and it may cause visual distortions to the image since it is replacing a complex block in the original image.
 
 \hspace{0pt} \\
-The block complexity is calculated by using a border complexity method. \cite{beaullieubpcs}
+The block complexity is calculated by using a border complexity method. \cite{beaullieubpcs}.
 That is for each binary bit that has an adjacent binary bit that is different than itself the border count is increased. 
 The final border count is then divided with the theoretical maximum border count, which would be the border count for a grid of the same size with a checkerboard pattern.
 
@@ -396,6 +414,8 @@ To reverse the conjugation this process simply needs to be repeated.
 
 \hspace{0pt} \\
 This method of conjugation is a simple method that makes a block more complex while still allowing the original values of the block to be retrieved.
+A conjugation map is also created to indicate which blocks have been conjugated.
+This is needed since the receiver of the image would not be able to determine if a block has been conjugated or no without such a map.
 
 \subsubsection{Fragile Watermark}
 \label{impFragileWatermark}
@@ -446,7 +466,19 @@ These 192 bits are finally embedded into the LSB plane of that specific section 
 
 \subsection{Extraction and Reconstruction}
 \label{extractRestore}
+In the extraction and reconstruction process of the proposed method the image is first authenticated, this process is discussed in section \ref{extractionAuthentication}. 
+The image reference content is then extracted and the image is restored to an approximation of the original image before embedding, this process is discussed in section \ref{extractionReconstruction}.
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.6]{"ExtractionProcess"}%
+} %
+\caption{The extraction process of the proposed self-recovering method}
+\label{fig:extractionProcess}
+\end{figure} 
+
 \subsubsection{Image authentication}
+\label{extractionAuthentication}
 The first step for the image extraction and reconstruction process is to determine which, if any, parts of the image after embedding has been tampered with.
 This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
 for each section (section refers here to 8x8 pixel section, thus a section here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
@@ -455,7 +487,7 @@ The extracted hash is then compared with the calculated hash and if they match t
 If they do not match then that section has been tampered with.
 
 \subsubsection{Image reconstruction}
-\hspace{0pt} \\
+\label{extractionReconstruction}
 For each authentic block the 7 MSB planes have their complexity calculated.
 If a bit plane block is found to be complex enough it is assumed that there is image information embedded into it.
 The embedded conjugation map is extracted at this point and if it is found that any of the complex enough bit plane blocks were conjugated the conjugation algorithm is applied again to reverse the conjugation.
@@ -473,13 +505,18 @@ This process restores the tampered areas of the image if their matching bit plan
 Obviously if too large a part of the image has been modified it would not be possible to accurately reconstruct the image because too much of the embedded image content would be lost.
 
 \subsection{Conclusion}
-//TODO 
+This chapter discussed the proposed self-recovering system. An overview was given of the proposed method in section \ref{impOverview}. 
+Embedding was discussed in section \ref{embedding} under which BPCS steganography as well as fragile watermarking was also discussed in sections \ref{bpcsSteg} and \ref{impFragileWatermark}.
+The extraction process was discussed in section \ref{extractRestore} under which authentication and reconstruction was also discussed in sections \ref{extractionAuthentication} and \ref{extractionReconstruction}. 
+Diagrams were also provided to visualize the embedding process in figure \ref{fig:embeddingProcess} and the extraction process in figure \ref{fig:extractionProcess}.
+The next chapter will discuss the experimental results achieved using the proposed method.
 
 
-\section{Results} 
+\section{Experimental Results} 
 \subsection{Introduction}
 //TODO
 
+\subsection{Experiments conducted}
 In testing the proposed method a simple experiment was set up in which the original image was processed using the embedding process described in \ref{embedding}.
 The results of that process can be seen in figure \ref{fig:lenaEmbedOnceEmbedding}, showing the original image and the image after the embedding process.
 Note that in this case the Image Reference content was only embedded once
@@ -613,13 +650,8 @@ The second image used thus behaved in a similar manner to the first image with t
 
 As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self recovering capabilities.
 This is discussed further in  section \ref{interpretation}.
-\subsection{Conclusion}
-//TODO 
 
-
-\section{Interpretation of results}
-\subsection{Introduction}
-//TODO
+\subsection{Interpretation of results}
 
 \label{interpretation}
 The proposed method for self-recovering images using the BPCS Steg embedding algorithm described in the preceding sections was shown to be effective.
