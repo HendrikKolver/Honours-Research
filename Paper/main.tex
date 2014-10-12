@@ -87,8 +87,8 @@ This content can then be extracted from the image at a later stage in order to r
 \hspace{0pt} \\
 In order to understand the self-recovering system proposed in this dissertation, one has to understand the underlying technologies.  This chapter will look at image steganography in more detail in section \ref{introSteganography} and at watermarking in section \ref{introFragWatermarking}. Self-embedding and recovery will be discussed in section \ref{introSelfEmbedRecovery} with a conclusion in section \ref{introConclusion}
 
-Self recovering images poses an interesting problem.
 \hspace{0pt} \\
+Self-recovering images pose an interesting problem.
 \iffalse
 	//TODO <add formal definition here>
 	Already mentioned the definition in the intro so I am not really sure what sort of definition to put here
@@ -196,7 +196,7 @@ Fragile watermarking was discussed in section \ref{introFragWatermarking} as wel
 The next chapter will discuss related work in existing self embedding techniques.
 
 \section{Current self recovering image schemes and algorithms}
-
+\label{currentSelfRecoveringSchemes}
 \subsection{Introduction}
 This section compares current content reconstruction algorithms using self embedding.
 This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
@@ -379,8 +379,7 @@ When extracting the image reference content again the assembled image reference 
 This is done to ensure that the pixels contained in the image reference content matches up (location wise) with the pixels in the original image.
 
 \paragraph{Block Spread}
-It is very important how the image reference content is spread across the image because this affects the tamper rate
-\hspace{0pt} \\
+It is very important how the image reference content is spread across the image because this affects the tamper rate.
 \cite{korus2013efficient} Has found that it is important that the image reference content should be uniformly distributed across the image during embedding and that each part of the image after should contain equal information about the image reference content.
 Due to the fact that the proposed method uses an adaptive embedding algorithm it is not possible for each part of the image after embedding to contain equal information about the image reference content.
 The proposed method does however distribute the embedded image reference content evenly among the blocks that were identified as suitable for embedding.
@@ -388,8 +387,7 @@ The proposed method uses a simple method for spreading the image reference conte
 The image reference content to be embedded is first divided into blocks as per the BPCS steg algorithm.
 These blocks are subsequently stored in a list. 
 The created list is then reversed before embedding.
-Reversing the list means that each corner of the image in the image reference content is embedded into the opposing corner diagonally in the original image. For example image reference content that contains the bottom right part of the original image will now be embedded into the top left part of the original image during embedding.
-
+Reversing the list means that each corner of the image in the image reference content is embedded into the opposing corner diagonally in the original image. For example image reference content that contains the bottom right part of the original image will now be embedded into the top left part of the original image during embedding. 
 This creates an effect where the embedded image reference content is far away from the content that it is referencing.
 This is important because if a piece of the image after embedding is destroyed it would not be able to reconstruct itself if that destroyed piece's reference content was destroyed with it.
 
@@ -514,9 +512,11 @@ The next chapter will discuss the experimental results achieved using the propos
 
 \section{Experimental Results} 
 \subsection{Introduction}
-//TODO
+This chapter discusses the experiments conducted to test the proposed method. 
+The results of the conducted experiments are also interpreted and evaluated. 
 
 \subsection{Experiments conducted}
+\label{experimentsConducted}
 In testing the proposed method a simple experiment was set up in which the original image was processed using the embedding process described in \ref{embedding}.
 The results of that process can be seen in figure \ref{fig:lenaEmbedOnceEmbedding}, showing the original image and the image after the embedding process.
 Note that in this case the Image Reference content was only embedded once
@@ -646,13 +646,10 @@ The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnc
 The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
 
 \hspace{0pt} \\
-The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced.
-
-As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self recovering capabilities.
+The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced. As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self recovering capabilities.
 This is discussed further in  section \ref{interpretation}.
 
 \subsection{Interpretation of results}
-
 \label{interpretation}
 The proposed method for self-recovering images using the BPCS Steg embedding algorithm described in the preceding sections was shown to be effective.
 According to Appendix B in \cite{korus2013efficient} the proposed method achieved Average to High quality reconstruction in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
@@ -688,7 +685,10 @@ The embedding rate was low where the image reference content was only embedded o
 However it was found that if the image reference content is embedded twice into the original image that the tamper rate compares equally to that of methods such as the one described in \ref{DynamicBlockOverview}.
 
 \subsection{Conclusion}
-//TODO 
+This chapter discussed the experiments conducted to test the proposed method in section \ref{experimentsConducted}.
+Two implementations of the proposed method were tested, embedding the image reference content once and twice into the original image.
+The results of the experiments were evaluated in section \ref{interpretation}.
+The results achieved using the proposed method were compared with the results achieved by other currently available self-recovering image methods discussed in section \ref{currentSelfRecoveringSchemes}.  
 
 \section{Conclusion}
 \subsection{Introduction}
@@ -702,7 +702,11 @@ It was also mentioned that no compression was used on the image reference conten
 If compression is used it may result in higher quality of the image after reconstruction as well as the image after embedding due to fewer modifications that will be made during embedding.
 
 \subsection{Future work}
-//TODO 
+The method proposed in this dissertation focused on the implementation of the BPCS steganography algorithm as well as the implementation of the fragile watermark. The focus was to combine these methods in order to create a high quality self-recovering image scheme.
+It could however be possible to increase the quality of the proposed method even further if compression is used on the image reference content that is embedded into the original image.
+By compressing the image reference content it would be possible to embed a higher quality reference image into the original image without increasing the payload size.
+It would also be possible to reduce the amount embedding capacity used of the original image, due to a smaller amount of bits that need to be embedded, which would result in less of the original image being changed and thus less noise being introduced into the original image.
+This could possibly lead to increasing the overall quality of the proposed self-recovering image scheme.
 
 \bibliography{main}
 \bibliographystyle{plain}
