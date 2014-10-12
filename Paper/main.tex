@@ -9,7 +9,7 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{mathtools}
 \usepackage{setspace}
-\setstretch{1.5}
+\setstretch{1.0}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -71,7 +71,7 @@ This section serves to make the meaning of those terms clear.
   \item LSB: This refers to the least significant bit in a binary string.
   \item MSB: This refers to the most significant bit/bits in a binary string.
   \item Section, Image section, Pixel section: This refers to a section of 8x8 pixels in an image.
-  \item Bit plane: A bit plane is a 8x8 grid representation of a specific bit value's for a specific pixel section. Each pixel has 24 bits which in total represents each colour, 8 bits per colour. these bits are the 8 binary bits that represent the numerical value of the colour. These 8 bits are separated from each other and are each stored in a 8x8 grid in the same location as that of the pixel in the pixel section. This process is repeated for each pixel in the pixel section and the result is 8, 8x8 grids of binary numbers. Each one of these 8 grids represent a single bit plane. 
+  \item Bit plane: A bit plane is a 8x8 grid representation of a specific bit value for a specific pixel section. Each pixel has 24 bits which in total represents each colour, 8 bits per colour. these bits are the 8 binary bits that represent the numerical value of the colour. These 8 bits are separated from each other and are each stored in a 8x8 grid in the same location as that of the pixel in the pixel section. This process is repeated for each pixel in the pixel section and the result is 8, 8x8 grids of binary numbers. Each one of these 8 grids represent a single bit plane. 
   \item Block: This refers to an individual bit plane of a specific section of the image. There are 8 such blocks in each section since each pixel is represented by 8 bits for each colour.
   \item BPCS Steganography: Bit-Plane Complexity Segmentation Steganography
 \end{itemize}
@@ -92,11 +92,6 @@ In order to understand the self-recovering system proposed in this dissertation,
 
 \hspace{0pt} \\
 Self-recovering images pose an interesting problem.
-\iffalse
-	//TODO <add formal definition here>
-	Already mentioned the definition in the intro so I am not really sure what sort of definition to put here
-\fi
-\hspace{0pt} \\
 There is an inherent trade-off between the quality of the image after embedding and the quality of the image after recovery.
 
 \subsection{Steganography}
@@ -152,7 +147,7 @@ Fragile watermarks are used to determine if a piece of watermarked digital conte
 \hspace{0pt} \\
 Fragile watermarking is a variation of traditional watermarking where a watermark is embedded into an image such that subsequent alterations to the watermarked image can be detected with high probability \cite{lin1999review}.
 This means that if modifications are made to the watermarked image it would be possible to detect that modifications were made as well as what parts of the image were modified.
-This is a necessary component in self recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so what parts of the image was modified.
+This is a necessary component in self-recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so what parts of the image was modified.
 
 \subsection{Self embedding and recovery}
 \label{introSelfEmbedRecovery}
@@ -188,9 +183,9 @@ By using a high capacity embedding algorithm the overall embedding capacity is i
 
 \hspace{0pt} \\
 The proposed method in this dissertation attempts to apply the algorithm for BPCS steganography
-to the problem of self recovering images, specifically to increase overall quality.
+to the problem of self-recovering images, specifically to increase overall quality.
 The BPCS algorithm can achieve a very high capacity while still remaining undetectable through human perception.
-This makes the BPCS algorithm a good choice to increase the capacity of a self recovering image scheme and possibly increase the quality through this process.
+This makes the BPCS algorithm a good choice to increase the capacity of a self-recovering image scheme and possibly increase the quality through this process.
 
 \subsection{Conclusion}
 \label{introConclusion}
@@ -198,7 +193,7 @@ This chapter gave important background information regarding staganography in ge
 Fragile watermarking was discussed in section \ref{introFragWatermarking} as well as self embedding and recovery in section \ref{introSelfEmbedRecovery}.
 The next chapter will discuss related work in existing self embedding techniques.
 
-\section{Current self recovering image schemes and algorithms}
+\section{Current self-recovering image schemes and algorithms}
 \label{currentSelfRecoveringSchemes}
 \subsection{Introduction}
 This section compares current content reconstruction algorithms using self embedding.
@@ -206,12 +201,13 @@ This serves to give an overview of what is currently available and to possibly h
 This would be useful to determine if the proposed method does indeed improve on existing methods. 
 It would also help highlight strengths and shortcomings in the proposed method.
 The methods analysed were chosen because they all provide good quality images after embedding as well as good quality images after reconstructed.
-They also each offer an unique approach or aspect to the self recovering image problem.
-
-\hspace{0pt} \\
-There are 3 current methods discussed in this section. An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}. A comparison between these 3 methods are provided in section \ref{litStudyCamparison}
+They also each offer an unique approach or aspect to the self-recovering image problem.
 
 \subsection{Overview}
+There are 3 current methods discussed in this section. An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}. 
+A comparison between these 3 methods are provided in section \ref{litStudyCamparison}.
+These 3 methods will be discussed based on their PSNR, tapering rate, security, payload size and embedding capacity.
+
 \begin{itemize}
 	\item Erasure channel: An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or the bit or it receives a message that the bit was not received, ie the bit was erased.
 	\item Peak signal to noise ratio (PSNR): PSNR is an expression for the ratio between the maximum possible value (power) of a signal and the power of distorting noise that affects the quality of its representation. PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
@@ -225,7 +221,6 @@ There are 3 current methods discussed in this section. An erasure channel model 
 	\item Payload size: Payload size is defined as the amount of bits that is embedded in to an image using steganographic embedding techniques. 
 	\item Embedding capacity: embedding capacity is defined as the maximum amount of bits that can be embedded into an image using steganographic embedding techniques.
 \end{itemize}
-//TODO <All the terms that have not been defined yet in the dissertation that will be used in this section should be defined here, query if this is indeed a correct assumption>
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
@@ -649,7 +644,7 @@ The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnc
 The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
 
 \hspace{0pt} \\
-The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced. As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self recovering capabilities.
+The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced. As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self-recovering capabilities.
 This is discussed further in  section \ref{interpretation}.
 
 \subsection{Interpretation of results}
