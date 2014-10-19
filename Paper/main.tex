@@ -9,7 +9,7 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{mathtools}
 \usepackage{setspace}
-\setstretch{1.0}
+\setstretch{1.5}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -48,6 +48,7 @@ Current self-recovering image techniques generally have poor quality restoration
 The proposed method will focus on improving the quality of self-recovering images.
 
 \subsection{Problem statement}
+\label{problemStatement}
 The proposed method attempts to achieve the following
 \begin{itemize}
 	\item The proposed method should achieve a high quality image after the self-embedding process as well as after the restoration process with a reasonable tamper rate(compared to currently available methods)
@@ -690,14 +691,23 @@ The results achieved using the proposed method were compared with the results ac
 
 \section{Conclusion}
 \subsection{Introduction}
-//TODO 
+This chapter summarizes the findings of the proposed method and relates those findings back to the problem statement in section \ref{problemStatement}.
+Possible future work with regards to the proposed method is also discussed.
 
-The proposed method described used an adaptive embedding algorithm described in \ref{bpcsSteg}.
+\subsection{Summary}
+The proposed method described used the BPCS steganaography algorithm, which is an adaptive embedding algorithm described in \ref{bpcsSteg}, and applied the algorithm to the self-embedding problem.
 The proposed method was shown to provide good quality as well as a good tamper rate.
-It was also shown that the quality of the image after embedding the image reference content and the image quality after reconstruction differs depending on the cover image chosen.
-This was attributed to the adaptive embedding algorithm used.
+It was also shown that the quality of the image after embedding the image reference content as well as the image quality after reconstruction differs depending on the cover image chosen.
+This was attributed to the adaptive embedding algorithm used due to the fact that the embedding differs depending on the cover image.
 It was also mentioned that no compression was used on the image reference content that was embedded into the original image.
 If compression is used it may result in higher quality of the image after reconstruction as well as the image after embedding due to fewer modifications that will be made during embedding.
+
+\hspace{0pt} \\
+The proposed method achieved a high quality image after the self-embedding process as well as after the restoration process with reasonable tamper rate in one set of the images tested. The quality though is dependent on the image used. 
+It would thus not achieve high quality with all images.
+The proposed method did not introduce clear visual evidence that the image has been modified after embedding as well as after restoration and the image did still carry it's original meaning.
+The proposed method thus achieved most of what it attempted to achieve with the only problem being that the quality is dependent on the image used.
+ 
 
 \subsection{Future work}
 The method proposed in this dissertation focused on the implementation of the BPCS steganography algorithm as well as the implementation of the fragile watermark. The focus was to combine these methods in order to create a high quality self-recovering image scheme.
