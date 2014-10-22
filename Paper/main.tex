@@ -9,7 +9,7 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{mathtools}
 \usepackage{setspace}
-\setstretch{1.5}
+\setstretch{1.0}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -29,7 +29,7 @@
 Many current self-recovering image methods exist, however few of the current methods provide good quality images after embedding as well as after reconstruction.
 This is due to an inherent trade off between the amount of information that can be embedded into an image and the quality of the image after embedding.
 This dissertation proposes a novel method for increasing the quality of the image after embedding as well as the quality of the image after reconstruction in the self-recovering image problem using the BPCS Steganography algorithm for content embedding as well as employing a fragile watermark for detecting image modifications.
-The proposed method achieves a good quality image after embedding as well as a good quality image after reconstruction when compared with some of the best currently available self-recovering image methods. 
+The proposed method achieves a good quality image after embedding as well as a good quality image after reconstruction when compared to some of the best currently available self-recovering image methods. 
 
 \end{abstract}
 
@@ -37,22 +37,30 @@ The proposed method achieves a good quality image after embedding as well as a g
 \section{Introduction}
 
 \subsection{Introduction}
-This dissertation proposes a novel method for self-recovering images.
+//TODO <//DONE// Rewrite in a more story like fashion, mention the why, what are the problems, steganography, fragile watermarks, self embedding etc>
+
+During communication images can by modified either intentionally or unintentionally.  These modifications can be small changes that does not change the meaning of the image, or bigger changes, for example the removal of key aspects from the image. 
+Various techniques exist for authenticating images of which self-recovering is one technique. 
+Self-recovering techniques attempt to preserve image content by embedding the image within itself to enable the reconstruction of the image if the image was tampered with. Self-recovering techniques use steganography, a technology used to embed information in digital media \cite{johnson1998exploring}, to hide the image content within the image.  Self-recovering techniques also use fragile watermarks which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
 
 \hspace{0pt} \\
-Self-recovering images: Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. 
-This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that the image was damaged.
+Most self-recovering techniques have a tradeoff trade-off concerning the quality of the image after embedding and the quality of the image after recovery.
+If the one's quality is increased the other's quality will be reduced.
 
 \hspace{0pt} \\
-Current self-recovering image techniques generally have poor quality restoration capabilities, damage the original image greatly or does not allow a large amount of the original image to be damaged before recovery is no longer possible.
-The proposed method will focus on improving the quality of self-recovering images.
+This dissertation proposes using a high capacity steganography algorithm called Bit-plane Complexity Segmentation (BPCS) steganography to increase the amount of data that can be embedded in an image to attempt to increase the quality of the embedded image.
+
 
 \subsection{Problem statement}
 \label{problemStatement}
-The proposed method attempts to achieve the following
+The proposed method aims to answer the following questions
 \begin{itemize}
-	\item The proposed method should achieve a high quality image after the self-embedding process as well as after the restoration process with a reasonable tamper rate(compared to currently available methods)
-	\item There should not be clear visual evidence that the image has been modified after embedding as well as after restoration and the image should still carry it's original semantic meaning
+	\item Can a method be proposed that will achieve a high quality image after the self-embedding and restoration process as well as a reasonable tamper rate? How does such a system compare to currently available methods?
+	\item Determining the quality of the resulting image should include, but are not limited to: 
+	\begin{itemize}
+		\item There should not be clear visual evidence that the image has been modified after embedding as well as after restoration
+		\item The image should still carry it's original semantic meaning
+	\end{itemize}
 \end{itemize}
 
 \subsection{Research methodology}
@@ -68,13 +76,23 @@ This section serves to make the meaning of those terms clear.
   \item Original Image: This refers to the original image without any modifications.
   \item Embedding: Embedding in the context of this dissertation refers to the process of storing digital information in an image's content in such a way that the original image is still distinguishable.
   \item Image after embedding: This refers to the the original image after the embedding process has been applied.
+  \item Reconstruction: This refers to the process of using the content that was embedded into the image to repair the image after embedding if it has been modified.
   \item Image after reconstruction: This refers to the reconstructed version of the original image that was obtained by applying the reconstruction process to the image after embedding.
   \item LSB: This refers to the least significant bit in a binary string.
   \item MSB: This refers to the most significant bit/bits in a binary string.
   \item Section, Image section, Pixel section: This refers to a section of 8x8 pixels in an image.
-  \item Bit plane: A bit plane is a 8x8 grid representation of a specific bit value for a specific pixel section. Each pixel has 24 bits which in total represents each colour, 8 bits per colour. these bits are the 8 binary bits that represent the numerical value of the colour. These 8 bits are separated from each other and are each stored in a 8x8 grid in the same location as that of the pixel in the pixel section. This process is repeated for each pixel in the pixel section and the result is 8, 8x8 grids of binary numbers. Each one of these 8 grids represent a single bit plane. 
+  \item Bit plane: A bit plane is a 8x8 grid representation of a specific bit value for a specific pixel section. Each pixel has 24 bits which in total represents each colour, 8 bits per colour. These bits are the 8 binary bits that represent the numerical value of the colour. These 8 bits are separated from each other and are each stored in a 8x8 grid in the same location as that of the pixel in the pixel section. This process is repeated for each pixel in the pixel section and the result is 8, 8x8 grids of binary numbers. Each one of these 8 grids represent a single bit plane. 
   \item Block: This refers to an individual bit plane of a specific section of the image. There are 8 such blocks in each section since each pixel is represented by 8 bits for each colour.
-  \item BPCS Steganography: Bit-Plane Complexity Segmentation Steganography
+\end{itemize}
+
+\subsection{Chapter layout}
+\begin{itemize}
+\item Chapter 1 serves as an introduction to the concept of self-recovering images
+\item Chapter 2 discusses self-recovering images and their different components
+\item Chapter 3 discusses currently available self-recovering image schemes, comparing their strengths and weaknesses
+\item Chapter 4 provides an overview of the system proposed in this dissertation
+\item Chapter 5 discusses the results achieved during experimentation with the proposed system.
+\item Chapter 6 Provides a conclusion, determining questions stated in section \ref{problemStatement} have been answered
 \end{itemize}
 
 \subsection{Conclusion}
@@ -85,147 +103,135 @@ The next chapter will give a more detailed overview of all the components that m
 \section{Self-recovering images}
 
 \subsection{Introduction}
-Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. 
+Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. //TODO <Reference> 
 This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that the image was damaged.
 
 \hspace{0pt} \\
 In order to understand the self-recovering system proposed in this dissertation, one has to understand the underlying technologies.  This chapter will look at image steganography in more detail in section \ref{introSteganography} and at watermarking in section \ref{introFragWatermarking}. Self-embedding and recovery will be discussed in section \ref{introSelfEmbedRecovery} with a conclusion in section \ref{introConclusion}
 
-\hspace{0pt} \\
-Self-recovering images pose an interesting problem.
-There is an inherent trade-off between the quality of the image after embedding and the quality of the image after recovery.
-
 \subsection{Steganography}
 \label{introSteganography}
-Steganography is the process of hiding information in such a way that it does not get detected \cite{johnson1998exploring}.
+//TODO <Get better definition and reference> Steganography is the process of hiding information in such a way that it does not get detected \cite{johnson1998exploring}.
 Steganography, derived from Greek means "covered writing".
 This means it differs from cryptography which does not attempt to hide information but merely scrambles it so it cannot be understood.
 Steganography does not scramble the information but rather relies on the information to remain hidden.
 
 \hspace{0pt} \\
 The proposed method uses steganography to embed the information into the image in a way that is not easily visibly detectable by a human observer.
-A successful stegnographic method has certain characteristics:
+A successful steganographic method has certain characteristics according to literature:
 \begin{itemize}
-	\item Invisibility: How easy it is to detect that information has been embedded using steganography.
-	\item Robustness: How much of the image that is embedded into can be modified without compromising the embedded information.
-	\item Capacity: The maximal number of bits that can be embedded without introducing statistically detectable artifacts \cite{fridrich2009steganography}. It should also be added that the embedding must also not be visually detectable.
+	\item Invisibility: How easy it is to visually detect that information has been embedded using steganography. //TODO <reference>
+	\item Robustness: How much of the image that is embedded into can be modified without compromising the embedded information. //TODO <definition and reference based on traditional stego concepts>
+	\item Capacity: The maximal number of bits that can be embedded without introducing statistically of visually detectable artifacts \cite{fridrich2009steganography}.
 \end{itemize}
-Least significant bit embedding (LSB) is a stegnographic method that can be used to embed information. 
-LSB works by replacing the least significant bit (or n least significant bits) of an image colour value with the binary bits from a message. The least significant bit of a colour value is the binary bit/s that carry the least value.
+Least significant bit embedding (LSB) is a steganographic method that can be used to embed information. 
+LSB works by replacing the least significant bit (or n least significant bits) of an image colour value with a binary bit from a message. The least significant bit of a colour value is the binary bit/s that carry the least value and thus the change in colour is not perceptible to the human eye.
+LSB is a very simple steganography algorithm and many methods exist for detecting the hidden information //TODO <Reference>
 
 \hspace{0pt} \\
-BPCS Steganography is another stegnographic embedding method \cite{beaullieubpcs}.
+Bit plane complexity steganography (BPCS) is another steganographic embedding method that was developed in <year> by <authors> \cite{beaullieubpcs}. 
+The goal of the BPCS algorithm is to embed as much data as possible into a cover image while maintaining invisibility \cite{beaullieubpcs}.
 
 \hspace{0pt} \\
-This method works with the following steps:
+The BPCS algorithm consists of the following steps:
 \begin{enumerate}
   \item Get the binary representation of the image
   \item Convert the binary representation into Gray code
   \item Divide the image into bit planes
   \item Divide the bit planes into 8x8 pixel blocks
   \item Calculate the complexity for each block
-  \item Divide the image reference content to be embedded into similar binary 8x8 blocks
-  \item Calculate the complexity for each image reference block and conjugate if not complex enough
-  \item for each image block that is complex enough, replace that block with the next image reference content block
-  \item Convert the blocks back to binary representation
-  \item reconstruct the image from the processed blocks 
+  \item Divide the message to be embedded into similar binary 8x8 blocks
+  \item Calculate the complexity for each message and conjugate if not complex enough
+  \item For each image block that is complex enough, replace that block with the next message block
+  \item Convert the blocks back to binary representation 
 \end{enumerate}
 
 \hspace{0pt} \\
-The BPCS algorithm is a high capacity embedding algorithm. The goal of the BPCS algorithm is thus to embed as much data as possible into a cover image without detection \cite{beaullieubpcs}.
+The BPCS algorithm is a high capacity embedding algorithm. //TODO <reference>
 This refers to detection by human perception as well as statistical analysis although the latter is not the focus of this dissertation.
-The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding (similar to \ref{DynamicBlockOverview}).
-BPCS steg differs however in the fact that the blocks can be conjugated in a checker board pattern to increase complexity and decrease detectability if needs be.
-BPCS steg also differs in the way in which embedding takes place.
-Instead of always embedding into the 3-LSB planes as in \ref{DynamicBlockOverview}.
+The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding.
+and blocks can be conjugated in a checkerboard pattern to increase complexity and decrease detectability if needs be.
 Bit planes are dynamically allocated for embedding.
 One section may thus only embed into one bit plane while another may use all 7 available bit planes.
 
 \subsection{Fragile Watermarking}
 \label{introFragWatermarking}
-Fragile watermarks are used to determine if a piece of watermarked digital content has been tampered, and distinguish tampered areas from non-tampered areas without referring to the original digital content \cite{liu2007image}.
+Fragile watermarks are used to determine if a piece of watermarked digital content has been tampered with. A fragile watermark system should be able to distinguish tampered areas from non-tampered areas without referring to the original digital content \cite{liu2007image}.
 
 \hspace{0pt} \\
 Fragile watermarking is a variation of traditional watermarking where a watermark is embedded into an image such that subsequent alterations to the watermarked image can be detected with high probability \cite{lin1999review}.
-This means that if modifications are made to the watermarked image it would be possible to detect that modifications were made as well as what parts of the image were modified.
-This is a necessary component in self-recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so what parts of the image was modified.
+This means that if modifications are made to the watermarked image it would be possible to detect that modifications were made as well as which parts of the image were modified.
+This is a necessary component in self-recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so which parts of the image was modified.
 
 \subsection{Self embedding and recovery}
 \label{introSelfEmbedRecovery}
-Self embedding is a scheme where image content is embedded into the image itself. This embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself \cite{fridrich1999images}.
-A self embedding and recovery scheme (Further referred to as reconstruction) such as the proposed method contains a couple of high level steps.
+Self embedding is a scheme where image content is embedded into the image itself //TODO <reference. The embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself \cite{fridrich1999images}.
+A self embedding and recovery scheme (further referred to as reconstruction) such as the proposed method contains a couple of high level steps.
 Firstly the authentic image content is embedded into the original image along with a fragile watermark.
 The resulting image is referred to as the image after embedding
-This watermark will help determine later on which parts of the image after embedding was modified if any (see \ref{introFragWatermarking}).
-When the authentic image needs to be reconstructed, after modification, the fragile watermark is used to determine which content was modified.
-An attempt is then made to extract the original content for the areas that were modified in the image after embedding.
+The watermark will help determine later on which parts of the image after embedding was modified if any (see \ref{introFragWatermarking}).
+When the authentic image needs to be reconstructed, after modification, the fragile watermark is used to determine which content was modified, if any.
+An attempt is then made to extract the original content for the areas that were modified in the image.
 If this process is successful the user is left with a high quality reconstruction of the original image.
 
 \hspace{0pt} \\
 There is an inherent quality trade-off present within self embedding schemes.
-The trade-off exists between the image after embedding and the image after reconstruction.
-If an embedding algorith such as LSB(Least significan bit) embedding is used the actual bit values of the original image are overwritten.
+The trade-off exists between the quality of the  image after embedding and the quality of the image after reconstruction.
+If an embedding algorith such as LSB embedding is used the actual bit values of the original image are overwritten.
 Naturally the more bit values are overwritten the more noise is introduced into the image.
-This effectively reduces the quality of the image after embedding.
+This effectively reduces the quality of the image after embedding but increases the amount of data that can be stored in the image thus increasing the quality of the reconstructed image.
 
 \hspace{0pt} \\
-The solution to this would be to simply embed a small amount of information into the image to keep the noise low.
+On one hand one could simply embed a small amount of information into the image to keep the noise low.
 However this presents another problem.
-The quality of the image after reconstruction is dependent on the amount of authentic image data (further referred to as the image reference content) embedded into the image.
+The quality of the image after reconstruction is dependent on the amount of authentic image data (referred to as the image reference content) embedded into the image.
 
 \hspace{0pt} \\
-To achieve maximum quality after embedding the embedded information must be as little as possible.
+To achieve maximum quality after embedding the embedded information must be as small as possible.
 To achieve maximum quality after reconstruction the embedded image reference content must be as large as possible to be as close as possible to the original image.
-There exists then a trade-off between the two.
+There thus exists then a trade-off between the two.
 
 \hspace{0pt} \\
-It might be possible to increase the quality of the image after reconstruction while still keeping the quality after embedding high.
-By using a high capacity embedding algorithm the overall embedding capacity is increased and a higher quality restoration image can be embedded. 
-
-\hspace{0pt} \\
-The proposed method in this dissertation attempts to apply the algorithm for BPCS steganography
+The proposed method attempts to apply the algorithm for BPCS steganography
 to the problem of self-recovering images, specifically to increase overall quality.
-The BPCS algorithm can achieve a very high capacity while still remaining undetectable through human perception.
+The BPCS algorithm can achieve a very high capacity while still remaining undetectable to human perception.
 This makes the BPCS algorithm a good choice to increase the capacity of a self-recovering image scheme and possibly increase the quality through this process.
 
 \subsection{Conclusion}
 \label{introConclusion}
-This chapter gave important background information regarding staganography in general as well as two stegnographic embedding methods, LSB embedding and BPCS steganography in section \ref{introSteganography}.
+This chapter gave important background information regarding steganography in general as well as two steganographic embedding methods, LSB embedding and BPCS steganography.
 Fragile watermarking was discussed in section \ref{introFragWatermarking} as well as self embedding and recovery in section \ref{introSelfEmbedRecovery}.
-The next chapter will discuss related work in existing self embedding techniques.
+The next chapter will discuss related work in existing self recovery techniques.
 
 \section{Current self-recovering image schemes and algorithms}
 \label{currentSelfRecoveringSchemes}
 \subsection{Introduction}
-This section compares current content reconstruction algorithms using self embedding.
-This serves to give an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
+This chapter compares current content reconstruction algorithms using self recovery techniques serving as an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
 This would be useful to determine if the proposed method does indeed improve on existing methods. 
 It would also help highlight strengths and shortcomings in the proposed method.
-The methods analysed were chosen because they all provide good quality images after embedding as well as good quality images after reconstructed.
+The methods analysed were chosen because they all provide good quality images after embedding as well as good quality images after reconstruction.
 They also each offer an unique approach or aspect to the self-recovering image problem.
 
 \subsection{Overview}
-There are 3 current methods discussed in this section. An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}. 
+There are 3 current methods discussed in this section. An erasure channel model utilizing the remaining authentic content is discussed in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation in \ref{DynamicBlockOverview}. 
 A comparison between these 3 methods are provided in section \ref{litStudyCamparison}.
-These 3 methods will be discussed based on their PSNR, tapering rate, security, payload size and embedding capacity.
+These 3 methods will be discussed based on their PSNR, tapering rate, security, payload size and embedding capacity as follows.
 
 \begin{itemize}
-	\item Erasure channel: An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or the bit or it receives a message that the bit was not received, ie the bit was erased.
-	\item Peak signal to noise ratio (PSNR): PSNR is an expression for the ratio between the maximum possible value (power) of a signal and the power of distorting noise that affects the quality of its representation. PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
+	\item Peak signal to noise ratio (PSNR): PSNR is an expression for the ratio between the maximum possible value (power) of a signal and the power of distorting noise that affects the quality of its representation. //TODO <reference> PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
 	As the mean squared error between the two images approaches 0 the PSNR approaches infinity. A higher PSNR value thus provides a higher quality image. 
 	A small PSNR value implies a high numerical difference between the two images \cite{hore2010image}.  
-	The quality measures mentioned in the 3 methods discussed were measured using the PSNR method. \cite{huynh2008scope} However determined that the validity of PSNR is limited to modifications within the same image.
-	It is thus not reliable to compare PSNR values between two different images.
-	\item Tampering rate: tampering rate is the percentage of image content that can be modified in the image after embedding, while still being able to reconstruct all the modified parts of that image.
+	The quality measures mentioned in the 3 methods discussed were measured using the PSNR method. 
+	\item Tampering rate: Tampering rate is the percentage of image content that can be modified in the image after embedding, while still being able to reconstruct all the modified parts of that image. //TODO <reference>
 	If too much of the image is modified the embedded image content would be lost and reconstruction would not be possible.
-	\item Security: security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is simple t detect.
-	\item Payload size: Payload size is defined as the amount of bits that is embedded in to an image using steganographic embedding techniques. 
-	\item Embedding capacity: embedding capacity is defined as the maximum amount of bits that can be embedded into an image using steganographic embedding techniques.
+	\item Security: Security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is simple detect. //TODO <reference>
+	\item Payload size: Payload size is defined as the amount of bits that is embedded into an image using steganographic embedding techniques //TODO <reference>. Embedding capacity is defined as the \textbf{maximum} amount of bits that can be embedded into an image using steganographic embedding techniques before visual distortion occurs.
 \end{itemize}
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
 The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
+An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or it receives a message that the bit was not received, ie the bit was erased. //TODO <reference>
 The method uses LSB embedding to embed the image reference content into the image itself and uses a global spreading technique to spread the image reference content across the image.
 The method also proposes that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
 
@@ -233,25 +239,24 @@ The method also proposes that by using the remaining authentic content in the im
 The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR \textgreater 35dB. 
 The method also achieves an image after reconstruction quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with tamper rates of 50\% and 33\% respectively.
 The method does not let the quality of the image after reconstruction deteriorate much if the tampering rate is increased up to a value of 50\%.
-They do however note that they can only achieve a minimal increase in reconstruction performance by decreasing the amount of information in the image reference content.
+The authors do however note that they can only achieve a minimal increase in reconstruction performance by decreasing the amount of information in the image reference content.
 By using only 50\% of the available capacity the maximal tampering rate increases form 50\% to 59\%.
 
 \hspace{0pt} \\
-This method \cite {korus2013efficient} is thus quite robust since 50\% of the image may be tampered with before reconstruction ability starts to deteriorate.
-The security for this method is also very good since the quality of the cover image is not very susceptible to visual checks.
+This method \cite {korus2013efficient} is robust since 50\% of the image may be tampered with before reconstruction ability starts to deteriorate.
+The security for this method is also very good since the quality of the cover image is not susceptible to visual checks.
 The authors did not do any statistical analysis on the image.
-The embedding capacity of this method is also acceptable, but because the method uses some of the authentic image data to aid in the reconstruction process the quality of the image, before and after reconstruction, is still very good even without a very high embedding capacity.  
+The embedding capacity of this method is acceptable because the method uses some of the authentic image data to aid in the reconstruction process. The quality of the image, before and after reconstruction, is thus good even though the method only has acceptable embedding capacity.  
 
 \subsubsection{Method using difference expansion}
 \label{differenceExpansionOverview}
 Another method \cite {tian2003high} uses difference expansion and generalized LSB embedding.
 Difference expansion works by exploiting the high redundancy that are present in images \cite {tian2002reversible}.
-With difference expansion the payload is embedded in the difference of pixel values. 
-For a pair of pixel values (x,y) \cite {tian2002reversible}. 
-It should however be noted that image quality reduces rapidly as the payload size is increased when using difference expansion. 
-The method uses difference expansion and to achieve a high embedding capacity while keeping distortion relatively low.
+With difference expansion the payload is embedded in the difference of pixel values \cite {tian2002reversible}. 
+It should be noted that image quality reduces rapidly as the payload size is increased when using difference expansion due to the large amount of change that is introduced into the image. 
+The method achieves a high embedding capacity while keeping distortion relatively low.
 The method achieves a PSNR \textgreater 35dB after embedding.
-The method achieves an embedding capacity of 1.78bpp when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image.
+The method achieves an embedding capacity of 1.78 bits per pixel (bbp) when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image //TODO <define what the lena image is>.
 
 \hspace{0pt} \\
 The method's \cite {tian2003high} quality regarding the image after reconstruction is acceptable at roughly 50\%. 
@@ -259,62 +264,58 @@ The difference expansion this method uses provides extra space for embedding.
 The authors did thus not implement compression on the image data because of the extra space the difference expansion provides.
 The embedding capacity of this method could thus be further improved by compressing the embedded data. 
 This could possibly lead to better quality than what their experimental results achieved at the expense of complexity.
-Difference expansion thus seems a good solution to increase the embedding capacity while still keeping the distortion low.
 
 \hspace{0pt} \\ 
-The authors do not mention the image tamper rate that this method \cite {tian2003high} achieves.
+The authors did not mention the image tamper rate that this method \cite {tian2003high} achieves.
 
 \subsubsection{Dynamic block allocation for self embedding}
 \label{DynamicBlockOverview}
-Qian et al \cite{qian2011image} proposes a method for fragile watermarking with good image restoration capabilities.
+Qian et al \cite{qian2011image} proposed a method for fragile watermarking with good image restoration capabilities.
 The proposed method differs from the other methods mentioned in \ref{ErasureChannelOverview} and \ref{differenceExpansionOverview} due to the fact that the method does not embed the information into all blocks uniformly.
 The method classifies different blocks of the image according to the block smoothness.
 The less smooth the block is the more information will be embedded into it.
 The authors argue that the current methods that use a fixed embedding size for each block are inadequate since less information should be embedded into the very smooth blocks and more should be embedded into the rough blocks \cite{qian2011image}.
 
 \hspace{0pt} \\
-The advantage of using this dynamic scheme is that there is visual distortion to the image after embedding. 
+The advantage of using this dynamic scheme is that there is very little visual distortion introduced into the image after embedding. 
 This is because if the specific block is already very rough (very busy visually) the human eye does not notice small changes.
 If however the specific block is very smooth (very uniform visually) the human eye is more likely to notice small changes.
 The method thus creates less distortion in the image after embedding than fixed size methods while still retaining good image after reconstruction quality \cite{qian2011image}. 
 
 \hspace{0pt} \\
 The method proposed by Qian et al \cite{qian2011image} uses 3 LSB bit planes
-\iffalse 
-	//TODO possibly define bit planes here although it is already defined in the terminology
-\fi 
-to embed the needed information in.
+to embed the necessary information in.
 The method achieves good results in experimentation with a image after embedding PSNR \textgreater 37dB as well as a image after reconstruction PSNR = 35dB.
 The method also allows for a tamper rate \textless 35\%.
-The authors do not analyze the security of the algorithm.
+The authors did not analyze the security of the algorithm.
 
 \subsection{Comparison}
 \label{litStudyCamparison}
 Each of the methods described in \ref{ErasureChannelOverview}, \ref{differenceExpansionOverview} and \ref{DynamicBlockOverview} provide good quality images after embedding as well as good quality images after reconstruction.
 There are however important differences.
-The method described in \ref{ErasureChannelOverview} offers a very good tamper rate of 50\% compared to the method described in \ref{DynamicBlockOverview} which has a tamper rate of 35\%.
+The erasure channel method described in \ref{ErasureChannelOverview} offers a very good tamper rate of 50\% compared to the difference expansion method described in \ref{DynamicBlockOverview} which has a tamper rate of 35\%.
 This means that a larger part of the image after embedding can be tampered with while still being able to reconstruct the image.
 
 \hspace{0pt} \\
-The method described in \ref{differenceExpansionOverview} achieves an image after embedding with a PSNR \textgreater 35dB, the method described in \ref{ErasureChannelOverview} achieves similar results, however the method described in \ref{DynamicBlockOverview} achieves an image after embedding PSNR \textgreater 37dB.
-This means that the method described in \ref{DynamicBlockOverview} would have less noise in the image after embedding and would thus have better overall quality of the image after embedding.
+The difference expansion method described in \ref{differenceExpansionOverview} achieves an image after embedding with a PSNR \textgreater 35dB and the erasure channel method achieves similar results, however the dynamic block allocation method achieves an image after embedding PSNR \textgreater 37dB.
+This means that the dynamic block allocation method would have less noise in the image after embedding and would thus have better overall quality of the image after embedding.
 
 \hspace{0pt} \\
-At almost equal tamper rates of around 33\%-35\% the method described in \ref{ErasureChannelOverview} achieves an image after reconstruction PSNR \textgreater 40dB whereas the method described in \ref{DynamicBlockOverview} only achieves an image after reconstruction PSNR = 35dB.
-The method described in \ref{differenceExpansionOverview} only achieves an image after reconstruction quality of about 50\% the original image.
-This means that the method described in \ref{ErasureChannelOverview} would generally produce better quality reconstructed images than the methods described in \ref{DynamicBlockOverview} and \ref{differenceExpansionOverview}.
+At almost equal tamper rates of around 33\%-35\% the erasure channel method achieves an image after reconstruction PSNR \textgreater 40dB whereas the dynamic block allocation method only achieves an image after reconstruction PSNR = 35dB.
+The difference expansion method only achieves an image after reconstruction quality of about 50\% the original image.
+This means that the erasure channel method would generally produce better quality reconstructed images than the other two methods.
 
 \hspace{0pt} \\
-This means that the method described in \ref{ErasureChannelOverview} provides the best tamper rate and the best reconstructed image quality, and the method described in \ref{DynamicBlockOverview} provides the best image after embedding quality.
-The method described in \ref{differenceExpansionOverview} provides decent quality of the image after embedding as well as the image after reconstruction.
+The erasure channel method thus provides the best tamper rate and the best reconstructed image quality, and the dynamic block allocation method provides the best image after embedding quality.
+The difference expansion method provides decent quality of the image after embedding as well as the image after reconstruction.
 
 \hspace{0pt} \\
 All three methods thus provide good results and would serve as a good benchmark for comparing the method proposed in this dissertation.
 
 \subsection{Conclusion}
 This chapter looked at currently available methods for self-recovering images.
-An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation \ref{DynamicBlockOverview}.
-A comparison between these methods was also provided in section \ref{litStudyCamparison}.
+An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation in \ref{DynamicBlockOverview}.
+A comparison between these methods was provided in section \ref{litStudyCamparison}.
 This information will be used to determine the success of the self-recovering image method proposed in this dissertation by comparing the results from the proposed method with the results achieved by the methods discussed in this chapter.
 The next chapter will discuss the implementation of the of the self-recovering image method proposed in this dissertation.  
 
