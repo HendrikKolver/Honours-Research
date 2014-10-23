@@ -652,38 +652,37 @@ This is discussed further in  section \ref{interpretation}.
 
 \subsection{Interpretation of results}
 \label{interpretation}
-The proposed method for self-recovering images using the BPCS Steg embedding algorithm described in the preceding sections was shown to be effective.
-According to Appendix B in \cite{korus2013efficient} the proposed method achieved Average to High quality reconstruction in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
-The proposed method achieved Low quality reconstruction in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
+The proposed method for self-recovering images using the BPCS steganography embedding algorithm described in the preceding sections was shown to be effective.
+According to Appendix B in \cite{korus2013efficient} the proposed method achieved average to high quality reconstruction in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
+The proposed method achieved low quality reconstruction in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
 
 \hspace{0pt} \\
 The image from figures \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} was specifically chosen for the experiment because it is well used in the literature and can serve to compare the proposed method to other methods available in the literature.
 Such comparisons follow below. 
 
 \hspace{0pt} \\
-The proposed method does not perform as well as the method described in \ref{ErasureChannelOverview}.
-The proposed method achieves PSNR values that are about 5dB worse than the method described in \ref{ErasureChannelOverview}.
-Compared to the method described in \ref{differenceExpansionOverview} the proposed method performs in a similar manner.
-The PSNR values achieved are worse than that of the method in \ref{differenceExpansionOverview} but the difference is around 1-2dB and is thus almost not noticeable to the human eye.
-It should also be mentioned that the proposed method uses no compression on the image reference content, similar to the method in \ref{differenceExpansionOverview}.
+The proposed method does not perform as well as the erasure channel method and achieves PSNR values that are about 5dB worse than the erasure channel method.
+Compared to the difference expansion method the proposed method performs in a similar manner.
+The PSNR values achieved are worse than that of the difference expansion method but the difference is around 1-2dB and is thus almost not noticeable to the human eye.
+It should also be mentioned that the proposed method uses no compression on the image reference content, similar to the difference expansion method.
 This method thus serves as a more equal comparison. 
 
 \hspace{0pt} \\
-\cite{wang2002image} Points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
-PSNR is a useful measure for objective image quality assessment to a certain degree however there are other important factors to consider. 
+Research in \cite{wang2002image} Points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
+PSNR is a useful measure for objective image quality assessment to a certain degree, however there are other important factors to consider. 
 The one important factor is how a person would perceive the image quality.
 Another important factor is if the meaning of the image is still clear even after reconstruction.
 This would typically mean being able to identify key features of the image easily. 
 The proposed method performs well under this form a visual analysis.
 
 \hspace{0pt} \\
-It was found during experimentation that image quality can vary greatly among different image using the proposed method.
+It was found during experimentation that image quality can vary greatly among different images using the proposed method.
 This can be attributed to the fact that an adaptive embedding method is used and where the image reference content is embedded thus differs depending on the chosen original image.
 
 \hspace{0pt} \\
 The embedding rate and effects of the embedding rate seemed consistent across the different images used.
-The embedding rate was low where the image reference content was only embedded once into the original image and compared poorly to methods such as the one described in \ref{DynamicBlockOverview}.
-However it was found that if the image reference content is embedded twice into the original image that the tamper rate compares equally to that of methods such as the one described in \ref{DynamicBlockOverview}.
+The embedding rate was low where the image reference content was only embedded once into the original image and compared poorly to methods such as the dynamic block allocation method.
+However it was found that if the image reference content is embedded twice into the original image that the tamper rate compares equally to that of dynamic block allocation method.
 
 \subsection{Conclusion}
 This chapter discussed the experiments conducted to test the proposed method in section \ref{experimentsConducted}.
