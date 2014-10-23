@@ -322,14 +322,14 @@ The next chapter will discuss the implementation of the of the self-recovering i
 \section{Overview of the proposed system}
 \label{Implementation}
 \subsection{Introduction}
-This chapter discusses the details of the implementation for the self-recovering image method proposed in this dissertation. Embedding is discussed under which BPCS staganography and fragile watermarking will also be discussed.
-The extraction and restoration process will be discussed under which authentication and restoration will also be discussed.
-Diagrams are also provided to visualize the embedding as well as the extraction process
+This chapter discusses the details of the implementation for the self-recovering image method proposed in this dissertation. Embedding is discussed in section \ref{embedding} and BPCS steganography and fragile watermarking will also be discussed again.
+The extraction and restoration process is discussed in section \ref{extractRestore} under which authentication and restoration will also be discussed.
+Diagrams are provided to visualize the embedding as well as the extraction process.
 
 \subsection{Overview of proposed system}
 \label{impOverview}
-The self-recovering method proposed in this dissertation uses BPCS steganography to increase the payload capacity of the cover image in order to be able to embed more reference content into the image without introducing visual distortion.
-In addition a fragile watermark was used to detect which parts of the image was damaged and thus needs to be reconstructed.
+The self-recovering method proposed in this dissertation uses BPCS steganography to increase the payload capacity of the cover image in order to be able to embed more image reference content into the image without introducing visual distortion.
+In addition a fragile watermark was used to detect which parts of the image is damaged and thus needs to be reconstructed.
 
 \subsection{Embedding}
 \label{embedding}
@@ -346,7 +346,7 @@ In the embedding phase BPCS steganography and fragile watermarks were used.  How
 \subsubsection{BPCS steganography} 
 \label{bpcsSteg}
 
-BPCS Steg has an inherent property that if any part of the image is modified the embedded message will be lost.
+BPCS steganography has an inherent property that if any part of the image is modified the embedded message will be lost.
 This would obviously be a problem for the proposed method since the image will definitely be modified.
 
 \hspace{0pt} \\
@@ -384,7 +384,7 @@ It is very important how the image reference content is spread across the image 
 Due to the fact that the proposed method uses an adaptive embedding algorithm it is not possible for each part of the image after embedding to contain equal information about the image reference content.
 The proposed method does however distribute the embedded image reference content evenly among the blocks that were identified as suitable for embedding.
 The proposed method uses a simple method for spreading the image reference content across the image.
-The image reference content to be embedded is first divided into blocks as per the BPCS steg algorithm.
+The image reference content to be embedded is first divided into blocks as per the BPCS steganography algorithm.
 These blocks are subsequently stored in a list. 
 The created list is then reversed before embedding.
 Reversing the list means that each corner of the image in the image reference content is embedded into the opposing corner diagonally in the original image. For example image reference content that contains the bottom right part of the original image will now be embedded into the top left part of the original image during embedding. 
@@ -394,7 +394,6 @@ This is important because if a piece of the image after embedding is destroyed i
 \hspace{0pt} \\
 An attempt was initially made to embed the image reference content blocks randomly into the original image.
 This process however produced a much lower tamper rate due to the fact that the image reference content was often embedded very close to the original image content that it was referencing.
-The result was a lowered tamper rate.
 The proposed method thus rather used the more successful method describe above.
 
 \paragraph{Conjugation}
@@ -402,8 +401,8 @@ If an image reference content block is found to not be complex enough that block
 This is important because if a block is not complex enough it cannot be detected when extracting and it may cause visual distortions to the image since it is replacing a complex block in the original image.
 
 \hspace{0pt} \\
-The block complexity is calculated by using a border complexity method. \cite{beaullieubpcs}.
-That is for each binary bit that has an adjacent binary bit that is different than itself the border count is increased. 
+The block complexity is calculated by using a border complexity method \cite{beaullieubpcs}. 
+For each binary bit that has an adjacent binary bit that is different than itself the border count is increased. 
 The final border count is then divided with the theoretical maximum border count, which would be the border count for a grid of the same size with a checkerboard pattern.
 
 \hspace{0pt} \\
@@ -414,10 +413,11 @@ To reverse the conjugation this process simply needs to be repeated.
 This method of conjugation is a simple method that makes a block more complex while still allowing the original values of the block to be retrieved.
 A conjugation map is also created to indicate which blocks have been conjugated.
 This is needed since the receiver of the image would not be able to determine if a block has been conjugated or no without such a map.
+The conjugation map is also embedded into the image.
 
 \subsubsection{Fragile Watermark}
 \label{impFragileWatermark}
-In order to be able to detect which parts of the image have been tampered with a fragile watermark can be used.
+In order to be able to detect which parts of the image have been tampered with a fragile watermark was used.
 
 \hspace{0pt} \\
 An initial attempt was made to apply the method proposed in \cite{tian2002wavelet}.
@@ -429,16 +429,16 @@ The method requires compression of bit streams in order to embed the watermark a
 These bit streams are used to store the embedding locations of watermark.
 The bit streams are rather small in the proposed method because they are only applicable to a specific 8x8 pixel block. 
 This is because each block is treated as a separate embedding entity.
-This results in the fact that there is not always enough redundancy to be able to compress the bit streams for embedding.
+This resulted in the fact that there was not always enough redundancy to be able to compress the bit streams for embedding.
 
 \hspace{0pt} \\
 Another problem with this method was the large amount of noise that this method of watermarking introduces into the cover image since it also uses difference expansion as mentioned in \cite{tian2002reversible}.
 
 \hspace{0pt} \\
-The fragile watermark used in the proposed method embeds a calculated hash into the image that is used to authenticate the content when the image is reconstructed on the receiving end.
+The fragile watermark used in the proposed method thus embeds a calculated hash into the image that is used to authenticate the content when the image is reconstructed on the receiving end.
 
 \hspace{0pt} \\
-For each of the 8x8 pixel section in the image after embedding a hash is calculated by combining the binary of each of the 7 Most significant bit planes of that section. This binary hash stream is then used as the input to the SHA-256 hash function.
+For each of the 8x8 pixel sections in the image after embedding a hash is calculated by combining the binary of each of the 7 Most significant bit planes of that section. This binary hash stream is then used as the input to the SHA-256 hash function.
 The output is a 256 bit hash string for that image section.
 This hash string is then truncated to a length of 57 bits.
 This is done to enable the conjugation map as well as the embedding map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
@@ -456,7 +456,7 @@ The pigeonhole principle states that since the input for the hash function (k) i
 However since the generated hash values are calculated from the 7 MSB planes of each section and then compared to the bits stored in the LSB plane of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur.
 Extensive testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
 However should this case arise, the proposed method would simply restore that section as well.
-Thus not having a major impact on the final result of the reconstruction.
+Thus it does not have a major impact on the final result of the reconstruction.
 
 \hspace{0pt} \\
 The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
@@ -482,7 +482,7 @@ This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\
 for each section (section refers here to 8x8 pixel section, thus a section here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
 The embedded hash is then extracted from the LSB plane of that block.
 The extracted hash is then compared with the calculated hash and if they match the section is authentic.
-If they do not match then that section has been tampered with.
+If they do not match then that section has been tampered with and needs to be reconstructed.
 
 \subsubsection{Image reconstruction}
 \label{extractionReconstruction}
@@ -492,11 +492,11 @@ The embedded conjugation map is extracted at this point and if it is found that 
 
 \hspace{0pt} \\
 The embedded image content is extracted at this point from the processed bit plane blocks and the embedded image is reconstructed.
-In order to know the location of the extracted pixels the embedding map that was embedded into the LSB bit plane of that image section is consulted \ref{bpcsSteg}.
+In order to know the location of the extracted pixels the embedding map that was embedded into the LSB bit plane of that image section is consulted.
 The reconstructed image is then scaled up back to it's original size of 512x512 pixels.
 The reconstructed image is then also split into bit plane blocks.
-This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
-The bit plane blocks generated from the image after embedding now get iterated and each block that was found not to be authentic is replaced by the corresponding reconstructed bit plane block. 
+This is accomplished by first completing steps 1-4 of the BPCS steganography algorithm (\ref{bpcsSteg}).
+The bit plane blocks generated from the image after embedding are traversed and each block that was found not to be authentic is replaced by the corresponding reconstructed bit plane block. 
 
 \hspace{0pt} \\
 This process restores the tampered areas of the image if their matching bit plane blocks could be extracted from the image. That is if the embedded blocks were not destroyed in the image modification. 
@@ -558,7 +558,7 @@ In this instance the PSNR after restoration was: 34.89dB.
 \hspace{0pt} \\
 It was found in the experimentation process that if the image reference content is only embedded once into the original image that the quality of the Image after embedding as well as the quality of the image after reconstruction was relatively high.
 It was however found that the tamper rate possible was quite low at \textless 3\%.
-To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the Image reference content was now being embedded twice.
+To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the image reference content was now being embedded twice.
 The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding} and figure \ref{fig:lenaEmbedTwiceRestoration}
 
 \begin{figure}[h]
@@ -588,7 +588,7 @@ The tamper rate however is now increased from \textless 3\% to \textless 35\%
 
 \hspace{0pt} \\
 This experiment was also completed on the following image.
-First Embedding the Image reference content once (figure \ref{fig:treeEmbedOnceEmbedding} and figure \ref{fig:treeEmbedOnceRestoration}):
+First by embedding the image reference content once (figure \ref{fig:treeEmbedOnceEmbedding} and figure \ref{fig:treeEmbedOnceRestoration}):
 
 \begin{figure}[h]
 \centerline{%
@@ -644,6 +644,7 @@ The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedTwiceEmb
 \hspace{0pt} \\
 The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
 The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
+//TODO <Summarize all findings in an additional table>
 
 \hspace{0pt} \\
 The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced. As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self-recovering capabilities.
