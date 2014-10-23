@@ -9,7 +9,7 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{mathtools}
 \usepackage{setspace}
-\setstretch{1.0}
+\setstretch{1.5}
 
 \usepackage{graphicx}
 \graphicspath{ {images/}}
@@ -37,8 +37,6 @@ The proposed method achieves a good quality image after embedding as well as a g
 \section{Introduction}
 
 \subsection{Introduction}
-//TODO <//DONE// Rewrite in a more story like fashion, mention the why, what are the problems, steganography, fragile watermarks, self embedding etc>
-
 During communication images can by modified either intentionally or unintentionally.  These modifications can be small changes that does not change the meaning of the image, or bigger changes, for example the removal of key aspects from the image. 
 Various techniques exist for authenticating images of which self-recovering is one technique. 
 Self-recovering techniques attempt to preserve image content by embedding the image within itself to enable the reconstruction of the image if the image was tampered with. Self-recovering techniques use steganography, a technology used to embed information in digital media \cite{johnson1998exploring}, to hide the image content within the image.  Self-recovering techniques also use fragile watermarks which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
@@ -222,16 +220,16 @@ These 3 methods will be discussed based on their PSNR, tapering rate, security, 
 	As the mean squared error between the two images approaches 0 the PSNR approaches infinity. A higher PSNR value thus provides a higher quality image. 
 	A small PSNR value implies a high numerical difference between the two images \cite{hore2010image}.  
 	The quality measures mentioned in the 3 methods discussed were measured using the PSNR method. 
-	\item Tampering rate: Tampering rate is the percentage of image content that can be modified in the image after embedding, while still being able to reconstruct all the modified parts of that image. //TODO <reference>
-	If too much of the image is modified the embedded image content would be lost and reconstruction would not be possible.
-	\item Security: Security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is simple detect. //TODO <reference>
-	\item Payload size: Payload size is defined as the amount of bits that is embedded into an image using steganographic embedding techniques //TODO <reference>. Embedding capacity is defined as the \textbf{maximum} amount of bits that can be embedded into an image using steganographic embedding techniques before visual distortion occurs.
+	\item Tampering rate: Tampering rate is the percentage of image content that has been modified in the image after embedding \cite{qian2011image}.
+	If the tampering rate is too high the embedded image content would be lost and reconstruction would not be possible.
+	\item Security: Security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is to simple detect \cite{fridrich2009steganography}.
+	\item Payload size: Payload size is defined as the amount of bits that is embedded into an image using steganographic embedding techniques \cite{chen2010high}. Embedding capacity is defined as the \textbf{maximum} amount of bits that can be embedded into an image using steganographic embedding techniques before visual distortion occurs.
 \end{itemize}
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
 The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
-An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or it receives a message that the bit was not received, ie the bit was erased. //TODO <reference>
+An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or it receives a message that the bit was not received, ie the bit was erased \cite{korus2013efficient}.
 The method uses LSB embedding to embed the image reference content into the image itself and uses a global spreading technique to spread the image reference content across the image.
 The method also proposes that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
 
@@ -256,7 +254,7 @@ With difference expansion the payload is embedded in the difference of pixel val
 It should be noted that image quality reduces rapidly as the payload size is increased when using difference expansion due to the large amount of change that is introduced into the image. 
 The method achieves a high embedding capacity while keeping distortion relatively low.
 The method achieves a PSNR \textgreater 35dB after embedding.
-The method achieves an embedding capacity of 1.78 bits per pixel (bbp) when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image //TODO <define what the lena image is>.
+The method achieves an embedding capacity of 1.78 bits per pixel (bbp) when using up to the 4th LSB on a 512x512 8bit gray-scale version of the Lena image. Lena is the name given to a standard test image widely used in the field of image processing since 1973 \cite{lenaOnlineArticle}.
 
 \hspace{0pt} \\
 The method's \cite {tian2003high} quality regarding the image after reconstruction is acceptable at roughly 50\%. 
@@ -552,7 +550,7 @@ The results of this reconstruction can be seen in figure \ref{fig:lenaEmbedOnceR
 \end{figure}
 
 \hspace{0pt} \\
-After the image (shown in figure \ref{fig:lenaEmbedOnceRestoration}) was reconstructed the PSNR of the image after reconstruction (figure \ref{fig:lenaEmbedOnceRestoration}) was calculated in relation to the Original Image (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+After the image (shown in figure \ref{fig:lenaEmbedOnceRestoration}) was reconstructed the PSNR of the image after reconstruction (figure \ref{fig:lenaEmbedOnceRestoration}) was calculated in relation to the original Image (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
 In this instance the PSNR after restoration was: 34.89dB.
 
 \hspace{0pt} \\
@@ -616,7 +614,7 @@ The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedOnceEmbe
 \hspace{0pt} \\
 The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 27.72dB.
 The tamper rate, as was the case with the first image (figure \ref{fig:lenaEmbedOnceRestoration}), was also \textless 3\%.
-The experiment was also conducted by embedding the Image reference content twice (figure \ref{fig:treeEmbedTwiceEmbedding} and figure \ref{fig:treeEmbedTwiceRestoration}).
+The experiment was also conducted by embedding the image reference content twice (figure \ref{fig:treeEmbedTwiceEmbedding} and figure \ref{fig:treeEmbedTwiceRestoration}).
 
 \begin{figure}[h]
 \centerline{%
@@ -645,6 +643,19 @@ The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedTwiceEmb
 The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
 The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
 //TODO <Summarize all findings in an additional table>
+\begin{center}
+  \begin{tabular}{| l | l | l | l |}
+    \hline
+    \multicolumn{4}{|c|}{Experimental results summary} \\
+    \hline
+    Image & PSNR after embedding & PSNR after restoration & Tampering rate \\ \hline
+    Figure \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedOnceRestoration} (Embed once) & 34.92dB & 34.89dB & \textless 3\% \\ \hline
+    Figure \ref{fig:lenaEmbedTwiceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} (Embed twice) & 34.92dB & 32.52 dB & \textless 35\% \\ \hline
+    Figure \ref{fig:treeEmbedOnceEmbedding} - \ref{fig:treeEmbedOnceRestoration} (Embed once) & 27.94dB & 27.72dB & \textless 3\% \\ \hline
+    Figure \ref{fig:treeEmbedTwiceEmbedding} - \ref{fig:treeEmbedTwiceRestoration} (Embed twice) & 27.93dB & 26.05dB & \textless 35\% \\ \hline
+    \hline
+  \end{tabular}
+\end{center}
 
 \hspace{0pt} \\
 The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced. As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self-recovering capabilities.
