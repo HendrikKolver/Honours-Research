@@ -44,7 +44,7 @@ Various techniques exist for authenticating images of which self-recovering is o
 Self-recovering techniques attempt to preserve image content by embedding the image within itself to enable the reconstruction of the image if the image was tampered with. Self-recovering techniques use steganography, a technology used to embed information in digital media \cite{johnson1998exploring}, to hide the image content within the image.  Self-recovering techniques also use fragile watermarks which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
 
 \hspace{0pt} \\
-Most self-recovering techniques have a tradeoff trade-off concerning the quality of the image after embedding and the quality of the image after recovery.
+Most self-recovering techniques have a trade-off concerning the quality of the image after embedding and the quality of the image after recovery.
 If the one's quality is increased the other's quality will be reduced.
 
 \hspace{0pt} \\
@@ -103,15 +103,15 @@ The next chapter will give a more detailed overview of all the components that m
 \section{Self-recovering images}
 
 \subsection{Introduction}
-Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques. //TODO <Reference> 
-This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that the image was damaged.
+Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques.
+This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that parts of the image was damaged without the need to access the original image \cite{fridrich1999images}.
 
 \hspace{0pt} \\
 In order to understand the self-recovering system proposed in this dissertation, one has to understand the underlying technologies.  This chapter will look at image steganography in more detail in section \ref{introSteganography} and at watermarking in section \ref{introFragWatermarking}. Self-embedding and recovery will be discussed in section \ref{introSelfEmbedRecovery} with a conclusion in section \ref{introConclusion}
 
 \subsection{Steganography}
 \label{introSteganography}
-//TODO <Get better definition and reference> Steganography is the process of hiding information in such a way that it does not get detected \cite{johnson1998exploring}.
+Steganography is the science that involves communicating secret data in an appropriate multimedia carrier eg images. It comes under the assumption that if the feature is visible, the point of attack is evident, thus the goal is always to conceal the very existence of the embedded data \cite{cheddad2010digital}.
 Steganography, derived from Greek means "covered writing".
 This means it differs from cryptography which does not attempt to hide information but merely scrambles it so it cannot be understood.
 Steganography does not scramble the information but rather relies on the information to remain hidden.
@@ -120,16 +120,16 @@ Steganography does not scramble the information but rather relies on the informa
 The proposed method uses steganography to embed the information into the image in a way that is not easily visibly detectable by a human observer.
 A successful steganographic method has certain characteristics according to literature:
 \begin{itemize}
-	\item Invisibility: How easy it is to visually detect that information has been embedded using steganography. //TODO <reference>
-	\item Robustness: How much of the image that is embedded into can be modified without compromising the embedded information. //TODO <definition and reference based on traditional stego concepts>
+	\item Invisibility: The invisibility of a steganographic algorithm is very important. The strength of steganography lies in its ability to be unnoticed by the human eye. If one can see that an image has been tampered with then invisibility has been lost and the algorithm has been compromised \cite{morkel2005overview}.
+	\item Robustness: The resistance to various image processing methods, compression and other image modifications. Thus how much of the image can be modified without destroying the embedded content \cite{cheddad2010digital}.
 	\item Capacity: The maximal number of bits that can be embedded without introducing statistically of visually detectable artifacts \cite{fridrich2009steganography}.
 \end{itemize}
 Least significant bit embedding (LSB) is a steganographic method that can be used to embed information. 
 LSB works by replacing the least significant bit (or n least significant bits) of an image colour value with a binary bit from a message. The least significant bit of a colour value is the binary bit/s that carry the least value and thus the change in colour is not perceptible to the human eye.
-LSB is a very simple steganography algorithm and many methods exist for detecting the hidden information //TODO <Reference>
+LSB embedding is the most common and easiest method for embedding messages in an image \cite{lee2000high}, and many methods exist for detecting the hidden information 
 
 \hspace{0pt} \\
-Bit plane complexity steganography (BPCS) is another steganographic embedding method that was developed in <year> by <authors> \cite{beaullieubpcs}. 
+Bit plane complexity steganography (BPCS) is another steganographic embedding method that was developed in 1999 by E. Kawaguchi and R.O. Eason. \cite{kawaguchi1999principles}. 
 The goal of the BPCS algorithm is to embed as much data as possible into a cover image while maintaining invisibility \cite{beaullieubpcs}.
 
 \hspace{0pt} \\
@@ -147,7 +147,7 @@ The BPCS algorithm consists of the following steps:
 \end{enumerate}
 
 \hspace{0pt} \\
-The BPCS algorithm is a high capacity embedding algorithm. //TODO <reference>
+The BPCS algorithm is a high capacity embedding algorithm \cite{beaullieubpcs}.
 This refers to detection by human perception as well as statistical analysis although the latter is not the focus of this dissertation.
 The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding.
 and blocks can be conjugated in a checkerboard pattern to increase complexity and decrease detectability if needs be.
@@ -165,7 +165,7 @@ This is a necessary component in self-recovering images because in order to be a
 
 \subsection{Self embedding and recovery}
 \label{introSelfEmbedRecovery}
-Self embedding is a scheme where image content is embedded into the image itself //TODO <reference. The embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself \cite{fridrich1999images}.
+Self embedding is a scheme where image content is embedded into the image itself \cite{fridrich1999images}. The embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself.
 A self embedding and recovery scheme (further referred to as reconstruction) such as the proposed method contains a couple of high level steps.
 Firstly the authentic image content is embedded into the original image along with a fragile watermark.
 The resulting image is referred to as the image after embedding
@@ -218,7 +218,7 @@ A comparison between these 3 methods are provided in section \ref{litStudyCampar
 These 3 methods will be discussed based on their PSNR, tapering rate, security, payload size and embedding capacity as follows.
 
 \begin{itemize}
-	\item Peak signal to noise ratio (PSNR): PSNR is an expression for the ratio between the maximum possible value (power) of a signal and the power of distorting noise that affects the quality of its representation. //TODO <reference> PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
+	\item Peak signal to noise ratio (PSNR): PSNR is a commonly used metric for objective signal quality measurement. PSNR provides a quality measurement based on the squared error between the original and processed signal \cite{turaga2004no}. PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
 	As the mean squared error between the two images approaches 0 the PSNR approaches infinity. A higher PSNR value thus provides a higher quality image. 
 	A small PSNR value implies a high numerical difference between the two images \cite{hore2010image}.  
 	The quality measures mentioned in the 3 methods discussed were measured using the PSNR method. 
