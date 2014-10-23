@@ -707,7 +707,7 @@ This chapter summarizes the findings of the proposed method and relates those fi
 Possible future work with regards to the proposed method is also discussed.
 
 \subsection{Summary}
-The proposed method described used the BPCS steganaography algorithm, which is an adaptive embedding algorithm described in \ref{bpcsSteg}, and applied the algorithm to the self-embedding problem.
+The proposed method described used the BPCS steganaography algorithm, which is an adaptive embedding algorithm described in \ref{bpcsSteg}, and applied the algorithm to the self recovering image problem.
 The proposed method was shown to provide good quality as well as a good tamper rate.
 It was also shown that the quality of the image after embedding the image reference content as well as the image quality after reconstruction differs depending on the cover image chosen.
 This was attributed to the adaptive embedding algorithm used due to the fact that the embedding differs depending on the cover image.
@@ -718,15 +718,18 @@ If compression is used it may result in higher quality of the image after recons
 The proposed method achieved a high quality image after the self-embedding process as well as after the restoration process with reasonable tamper rate in one set of the images tested. The quality though is dependent on the image used. 
 It would thus not achieve high quality with all images.
 The proposed method did not introduce clear visual evidence that the image has been modified after embedding as well as after restoration and the image did still carry it's original meaning.
-The proposed method thus achieved most of what it attempted to achieve with the only problem being that the quality is dependent on the image used.
+The proposed method thus achieved most of what it attempted to achieve with the only exception being that the quality is dependent on the image used.
  
 
 \subsection{Future work}
 The method proposed in this dissertation focused on the implementation of the BPCS steganography algorithm as well as the implementation of the fragile watermark. The focus was to combine these methods in order to create a high quality self-recovering image scheme.
 It could however be possible to increase the quality of the proposed method even further if compression is used on the image reference content that is embedded into the original image.
 By compressing the image reference content it would be possible to embed a higher quality reference image into the original image without increasing the payload size.
-It would also be possible to reduce the amount embedding capacity used of the original image, due to a smaller amount of bits that need to be embedded, which would result in less of the original image being changed and thus less noise being introduced into the original image.
+It would also be possible to reduce the amount embedding capacity used, due to a smaller amount of bits that need to be embedded, which would result in less of the original image being changed and thus less noise being introduced into the original image.
 This could possibly lead to increasing the overall quality of the proposed self-recovering image scheme.
+
+\hspace{0pt} \\
+It was shown that the proposed method's quality is dependent on the cover image used. Further research can be conducted to determine which image characteristics impact the quality of the images produced by the proposed method
 
 \bibliography{main}
 \bibliographystyle{plain}
