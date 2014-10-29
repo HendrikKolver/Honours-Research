@@ -17,7 +17,7 @@
 \contentsline {subsection}{\numberline {3.2}Overview}{11}
 \contentsline {subsubsection}{\numberline {3.2.1}Erasure channel model utilizing the remaining authentic content}{12}
 \contentsline {subsubsection}{\numberline {3.2.2}Method using difference expansion}{13}
-\contentsline {subsubsection}{\numberline {3.2.3}Dynamic block allocation for self embedding}{14}
+\contentsline {subsubsection}{\numberline {3.2.3}Dynamic block allocation for self-embedding}{14}
 \contentsline {subsection}{\numberline {3.3}Comparison}{14}
 \contentsline {subsection}{\numberline {3.4}Conclusion}{15}
 \contentsline {section}{\numberline {4}Overview of the proposed system}{16}

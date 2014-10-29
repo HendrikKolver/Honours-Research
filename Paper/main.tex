@@ -105,93 +105,89 @@ The next chapter will give a more detailed overview of all the components of sel
 \section{Self-recovering images}
 
 \subsection{Introduction}
-Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques.
-This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the case that parts of the image was damaged without the need to access the original image \cite{fridrich1999images}.
+Self-recovering images are images that have their own image content embedded into themselves using image steganography techniques \cite{fridrich1999images}.
+This content can then be extracted from the image at a later stage in order to reconstruct the image to an approximate original state in the event that parts of the image were damaged. Reconstruction can thus be done without the need to access the original image \cite{fridrich1999images}.
 
 \hspace{0pt} \\
 In order to understand the self-recovering system proposed in this dissertation, one has to understand the underlying technologies.  This chapter will look at image steganography in more detail in section \ref{introSteganography} and at watermarking in section \ref{introFragWatermarking}. Self-embedding and recovery will be discussed in section \ref{introSelfEmbedRecovery} with a conclusion in section \ref{introConclusion}
 
 \subsection{Steganography}
 \label{introSteganography}
-Steganography is the science that involves communicating secret data in an appropriate multimedia carrier eg images. It comes under the assumption that if the feature is visible, the point of attack is evident, thus the goal is always to conceal the very existence of the embedded data \cite{cheddad2010digital}.
+Steganography is a science that involves communicating secret data in an appropriate multimedia carrier i.e. images. It operates under the assumption that if the embedded information is visible, the point of attack is evident, thus the goal is always to conceal the very existence of the embedded data \cite{cheddad2010digital}.
 Steganography, derived from Greek means "covered writing".
-This means it differs from cryptography which does not attempt to hide information but merely scrambles it so it cannot be understood.
+Steganography differs from cryptography which does not attempt to hide information but merely scrambles it so it cannot be understood.
 Steganography does not scramble the information but rather relies on the information to remain hidden.
 
 \hspace{0pt} \\
-The proposed method uses steganography to embed the information into the image in a way that is not easily visibly detectable by a human observer.
+The proposed method uses steganography to embed the information into an image in a way that is not easily visibly detectable by a human observer.
 A successful steganographic method has certain characteristics according to literature:
 \begin{itemize}
 	\item Invisibility: The invisibility of a steganographic algorithm is very important. The strength of steganography lies in its ability to be unnoticed by the human eye. If one can see that an image has been tampered with then invisibility has been lost and the algorithm has been compromised \cite{morkel2005overview}.
 	\item Robustness: The resistance to various image processing methods, compression and other image modifications. Thus how much of the image can be modified without destroying the embedded content \cite{cheddad2010digital}.
-	\item Capacity: The maximal number of bits that can be embedded without introducing statistically of visually detectable artifacts \cite{fridrich2009steganography}.
+	\item Capacity: The maximum number of bits that can be embedded into an image without introducing statistically or visually detectable artifacts \cite{fridrich2009steganography}.
 \end{itemize}
 Least significant bit embedding (LSB) is a steganographic method that can be used to embed information. 
-LSB works by replacing the least significant bit (or n least significant bits) of an image colour value with a binary bit from a message. The least significant bit of a colour value is the binary bit/s that carry the least value and thus the change in colour is not perceptible to the human eye.
+LSB works by replacing the least significant bit (or \textit{n} least significant bits) of an image colour value with a binary bit from a message. The least significant bit of a colour value is the binary bit that carries the least value and thus the change in colour is not perceptible to the human eye.
 LSB embedding is the most common and easiest method for embedding messages in an image \cite{lee2000high}, and many methods exist for detecting the hidden information 
 
 \hspace{0pt} \\
-Bit plane complexity steganography (BPCS) is another steganographic embedding method that was developed in 1999 by E. Kawaguchi and R.O. Eason. \cite{kawaguchi1999principles}. 
+Bit plane complexity steganography (BPCS) is another steganographic embedding method that was developed in 1999 by E. Kawaguchi and R.O. Eason \cite{kawaguchi1999principles}. 
 The goal of the BPCS algorithm is to embed as much data as possible into a cover image while maintaining invisibility \cite{beaullieubpcs}.
 
 \hspace{0pt} \\
 The BPCS algorithm consists of the following steps:
 \begin{enumerate}
   \item Get the binary representation of the image
-  \item Convert the binary representation into Gray code
   \item Divide the image into bit planes
   \item Divide the bit planes into 8x8 pixel blocks
   \item Calculate the complexity for each block
   \item Divide the message to be embedded into similar binary 8x8 blocks
-  \item Calculate the complexity for each message and conjugate if not complex enough
+  \item Calculate the complexity for each message block and conjugate - that is, increase the complexity of the block - if not complex enough
   \item For each image block that is complex enough, replace that block with the next message block
   \item Convert the blocks back to binary representation 
 \end{enumerate}
 
 \hspace{0pt} \\
 The BPCS algorithm is a high capacity embedding algorithm \cite{beaullieubpcs}.
-This refers to detection by human perception as well as statistical analysis although the latter is not the focus of this dissertation.
-The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding.
-and blocks can be conjugated in a checkerboard pattern to increase complexity and decrease detectability if needs be.
+The BPCS algorithm uses an adaptive scheme to classify blocks that are suitable for embedding and blocks can be conjugated in a checkerboard pattern to increase complexity and decrease detectability if needs be.
 Bit planes are dynamically allocated for embedding.
-One section may thus only embed into one bit plane while another may use all 7 available bit planes.
+One section of the image may thus only use one bit plane for embedding while another may use all 7 available bit planes.
 
 \subsection{Fragile Watermarking}
 \label{introFragWatermarking}
-Fragile watermarks are used to determine if a piece of watermarked digital content has been tampered with. A fragile watermark system should be able to distinguish tampered areas from non-tampered areas without referring to the original digital content \cite{liu2007image}.
+Fragile watermarks are used to determine if a piece of watermarked digital content has been tampered with \cite{liu2007image}. A fragile watermark system should be able to distinguish tampered areas from non-tampered areas without referring to the original digital content \cite{liu2007image}.
 
 \hspace{0pt} \\
 Fragile watermarking is a variation of traditional watermarking where a watermark is embedded into an image such that subsequent alterations to the watermarked image can be detected with high probability \cite{lin1999review}.
 This means that if modifications are made to the watermarked image it would be possible to detect that modifications were made as well as which parts of the image were modified.
-This is a necessary component in self-recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and if so which parts of the image was modified.
+This is a necessary component in self-recovering images because in order to be able to recover image data it first needs to be determined if the image after embedding has been modified and, if so, which parts of the image were modified.
+A fragile watermark works by generating a hash of a specific image section and then embedding that hash into the image.
+To calculate if the image section is authentic the hash would be recalculated and compared with the embedded hash.
+If the two hashes are identical then the image section is authentic. 
 
 \subsection{Self embedding and recovery}
 \label{introSelfEmbedRecovery}
-Self embedding is a scheme where image content is embedded into the image itself \cite{fridrich1999images}. The embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself.
-A self embedding and recovery scheme (further referred to as reconstruction) such as the proposed method contains a couple of high level steps.
-Firstly the authentic image content is embedded into the original image along with a fragile watermark.
-The resulting image is referred to as the image after embedding
-The watermark will help determine later on which parts of the image after embedding was modified if any (see \ref{introFragWatermarking}).
-When the authentic image needs to be reconstructed, after modification, the fragile watermark is used to determine which content was modified, if any.
-An attempt is then made to extract the original content for the areas that were modified in the image.
+Self-embedding is a scheme where image content is embedded into the image itself \cite{fridrich1999images}. The embedded content can then later be used to recover damaged or modified parts of the image without accessing the original image itself.
+self-embedding is also referred to as self-recovering
+A self-recovery scheme such as the proposed method contains a couple of high level steps.
+Firstly an approximation of the original image, referred to as the image reference content, is embedded into the original image along with a fragile watermark.
+The resulting image is referred to as the image after embedding.
+The watermark helps to determine which parts of the image after embedding was modified if any (see \ref{introFragWatermarking}).
+When the authentic image needs to be reconstructed, after modification, the fragile watermark is used to determine which areas of the image were modified.
+An attempt is then made to extract the areas that were modified from the original image and replace the tampered areas with the extracted information.
 If this process is successful the user is left with a high quality reconstruction of the original image.
 
 \hspace{0pt} \\
-There is an inherent quality trade-off present within self embedding schemes.
+There is an inherent quality trade-off present within self-embedding schemes.
 The trade-off exists between the quality of the  image after embedding and the quality of the image after reconstruction.
-If an embedding algorith such as LSB embedding is used the actual bit values of the original image are overwritten.
+If an embedding algorithm such as LSB embedding is used the actual bit values of the original image are overwritten.
 Naturally the more bit values are overwritten the more noise is introduced into the image.
 This effectively reduces the quality of the image after embedding but increases the amount of data that can be stored in the image thus increasing the quality of the reconstructed image.
 
 \hspace{0pt} \\
-On one hand one could simply embed a small amount of information into the image to keep the noise low.
-However this presents another problem.
-The quality of the image after reconstruction is dependent on the amount of authentic image data (referred to as the image reference content) embedded into the image.
-
-\hspace{0pt} \\
-To achieve maximum quality after embedding the embedded information must be as small as possible.
+To achieve maximum quality after embedding the embedded information must be as small as possible or the algorithm should allow as much as possible embedded information without visually changing the image.
 To achieve maximum quality after reconstruction the embedded image reference content must be as large as possible to be as close as possible to the original image.
-There thus exists then a trade-off between the two.
+There thus exists a trade-off between the two.
 
 \hspace{0pt} \\
 The proposed method attempts to apply the algorithm for BPCS steganography
@@ -202,7 +198,7 @@ This makes the BPCS algorithm a good choice to increase the capacity of a self-r
 \subsection{Conclusion}
 \label{introConclusion}
 This chapter gave important background information regarding steganography in general as well as two steganographic embedding methods, LSB embedding and BPCS steganography.
-Fragile watermarking was discussed in section \ref{introFragWatermarking} as well as self embedding and recovery in section \ref{introSelfEmbedRecovery}.
+Fragile watermarking was discussed in section \ref{introFragWatermarking} as well as self-embedding and recovery in section \ref{introSelfEmbedRecovery}.
 The next chapter will discuss related work in existing self recovery techniques.
 
 \section{Current self-recovering image schemes and algorithms}
@@ -270,7 +266,7 @@ This could possibly lead to better quality than what their experimental results 
 \hspace{0pt} \\ 
 The authors did not mention the image tamper rate that this method \cite {tian2003high} achieves.
 
-\subsubsection{Dynamic block allocation for self embedding}
+\subsubsection{Dynamic block allocation for self-embedding}
 \label{DynamicBlockOverview}
 Qian et al \cite{qian2011image} proposed a method for fragile watermarking with good image restoration capabilities.
 The proposed method differs from the other methods mentioned in \ref{ErasureChannelOverview} and \ref{differenceExpansionOverview} due to the fact that the method does not embed the information into all blocks uniformly.
@@ -360,7 +356,7 @@ An embedding map containing the location of the first pixel to be embedded in th
 Since the individual image reference content pixels are embedded in order it is only necessary to know the location of the first pixel.
 This embedding map is then embedded into the LSB (Least significant bit) layer of that specific 8x8 block of pixels 
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
-This serves to give random access to the embedded content which is an essential property of self embedding as defined by Korus et al. \cite{korus2013efficient}.
+This serves to give random access to the embedded content which is an essential property of self-embedding as defined by Korus et al. \cite{korus2013efficient}.
 This is essential in order for the reconstruction process to function properly.
 
 \hspace{0pt} \\
