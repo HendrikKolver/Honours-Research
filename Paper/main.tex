@@ -199,12 +199,12 @@ This makes the BPCS algorithm a good choice to increase the capacity of a self-r
 \label{introConclusion}
 This chapter gave important background information regarding steganography in general as well as two steganographic embedding methods, LSB embedding and BPCS steganography.
 Fragile watermarking was discussed in section \ref{introFragWatermarking} as well as self-embedding and recovery in section \ref{introSelfEmbedRecovery}.
-The next chapter will discuss related work in existing self recovery techniques.
+The next chapter will discuss related work in existing self-recovery techniques.
 
 \section{Current self-recovering image schemes and algorithms}
 \label{currentSelfRecoveringSchemes}
 \subsection{Introduction}
-This chapter compares current content reconstruction algorithms using self recovery techniques serving as an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
+This chapter compares current content reconstruction algorithms using self-recovery techniques to serve as an overview of what is currently available and to possibly highlight shortcomings of the current algorithms.
 This would be useful to determine if the proposed method does indeed improve on existing methods. 
 It would also help highlight strengths and shortcomings in the proposed method.
 The methods analysed were chosen because they all provide good quality images after embedding as well as good quality images after reconstruction.
@@ -213,25 +213,25 @@ They also each offer an unique approach or aspect to the self-recovering image p
 \subsection{Overview}
 There are 3 current methods discussed in this section. An erasure channel model utilizing the remaining authentic content is discussed in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation in \ref{DynamicBlockOverview}. 
 A comparison between these 3 methods are provided in section \ref{litStudyCamparison}.
-These 3 methods will be discussed based on their PSNR, tapering rate, security, payload size and embedding capacity as follows.
+These 3 methods will be discussed based on their PSNR, tampering rate, security, payload size and embedding capacity as follows:
 
 \begin{itemize}
-	\item Peak signal to noise ratio (PSNR): PSNR is a commonly used metric for objective signal quality measurement. PSNR provides a quality measurement based on the squared error between the original and processed signal \cite{turaga2004no}. PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noised introduced into an image when compared with the original image. 
+	\item Peak signal to noise ratio (PSNR): PSNR is a commonly used metric for objective signal quality measurement. PSNR provides a quality measurement based on the squared error between the original and processed signal \cite{turaga2004no}. PSNR is represented as a logarithmic decibel scale. In terms of images PSNR can objectively measure the amount of noise introduced into an image when compared with the original image. 
 	As the mean squared error between the two images approaches 0 the PSNR approaches infinity. A higher PSNR value thus provides a higher quality image. 
 	A small PSNR value implies a high numerical difference between the two images \cite{hore2010image}.  
 	The quality measures mentioned in the 3 methods discussed were measured using the PSNR method. 
 	\item Tampering rate: Tampering rate is the percentage of image content that has been modified in the image after embedding \cite{qian2011image}.
 	If the tampering rate is too high the embedded image content would be lost and reconstruction would not be possible.
-	\item Security: Security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is to simple detect \cite{fridrich2009steganography}.
-	\item Payload size: Payload size is defined as the amount of bits that is embedded into an image using steganographic embedding techniques \cite{chen2010high}. Embedding capacity is defined as the \textbf{maximum} amount of bits that can be embedded into an image using steganographic embedding techniques before visual distortion occurs.
+	\item Security: Security refers to how easy it is to detect that information has been embedded into the image using either visual or statistical methods. Good security implies that it is difficult to detect and poor security implies that it is simple to detect \cite{fridrich2009steganography}.
+	\item Payload size: Payload size is defined as the amount of bits that is embedded into an image using steganographic embedding techniques \cite{chen2010high}. Embedding capacity is defined as the \textbf{maximum} amount of bits that can be embedded into an image using steganographic embedding techniques before visual distortion occurs \cite{chen2010high}.
 \end{itemize}
 
 \subsubsection{Erasure channel model utilizing the remaining authentic content}
 \label{ErasureChannelOverview}
 The method proposed in \cite {korus2013efficient} uses an erasure channel as a model for the content reconstruction problem.
-An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or it receives a message that the bit was not received, ie the bit was erased \cite{korus2013efficient}.
+An erasure channel is a channel that can transmit a bit of information and the receiver can either receive the bit or it receives a message that the bit was not received, in other words, the bit was erased \cite{korus2013efficient}.
 The method uses LSB embedding to embed the image reference content into the image itself and uses a global spreading technique to spread the image reference content across the image.
-The method also proposes that by using the remaining authentic content in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
+The method also proposes that by using the remaining authentic content, that is the content that has not been modified, in the image it is possible to have a high tamper rate while at the same time achieving good quality images before and after reconstruction.
 
 \hspace{0pt} \\
 The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR \textgreater 35dB. 
@@ -249,7 +249,7 @@ The embedding capacity of this method is acceptable because the method uses some
 \subsubsection{Method using difference expansion}
 \label{differenceExpansionOverview}
 Another method \cite {tian2003high} uses difference expansion and generalized LSB embedding.
-Difference expansion works by exploiting the high redundancy that are present in images \cite {tian2002reversible}.
+Difference expansion works by exploiting the high redundancy that is present in images \cite {tian2002reversible}.
 With difference expansion the payload is embedded in the difference of pixel values \cite {tian2002reversible}. 
 It should be noted that image quality reduces rapidly as the payload size is increased when using difference expansion due to the large amount of change that is introduced into the image. 
 The method achieves a high embedding capacity while keeping distortion relatively low.
@@ -277,7 +277,7 @@ The authors argue that the current methods that use a fixed embedding size for e
 \hspace{0pt} \\
 The advantage of using this dynamic scheme is that there is very little visual distortion introduced into the image after embedding. 
 This is because if the specific block is already very rough (very busy visually) the human eye does not notice small changes.
-If however the specific block is very smooth (very uniform visually) the human eye is more likely to notice small changes.
+If however the specific block is very smooth (very uniform visually) the human eye is more likely to notice small changes and should be avoided.
 The method thus creates less distortion in the image after embedding than fixed size methods while still retaining good image after reconstruction quality \cite{qian2011image}. 
 
 \hspace{0pt} \\
@@ -309,13 +309,27 @@ The difference expansion method provides decent quality of the image after embed
 
 \hspace{0pt} \\
 All three methods thus provide good results and would serve as a good benchmark for comparing the method proposed in this dissertation.
+A summary of the comparison between the 3 methods is given in Table 1
+
+\begin{center}
+  \begin{tabular}{| l | l | l | l |}
+    \hline
+    \multicolumn{4}{|c|}{Table 1: Summary of the comparison between the 3 methods} \\
+    \hline
+    Method & PSNR after embedding & PSNR after reconstruction & Tampering rate \\ \hline
+    Erasure channel& \textgreater35dB & 35dB \textless PSNR\textgreater 40dB & 33\% \\ \hline
+    Difference expansion& \textgreater35dB & Not specified & Not specified \\ \hline
+    Dynamic block allocation& \textgreater37dB & 35dB & \textless 35\% \\ \hline
+    \hline
+  \end{tabular}
+\end{center}
 
 \subsection{Conclusion}
 This chapter looked at currently available methods for self-recovering images.
 An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation in \ref{DynamicBlockOverview}.
 A comparison between these methods was provided in section \ref{litStudyCamparison}.
 This information will be used to determine the success of the self-recovering image method proposed in this dissertation by comparing the results from the proposed method with the results achieved by the methods discussed in this chapter.
-The next chapter will discuss the implementation of the of the self-recovering image method proposed in this dissertation.  
+The next chapter will discuss the implementation of the self-recovering image method proposed in this dissertation.  
 
 \section{Overview of the proposed system}
 \label{Implementation}
