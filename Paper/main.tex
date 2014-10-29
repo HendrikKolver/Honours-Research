@@ -341,7 +341,7 @@ Diagrams are provided to visualize the embedding as well as the extraction proce
 \subsection{Overview of proposed system}
 \label{impOverview}
 The self-recovering method proposed in this dissertation uses BPCS steganography to increase the payload capacity of the cover image in order to be able to embed more image reference content into the image without introducing visual distortion.
-In addition a fragile watermark was used to detect which parts of the image is damaged and thus needs to be reconstructed.
+In addition a fragile watermark is used to detect which parts of the image is damaged and thus needs to be reconstructed.
 
 \subsection{Embedding}
 \label{embedding}
@@ -365,12 +365,12 @@ This would obviously be a problem for the proposed method since the image will d
 As a solution to this problem each bit plane block used for embedding is treated as a separate embedding entity.
 There is thus no overlap between two different blocks used for embedding.
 The image reference content is first processed using the method explained later in this section.
-Each block has 12 pixels (with a bit depth of 16 bits) of the image reference content embedded into it.
-An embedding map containing the location of the first pixel to be embedded in the block is also created.
+Each block of the original image, which can store 192 bits, has 12 pixels (with a bit depth of 16 bits, in other words 192 bits) of the image reference content embedded into it.
+An embedding map containing the location of the first pixel to be embedded in the block is also created to keep track of which pixels of the original image contains image reference content.
 Since the individual image reference content pixels are embedded in order it is only necessary to know the location of the first pixel.
-This embedding map is then embedded into the LSB (Least significant bit) layer of that specific 8x8 block of pixels 
+This embedding map is then embedded into the LSB (Least significant bit) layer of that specific 8x8 section of pixels. 
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
-This serves to give random access to the embedded content which is an essential property of self-embedding as defined by Korus et al. \cite{korus2013efficient}.
+This serves to give random access to the embedded content which is an essential property of self-embedding \cite{korus2013efficient}.
 This is essential in order for the reconstruction process to function properly.
 
 \hspace{0pt} \\
@@ -386,14 +386,20 @@ Total embedded bits = 12*16 = 192
 The image reference content that is embedded into the original image cannot be embedded with perfect quality due to space restrictions caused by the embedding algorithm. 
 The proposed method however does not utilize compression as it is beyond the scope of this dissertation.
 The proposed method rather reduces the bit rate of the image from 24 bits to 16 which reduces the size of each pixel by 6 bits.
+This means that the image size is reduced due to fewer bits being stored for each pixel.
+The quality of the image is reduced using this method by reducing the amount of colours that a pixel can represent.
 The image's size is also reduced according to the space available for embedding.
-When extracting the image reference content again the assembled image reference content is scaled up to it's original size of 512x512 pixels before completing the reconstruction.
+This is accomplished by calculating the amount of bits that can be embedded into in the original image.
+The image is scaled down to the largest possible size that can still be embedded into the original image(determined by the calculated embedding capacity).
+This means that the image reference content quality is at a maximum. 
+When extracting the image reference content again the assembled image reference content is scaled up to it's original size of 512x512 pixels, which is the standard image size for the proposed method, before completing the reconstruction.
+All image scaling was done by converting the image data to a Java image object, using the built in Java image scaling feature and then converting the resulting scaled image back to the required format.
 This is done to ensure that the pixels contained in the image reference content matches up (location wise) with the pixels in the original image.
 
 \paragraph{Block Spread}
 It is very important how the image reference content is spread across the image because this affects the tamper rate.
-\cite{korus2013efficient} Has found that it is important that the image reference content should be uniformly distributed across the image during embedding and that each part of the image after should contain equal information about the image reference content.
-Due to the fact that the proposed method uses an adaptive embedding algorithm it is not possible for each part of the image after embedding to contain equal information about the image reference content.
+Researchers \cite{korus2013efficient} have found that it is important that the image reference content should be uniformly distributed across the image during embedding and that each part of the image after should contain equal information about the image reference content.
+Due to the fact that the proposed method uses an adaptive embedding algorithm it is not possible for each part of the image after embedding to contain equal amounts of the image reference content.
 The proposed method does however distribute the embedded image reference content evenly among the blocks that were identified as suitable for embedding.
 The proposed method uses a simple method for spreading the image reference content across the image.
 The image reference content to be embedded is first divided into blocks as per the BPCS steganography algorithm.
@@ -409,7 +415,7 @@ This process however produced a much lower tamper rate due to the fact that the 
 The proposed method thus rather used the more successful method describe above.
 
 \paragraph{Conjugation}
-If an image reference content block is found to not be complex enough that block needs to be conjugated before embedding.
+If an image reference content block is found to not be complex enough then that block needs to be conjugated before embedding.
 This is important because if a block is not complex enough it cannot be detected when extracting and it may cause visual distortions to the image since it is replacing a complex block in the original image.
 
 \hspace{0pt} \\
@@ -424,7 +430,7 @@ To reverse the conjugation this process simply needs to be repeated.
 \hspace{0pt} \\
 This method of conjugation is a simple method that makes a block more complex while still allowing the original values of the block to be retrieved.
 A conjugation map is also created to indicate which blocks have been conjugated.
-This is needed since the receiver of the image would not be able to determine if a block has been conjugated or no without such a map.
+This is needed since the receiver of the image would not be able to determine if a block has been conjugated or not without such a map.
 The conjugation map is also embedded into the image.
 
 \subsubsection{Fragile Watermark}
@@ -444,7 +450,7 @@ This is because each block is treated as a separate embedding entity.
 This resulted in the fact that there was not always enough redundancy to be able to compress the bit streams for embedding.
 
 \hspace{0pt} \\
-Another problem with this method was the large amount of noise that this method of watermarking introduces into the cover image since it also uses difference expansion as mentioned in \cite{tian2002reversible}.
+Another problem with this method was the large amount of noise that this method of watermarking introduced into the cover image since it also uses difference expansion as mentioned in \cite{tian2002reversible}.
 
 \hspace{0pt} \\
 The fragile watermark used in the proposed method thus embeds a calculated hash into the image that is used to authenticate the content when the image is reconstructed on the receiving end.
@@ -453,6 +459,7 @@ The fragile watermark used in the proposed method thus embeds a calculated hash 
 For each of the 8x8 pixel sections in the image after embedding a hash is calculated by combining the binary of each of the 7 Most significant bit planes of that section. This binary hash stream is then used as the input to the SHA-256 hash function.
 The output is a 256 bit hash string for that image section.
 This hash string is then truncated to a length of 57 bits.
+This effectively means that only the first 57 bits of the hash string are used and the rest is simply thrown away.
 This is done to enable the conjugation map as well as the embedding map that was generated when embedding the image content (\ref{bpcsSteg}) to be stored at the end of the stream.
 
 \hspace{0pt} \\
@@ -465,8 +472,7 @@ This means that there are k amount of unique sections in the image
 \[k = x^2 =64^2 = 4096 \]
 Since k \textgreater y the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
 The pigeonhole principle states that since the input for the hash function (k) is greater than the amount of unique outputs of the hash function (y) there will be duplicate hash values produced.
-However since the generated hash values are calculated from the 7 MSB planes of each section and then compared to the bits stored in the LSB plane of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur.
-Extensive testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
+However since the generated hash values are calculated from the 7 MSB planes of each section and then compared to the bits stored in the LSB plane of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur. Testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
 However should this case arise, the proposed method would simply restore that section as well.
 Thus it does not have a major impact on the final result of the reconstruction.
 
@@ -491,14 +497,13 @@ The image reference content is then extracted and the image is restored to an ap
 \label{extractionAuthentication}
 The first step for the image extraction and reconstruction process is to determine which, if any, parts of the image after embedding has been tampered with.
 This is accomplished by first completing steps 1-4 of the BPCS steg algorithm (\ref{bpcsSteg}).
-for each section (section refers here to 8x8 pixel section, thus a section here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
-The embedded hash is then extracted from the LSB plane of that block.
-The extracted hash is then compared with the calculated hash and if they match the section is authentic.
+For each section (section refers here to 8x8 pixel section, thus a section here contains all 8 bit planes) the authentication hash string is calculated as described in \ref{impFragileWatermark}. 
+The embedded hash is then extracted from the LSB plane of that block and compared to the calculated hash to determine if they match, in which case the section can be seen as tamper-free.
 If they do not match then that section has been tampered with and needs to be reconstructed.
 
 \subsubsection{Image reconstruction}
 \label{extractionReconstruction}
-For each authentic block the 7 MSB planes have their complexity calculated.
+The complexity of the 7 MSBs of each authentic block is calculated.
 If a bit plane block is found to be complex enough it is assumed that there is image information embedded into it.
 The embedded conjugation map is extracted at this point and if it is found that any of the complex enough bit plane blocks were conjugated the conjugation algorithm is applied again to reverse the conjugation.
 
