@@ -8,7 +8,7 @@
 \contentsline {subsection}{\numberline {1.6}Conclusion}{6}
 \contentsline {section}{\numberline {2}Self-recovering images}{6}
 \contentsline {subsection}{\numberline {2.1}Introduction}{6}
-\contentsline {subsection}{\numberline {2.2}Steganography}{6}
+\contentsline {subsection}{\numberline {2.2}Steganography}{7}
 \contentsline {subsection}{\numberline {2.3}Fragile Watermarking}{9}
 \contentsline {subsection}{\numberline {2.4}Self embedding and recovery}{9}
 \contentsline {subsection}{\numberline {2.5}Conclusion}{10}

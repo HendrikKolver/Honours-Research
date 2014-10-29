@@ -14,7 +14,7 @@
 \usepackage{graphicx}
 \graphicspath{ {images/}}
 
-\title{Self recovering capabilities in images using the BPCS Steganography algorithm}
+\title{Increasing quality of self-recovering images using BPCS Steganography}
 
 \author{Hendrik J Kolver}
 
@@ -29,7 +29,7 @@
 Many current self-recovering image methods exist, however few of the current methods provide good quality images after embedding as well as after reconstruction.
 This is due to an inherent trade off between the amount of information that can be embedded into an image and the quality of the image after embedding.
 This dissertation proposes a novel method for increasing the quality of the image after embedding as well as the quality of the image after reconstruction in the self-recovering image problem using the BPCS Steganography algorithm for content embedding as well as employing a fragile watermark for detecting image modifications.
-The proposed method achieves a good quality image after embedding as well as a good quality image after reconstruction when compared to some of the best currently available self-recovering image methods. 
+Experimental results show that the proposed method achieves a good quality image after embedding as well as a good quality image after reconstruction when compared to some of the currently available self-recovering image methods. 
 
 \end{abstract}
 
@@ -37,13 +37,15 @@ The proposed method achieves a good quality image after embedding as well as a g
 \section{Introduction}
 
 \subsection{Introduction}
-During communication images can by modified either intentionally or unintentionally.  These modifications can be small changes that does not change the meaning of the image, or bigger changes, for example the removal of key aspects from the image. 
+During communication images can be modified either intentionally or unintentionally.  These modifications can be small changes that does not change the meaning of the image, or bigger changes, for example the removal of key aspects from the image. 
 Various techniques exist for authenticating images of which self-recovering is one technique. 
-Self-recovering techniques attempt to preserve image content by embedding the image within itself to enable the reconstruction of the image if the image was tampered with. Self-recovering techniques use steganography, a technology used to embed information in digital media \cite{johnson1998exploring}, to hide the image content within the image.  Self-recovering techniques also use fragile watermarks which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
+Self-recovering techniques attempt to preserve image content by embedding the image within itself to enable the reconstruction of the image if the image was tampered with. Self-recovering techniques usually use steganography, a technology used to embed information in digital media \cite{johnson1998exploring}, to hide an approximation of the image within the image itself.  
+If the image was tampered with, this embedded approximation can then be used to attempt to recover the original image.
+ Self-recovering techniques also use fragile watermarks which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
 
 \hspace{0pt} \\
 Most self-recovering techniques have a trade-off concerning the quality of the image after embedding and the quality of the image after recovery.
-If the one's quality is increased the other's quality will be reduced.
+If the one's quality is increased the other's quality will be reduced since an increase in the amount of embedded information could lead to a decrease in image quality and vice versa..
 
 \hspace{0pt} \\
 This dissertation proposes using a high capacity steganography algorithm called Bit-plane Complexity Segmentation (BPCS) steganography to increase the amount of data that can be embedded in an image to attempt to increase the quality of the embedded image.
@@ -51,7 +53,7 @@ This dissertation proposes using a high capacity steganography algorithm called 
 
 \subsection{Problem statement}
 \label{problemStatement}
-The proposed method aims to answer the following questions
+The proposed method aims to answer the following questions:
 \begin{itemize}
 	\item Can a method be proposed that will achieve a high quality image after the self-embedding and restoration process as well as a reasonable tamper rate? How does such a system compare to currently available methods?
 	\item Determining the quality of the resulting image should include, but are not limited to: 
@@ -60,10 +62,12 @@ The proposed method aims to answer the following questions
 		\item The image should still carry it's original semantic meaning
 	\end{itemize}
 \end{itemize}
+These questions will be addressed in chapters to follow.
 
 \subsection{Research methodology}
 Firstly a literature review was conducted to determine the currently available methods for self-recovering images. 
-After a shortcoming was identified the proposed method was designed and then implemented in the form of a Java software application in order to attempt to improve on the identified shortcoming. 
+The proposed method was designed based on shortcomings that were found with currently available self-recovering methods. 
+The proposed method was then implemented in the form of a Java software application in order to attempt to improve on the identified shortcomings. 
 The results of the proposed method were then compared to the results of other relevant self-recovering image methods.
 
 \subsection{Terminology}
@@ -72,7 +76,7 @@ This section serves to make the meaning of those terms clear.
 
 \begin{itemize}
   \item Original Image: This refers to the original image without any modifications.
-  \item Embedding: Embedding in the context of this dissertation refers to the process of storing digital information in an image's content in such a way that the original image is still distinguishable.
+  \item Embedding: Embedding in the context of this dissertation refers to the process of storing digital information in an image in such a way that the original image is still distinguishable.
   \item Image after embedding: This refers to the the original image after the embedding process has been applied.
   \item Reconstruction: This refers to the process of using the content that was embedded into the image to repair the image after embedding if it has been modified.
   \item Image after reconstruction: This refers to the reconstructed version of the original image that was obtained by applying the reconstruction process to the image after embedding.
@@ -89,14 +93,14 @@ This section serves to make the meaning of those terms clear.
 \item Chapter 2 discusses self-recovering images and their different components
 \item Chapter 3 discusses currently available self-recovering image schemes, comparing their strengths and weaknesses
 \item Chapter 4 provides an overview of the system proposed in this dissertation
-\item Chapter 5 discusses the results achieved during experimentation with the proposed system.
-\item Chapter 6 Provides a conclusion, determining questions stated in section \ref{problemStatement} have been answered
+\item Chapter 5 discusses the results achieved during experimentation with the proposed system
+\item Chapter 6 provides a conclusion, to determine if the questions stated in section \ref{problemStatement} have been answered
 \end{itemize}
 
 \subsection{Conclusion}
 This chapter discussed the purpose behind self-recovering images as well as the aim of this research and the proposed method. 
 The research methodology followed was described. A list of terminologies used in this dissertation was also given.
-The next chapter will give a more detailed overview of all the components that make up self-recovering images. 
+The next chapter will give a more detailed overview of all the components of self-recovering images. 
 
 \section{Self-recovering images}
 
@@ -642,7 +646,6 @@ The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedTwiceEmb
 \hspace{0pt} \\
 The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
 The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
-//TODO <Summarize all findings in an additional table>
 \begin{center}
   \begin{tabular}{| l | l | l | l |}
     \hline
@@ -707,7 +710,7 @@ This chapter summarizes the findings of the proposed method and relates those fi
 Possible future work with regards to the proposed method is also discussed.
 
 \subsection{Summary}
-The proposed method described used the BPCS steganaography algorithm, which is an adaptive embedding algorithm described in \ref{bpcsSteg}, and applied the algorithm to the self recovering image problem.
+The proposed method described used the BPCS steganaography algorithm, which is an adaptive embedding algorithm described in \ref{bpcsSteg}, and applied the algorithm to the self-recovering image problem.
 The proposed method was shown to provide good quality as well as a good tamper rate.
 It was also shown that the quality of the image after embedding the image reference content as well as the image quality after reconstruction differs depending on the cover image chosen.
 This was attributed to the adaptive embedding algorithm used due to the fact that the embedding differs depending on the cover image.
