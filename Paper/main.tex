@@ -536,7 +536,6 @@ The results of the conducted experiments are also interpreted and evaluated.
 \label{experimentsConducted}
 In testing the proposed method a simple experiment was set up in which the original image was processed using the embedding process described in \ref{embedding}.
 The results of that process can be seen in figure \ref{fig:lenaEmbedOnceEmbedding}, showing the original image and the image after the embedding process.
-Note that in this case the Image Reference content was only embedded once
 
 \begin{figure}[h]
 \centerline{%
@@ -549,34 +548,43 @@ Note that in this case the Image Reference content was only embedded once
 \end{figure}
 
 \hspace{0pt} \\
-All images will be evaluated using Peak Signal to Noise Ratio (PSNR) because it is the most widely used measurement for objective image quality and is easily comparable with previous research. \cite{wang2002image}
 After the image after embedding was generated the PSNR of the image after embedding in relation to the original image was calculated.
-In this instance the PSNR after embedding was: 34.92dB 
+In this instance the PSNR after embedding was: 34.92dB.
+This indicates that the difference in signal between the original image and the image after embedding is almost 35dB.
 
 \hspace{0pt} \\
-The next step in the experiment conducted was to modify the image after embedding (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+The next step in the experiment conducted was to modify the image after embedding.
+\begin{figure}[h]
+	\centerline{%
+	\includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImage - Copy"}%
+	}%
+	\caption{Image After Tampering}
+	\label{fig:lenaEmbedOnceTampered}
+\end{figure}
 After the image was modified it was reconstructed using the method described in \ref{extractRestore}.
-The results of this reconstruction can be seen in figure \ref{fig:lenaEmbedOnceRestoration}, showing the image after tampering and the image after reconstruction.
+The results of this reconstruction can be seen in figure \ref{fig:lenaEmbedOnceRestoredOriginal}, showing the original image and the image after reconstruction.
 
 \begin{figure}[h]
 \centerline{%
-\includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImage - Copy"}%
+\includegraphics[scale=0.45]{"lena"}%
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Once. Left: Image After Tampering, Right: Image After Restoration}
-\label{fig:lenaEmbedOnceRestoration}
+\caption{Left: Original Image, Right: Image After Reconstruction}
+\label{fig:lenaEmbedOnceRestoredOriginal}
 \end{figure}
 
 \hspace{0pt} \\
-After the image (shown in figure \ref{fig:lenaEmbedOnceRestoration}) was reconstructed the PSNR of the image after reconstruction (figure \ref{fig:lenaEmbedOnceRestoration}) was calculated in relation to the original Image (shown in figure \ref{fig:lenaEmbedOnceEmbedding}).
+After the image was reconstructed the PSNR of the image after reconstruction was calculated in relation to the original image.
 In this instance the PSNR after restoration was: 34.89dB.
 
 \hspace{0pt} \\
-It was found in the experimentation process that if the image reference content is only embedded once into the original image that the quality of the Image after embedding as well as the quality of the image after reconstruction was relatively high.
+The experimentation process thus shows that if the image reference content is only embedded once into the original image that the quality of the image after embedding as well as the quality of the image after reconstruction is relatively high.
 It was however found that the tamper rate possible was quite low at \textless 3\%.
 To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the image reference content was now being embedded twice.
-The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding} and figure \ref{fig:lenaEmbedTwiceRestoration}
+This increases the probability reconstruction will be possible since every piece of image reference content is contained twice in the image after embedding.
+A specific piece of the image reference content must thus be lost in two locations before reconstruction is no longer possible.
+The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding}, figure \ref{fig:lenaEmbedTwiceTampered} and figure \ref{fig:lenaEmbedTwiceRestoration}
 
 \begin{figure}[h]
 \centerline{%
@@ -591,10 +599,19 @@ The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding} and figure \
 \begin{figure}[h]
 \centerline{%
 \includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImage - Copy"}%
+}%
+\caption{Embedding Twice. Image After Tampering}
+\label{fig:lenaEmbedTwiceTampered}
+\end{figure}
+
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.45]{"lena"}%
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Twice. Left: Image After Tampering, Right: Image After Restoration}
+\caption{Embedding Twice. Left: Original image, Right: Image After Restoration}
 \label{fig:lenaEmbedTwiceRestoration}
 \end{figure}
 
@@ -605,7 +622,7 @@ The tamper rate however is now increased from \textless 3\% to \textless 35\%
 
 \hspace{0pt} \\
 This experiment was also completed on the following image.
-First by embedding the image reference content once (figure \ref{fig:treeEmbedOnceEmbedding} and figure \ref{fig:treeEmbedOnceRestoration}):
+First by embedding the image reference content once (figure \ref{fig:treeEmbedOnceEmbedding}, figure \ref{fig:treeEmbedOnceTamper} and figure \ref{fig:treeEmbedOnceRestore}):
 
 \begin{figure}[h]
 \centerline{%
@@ -618,22 +635,30 @@ First by embedding the image reference content once (figure \ref{fig:treeEmbedOn
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedOnceEmbedding}) was 27.94dB.
+The PSNR of the image after embedding was 27.94dB.
 
 \begin{figure}[h]
 \centerline{%
 \includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImage - Copy"}%
+}%
+\caption{Embedding Once. Image After Tampering}
+\label{fig:treeEmbedOnceTamper}
+\end{figure}
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.3375]{"tree"}%
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Once. Left: Image After Tampering, Right: Image After Restoration}
-\label{fig:treeEmbedOnceRestoration}
+\caption{Embedding Once. Left: Original image, Right: Image After Restoration}
+\label{fig:treeEmbedOnceRestore}
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 27.72dB.
-The tamper rate, as was the case with the first image (figure \ref{fig:lenaEmbedOnceRestoration}), was also \textless 3\%.
-The experiment was also conducted by embedding the image reference content twice (figure \ref{fig:treeEmbedTwiceEmbedding} and figure \ref{fig:treeEmbedTwiceRestoration}).
+The PSNR of the image after reconstruction was 27.72dB.
+The tamper rate, as was the case with the first image, was also \textless 3\%.
+The experiment was also conducted by embedding the image reference content twice (figure \ref{fig:treeEmbedTwiceEmbedding}, figure \ref{fig:treeEmbedTwiceTamper} and figure \ref{fig:treeEmbedTwiceRestore}).
 
 \begin{figure}[h]
 \centerline{%
@@ -646,20 +671,28 @@ The experiment was also conducted by embedding the image reference content twice
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the image after embedding (show in figure \ref{fig:treeEmbedTwiceEmbedding}) was 27.93dB.
+The PSNR of the image after embedding was 27.93dB.
 
 \begin{figure}[h]
 \centerline{%
 \includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImage - Copy"}%
+}%
+\caption{Embedding Twice. Image After Tampering}
+\label{fig:treeEmbedTwiceTamper}
+\end{figure}
+
+\begin{figure}[h]
+\centerline{%
+\includegraphics[scale=0.3375]{"tree"}%
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Twice. Left: Image After Tampering, Right: Image After Restoration}
-\label{fig:treeEmbedTwiceRestoration}
+\caption{Embedding Twice. Left: Original image, Right: Image After Restoration}
+\label{fig:treeEmbedTwiceRestore}
 \end{figure}
 
 \hspace{0pt} \\
-The PSNR of the image after reconstruction (show in figure \ref{fig:treeEmbedOnceRestoration}) was 26.05dB.
+The PSNR of the image after reconstruction was 26.05dB.
 The tamper rate, as was the case with the first image image (figure \ref{fig:lenaEmbedTwiceRestoration}), was increased from \textless 3\% to \textless 35\% with a similar reduction in quality experienced.
 \begin{center}
   \begin{tabular}{| l | l | l | l |}
@@ -667,23 +700,27 @@ The tamper rate, as was the case with the first image image (figure \ref{fig:len
     \multicolumn{4}{|c|}{Experimental results summary} \\
     \hline
     Image & PSNR after embedding & PSNR after restoration & Tampering rate \\ \hline
-    Figure \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedOnceRestoration} (Embed once) & 34.92dB & 34.89dB & \textless 3\% \\ \hline
+    Figure \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedOnceRestoredOriginal} (Embed once) & 34.92dB & 34.89dB & \textless 3\% \\ \hline
     Figure \ref{fig:lenaEmbedTwiceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} (Embed twice) & 34.92dB & 32.52 dB & \textless 35\% \\ \hline
-    Figure \ref{fig:treeEmbedOnceEmbedding} - \ref{fig:treeEmbedOnceRestoration} (Embed once) & 27.94dB & 27.72dB & \textless 3\% \\ \hline
-    Figure \ref{fig:treeEmbedTwiceEmbedding} - \ref{fig:treeEmbedTwiceRestoration} (Embed twice) & 27.93dB & 26.05dB & \textless 35\% \\ \hline
+    Figure \ref{fig:treeEmbedOnceEmbedding} - \ref{fig:treeEmbedOnceRestore} (Embed once) & 27.94dB & 27.72dB & \textless 3\% \\ \hline
+    Figure \ref{fig:treeEmbedTwiceEmbedding} - \ref{fig:treeEmbedTwiceRestore} (Embed twice) & 27.93dB & 26.05dB & \textless 35\% \\ \hline
     \hline
   \end{tabular}
 \end{center}
 
 \hspace{0pt} \\
-The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced. As an experimental control the results from the experiment in the proposed method will be compared to other current methods for images with self-recovering capabilities.
+The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced.
+This is due to the fact that the embedding algorithm used dynamically determines where to embed the image reference content depending on the original image.
+Areas in the second image like the grass and tree leaves are detected by the embedding algorithm as noisy and suitable for embedding, the second image thus has more space to embed information in without introducing noticeable visual distortion than the first image.
+The PSNR method used to objectively measure the quality of the images gives a lower quality rating due to more of the image being different from the original image even though when observed visually the image does not appear to have undergone such a big change. 
+  As an experimental control the results from the experiment in the proposed method is compared to other current methods for images with self-recovering capabilities.
 This is discussed further in  section \ref{interpretation}.
 
 \subsection{Interpretation of results}
 \label{interpretation}
 The proposed method for self-recovering images using the BPCS steganography embedding algorithm described in the preceding sections was shown to be effective.
-According to Appendix B in \cite{korus2013efficient} the proposed method achieved average to high quality reconstruction in the case of figure \ref{fig:lenaEmbedTwiceRestoration} and figure \ref{fig:lenaEmbedOnceRestoration} respectively.
-The proposed method achieved low quality reconstruction in the case of figure \ref{fig:treeEmbedOnceRestoration} and figure \ref{fig:treeEmbedTwiceRestoration} according to \cite{korus2013efficient}.
+According to Appendix B in \cite{korus2013efficient} the proposed method achieved average to high quality reconstruction in the case of figure \ref{fig:lenaEmbedOnceRestoredOriginal}  and figure \ref{fig:lenaEmbedTwiceRestoration} respectively.
+The proposed method achieved low quality reconstruction in the case of figure \ref{fig:treeEmbedOnceRestore} and figure \ref{fig:treeEmbedTwiceRestore} according to \cite{korus2013efficient}.
 
 \hspace{0pt} \\
 The image from figures \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} was specifically chosen for the experiment because it is well used in the literature and can serve to compare the proposed method to other methods available in the literature.
@@ -694,10 +731,10 @@ The proposed method does not perform as well as the erasure channel method and a
 Compared to the difference expansion method the proposed method performs in a similar manner.
 The PSNR values achieved are worse than that of the difference expansion method but the difference is around 1-2dB and is thus almost not noticeable to the human eye.
 It should also be mentioned that the proposed method uses no compression on the image reference content, similar to the difference expansion method.
-This method thus serves as a more equal comparison. 
+Compression would mean that less noise would be introduced during embedding or that a higher quality reference image could be embedded. 
 
 \hspace{0pt} \\
-Research in \cite{wang2002image} Points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
+Research in \cite{wang2002image} points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
 PSNR is a useful measure for objective image quality assessment to a certain degree, however there are other important factors to consider. 
 The one important factor is how a person would perceive the image quality.
 Another important factor is if the meaning of the image is still clear even after reconstruction.
