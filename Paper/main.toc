@@ -40,5 +40,4 @@
 \contentsline {subsection}{\numberline {5.4}Conclusion}{32}
 \contentsline {section}{\numberline {6}Conclusion}{33}
 \contentsline {subsection}{\numberline {6.1}Introduction}{33}
-\contentsline {subsection}{\numberline {6.2}Summary}{33}
-\contentsline {subsection}{\numberline {6.3}Future work}{34}
+\contentsline {subsection}{\numberline {6.2}Future work}{33}
