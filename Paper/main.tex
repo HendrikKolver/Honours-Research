@@ -28,7 +28,7 @@
 \noindent 
 Many current self-recovering image methods exist, however few of the current methods provide good quality images after embedding as well as after reconstruction.
 This is due to an inherent trade off between the amount of information that can be embedded into an image and the quality of the image after embedding.
-This dissertation proposes a novel method for increasing the quality of the image after embedding as well as the quality of the image after reconstruction in the self-recovering image problem using the BPCS Steganography algorithm for content embedding as well as employing a fragile watermark for detecting image modifications.
+This dissertation proposes a novel method for increasing the quality of the image after embedding as well as the quality of the image after reconstruction in self-recovering images using the BPCS Steganography algorithm for content embedding as well as employing a fragile watermark for detecting image modifications.
 Experimental results show that the proposed method achieves a good quality image after embedding as well as a good quality image after reconstruction when compared to some of the currently available self-recovering image methods. 
 
 \end{abstract}
@@ -37,11 +37,11 @@ Experimental results show that the proposed method achieves a good quality image
 \section{Introduction}
 
 \subsection{Introduction}
-During communication images can be modified either intentionally or unintentionally.  These modifications can be small changes that does not change the meaning of the image, or bigger changes, for example the removal of key aspects from the image. 
+During communication images can be modified either intentionally or unintentionally.  These modifications can be small changes that do not change the meaning of the image, or bigger changes, for example the removal of key aspects from the image. 
 Various techniques exist for authenticating images of which self-recovering is one technique. 
 Self-recovering techniques attempt to preserve image content by embedding the image within itself to enable the reconstruction of the image if the image was tampered with. Self-recovering techniques usually use steganography, a technology used to embed information in digital media \cite{johnson1998exploring}, to hide an approximation of the image within the image itself.  
 If the image was tampered with, this embedded approximation can then be used to attempt to recover the original image.
- Self-recovering techniques also use fragile watermarks which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
+ Self-recovering techniques also use fragile watermarks, which is a technology commonly used in image authentication, to determine which areas of an image was tampered with.
 
 \hspace{0pt} \\
 Most self-recovering techniques have a trade-off concerning the quality of the image after embedding and the quality of the image after recovery.
