@@ -235,7 +235,7 @@ The method also proposes that by using the remaining authentic content, that is 
 
 \hspace{0pt} \\
 The method proposed in \cite {korus2013efficient} achieves good quality images after embedding with a PSNR \textgreater 35dB. 
-The method also achieves an image after reconstruction quality of 35dB \textless PSNR \textgreater 40dB and 40dB \textless PSNR with tamper rates of 50\% and 33\% respectively.
+The method also achieves an image after reconstruction quality of 35dB \textless PSNR \textless 40dB and 40dB \textless PSNR with tamper rates of 50\% and 33\% respectively.
 The method does not let the quality of the image after reconstruction deteriorate much if the tampering rate is increased up to a value of 50\%.
 The authors do however note that they can only achieve a minimal increase in reconstruction performance by decreasing the amount of information in the image reference content.
 By using only 50\% of the available capacity the maximal tampering rate increases form 50\% to 59\%.
@@ -317,7 +317,7 @@ A summary of the comparison between the 3 methods is given in Table 1
     \multicolumn{4}{|c|}{Table 1: Summary of the comparison between the 3 methods} \\
     \hline
     Method & PSNR after embedding & PSNR after reconstruction & Tampering rate \\ \hline
-    Erasure channel& \textgreater35dB & 35dB \textless PSNR\textgreater 40dB & 33\% \\ \hline
+    Erasure channel& \textgreater35dB & 35dB \textless PSNR\textless 40dB & 33\% \\ \hline
     Difference expansion& \textgreater35dB & Not specified & Not specified \\ \hline
     Dynamic block allocation& \textgreater37dB & 35dB & \textless 35\% \\ \hline
     \hline
@@ -326,7 +326,7 @@ A summary of the comparison between the 3 methods is given in Table 1
 
 \subsection{Conclusion}
 This chapter looked at currently available methods for self-recovering images.
-An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation in \ref{DynamicBlockOverview}.
+An erasure channel model utilizing the remaining authentic content in section \ref{ErasureChannelOverview}, a method using difference expansion in section \ref{differenceExpansionOverview} and a method using dynamic block allocation in section \ref{DynamicBlockOverview}.
 A comparison between these methods was provided in section \ref{litStudyCamparison}.
 This information will be used to determine the success of the self-recovering image method proposed in this dissertation by comparing the results from the proposed method with the results achieved by the methods discussed in this chapter.
 The next chapter will discuss the implementation of the self-recovering image method proposed in this dissertation.  
