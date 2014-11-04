@@ -464,21 +464,21 @@ This is done to enable the conjugation map as well as the embedding map that was
 
 \hspace{0pt} \\
 The SHA-256 hash used is truncated to a 57 bit hash. 
-This means that the hash has y possible unique values 
-\[ y = 57^2 = 3249 \]
+This means that the hash has \textit{y} possible unique values 
+\[ \textit{y} = 57^2 = 3249 \]
 The image has 512x512 pixels that are divided into 8x8 sections.
-This means that there are k amount of unique sections in the image
-\[x = \frac{512}{8} = 64 \]
-\[k = x^2 =64^2 = 4096 \]
-Since k \textgreater y the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
-The pigeonhole principle states that since the input for the hash function (k) is greater than the amount of unique outputs of the hash function (y) there will be duplicate hash values produced.
+This means that there are \textit{k} amount of unique sections in the image
+\[\textit{x} = \frac{512}{8} = 64 \]
+\[\textit{k} = \textit{x}^2 =64^2 = 4096 \]
+Since \textit{k} \textgreater \textit{y} the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
+The pigeonhole principle states that since the input for the hash function (\textit{k}) is greater than the amount of unique outputs of the hash function (\textit{y}) there will be duplicate hash values produced.
 However since the generated hash values are calculated from the 7 MSB planes of each section and then compared to the bits stored in the LSB plane of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur. Testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
 However should this case arise, the proposed method would simply restore that section as well.
 Thus it does not have a major impact on the final result of the reconstruction.
 
 \hspace{0pt} \\
 The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
-These 192 bits are finally embedded into the LSB plane of that specific section of the image after embedding effectively replacing all the bits in that bit plane with the generated bit stream.
+These 192 bits are finally embedded into the LSB plane of that specific section of the image after embedding, effectively replacing all the bits in that bit plane with the generated bit stream.
 
 \subsection{Extraction and Reconstruction}
 \label{extractRestore}
