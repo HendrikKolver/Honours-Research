@@ -21,6 +21,26 @@
 \date{\today}
 
 \begin{document}
+\begin{titlepage}
+	\begin{center}
+		{\Huge \textbf{COS 700 Year Project}}
+		\hspace{0pt} \\
+		\hspace{0pt} \\
+		{\LARGE  \textbf{Hendrik Johannes Kolver}}
+		\hspace{0pt} \\
+		{\Large \textit{\textbf{11058103}}}
+		\hspace{0pt} \\
+		\hspace{0pt} \\
+		{\LARGE  \textbf{Supervisor: Ms Tayana Morkel}}
+	\end{center}
+	\begin{figure}[h]
+		\centerline{%
+		\includegraphics[scale=0.08]{"plag"}%
+		}%
+	\end{figure}
+	
+\end{titlepage}
+
 \maketitle
 
 \begin{abstract}
@@ -464,21 +484,21 @@ This is done to enable the conjugation map as well as the embedding map that was
 
 \hspace{0pt} \\
 The SHA-256 hash used is truncated to a 57 bit hash. 
-This means that the hash has y possible unique values 
-\[ y = 57^2 = 3249 \]
+This means that the hash has \textit{y} possible unique values 
+\[ \textit{y} = 57^2 = 3249 \]
 The image has 512x512 pixels that are divided into 8x8 sections.
-This means that there are k amount of unique sections in the image
-\[x = \frac{512}{8} = 64 \]
-\[k = x^2 =64^2 = 4096 \]
-Since k \textgreater y the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
-The pigeonhole principle states that since the input for the hash function (k) is greater than the amount of unique outputs of the hash function (y) there will be duplicate hash values produced.
+This means that there are \textit{k} amount of unique sections in the image
+\[\textit{x} = \frac{512}{8} = 64 \]
+\[\textit{k} = \textit{x}^2 =64^2 = 4096 \]
+Since \textit{k} \textgreater \textit{y} the proposed method is subject to the pigeonhole principle \cite{cook1976short}.
+The pigeonhole principle states that since the input for the hash function (\textit{k}) is greater than the amount of unique outputs of the hash function (\textit{y}) there will be duplicate hash values produced.
 However since the generated hash values are calculated from the 7 MSB planes of each section and then compared to the bits stored in the LSB plane of that section it is highly unlikely, but not impossible, that a false positive for tampering will occur. Testing was conducted on a number of images and no situation was found where such a collision occurred within normal operation.
 However should this case arise, the proposed method would simply restore that section as well.
 Thus it does not have a major impact on the final result of the reconstruction.
 
 \hspace{0pt} \\
 The conjugation map is appended to the truncated hash string to create a binary string of 192 bits.
-These 192 bits are finally embedded into the LSB plane of that specific section of the image after embedding effectively replacing all the bits in that bit plane with the generated bit stream.
+These 192 bits are finally embedded into the LSB plane of that specific section of the image after embedding, effectively replacing all the bits in that bit plane with the generated bit stream.
 
 \subsection{Extraction and Reconstruction}
 \label{extractRestore}
@@ -543,7 +563,7 @@ The results of that process can be seen in figure \ref{fig:lenaEmbedOnceEmbeddin
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImage"}%
 }%
-\caption{Embedding Once. Left: Original Image, Right: Image After embedding}
+\caption{Left: Original image, Right: Image after embedding}
 \label{fig:lenaEmbedOnceEmbedding}
 \end{figure}
 
@@ -553,15 +573,15 @@ In this instance the PSNR after embedding was: 34.92dB.
 This indicates that the difference in signal between the original image and the image after embedding is almost 35dB.
 
 \hspace{0pt} \\
-The next step in the experiment conducted was to modify the image after embedding.
+The next step in the experiment conducted was to modify the image after embedding (figure \ref{fig:lenaEmbedOnceTampered}).
 \begin{figure}[h]
 	\centerline{%
 	\includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImage - Copy"}%
 	}%
-	\caption{Image After Tampering}
+	\caption{Image after tampering}
 	\label{fig:lenaEmbedOnceTampered}
 \end{figure}
-After the image was modified it was reconstructed using the method described in \ref{extractRestore}.
+After the image was modified it was reconstructed using the method described in section \ref{extractRestore}.
 The results of this reconstruction can be seen in figure \ref{fig:lenaEmbedOnceRestoredOriginal}, showing the original image and the image after reconstruction.
 
 \begin{figure}[h]
@@ -570,7 +590,7 @@ The results of this reconstruction can be seen in figure \ref{fig:lenaEmbedOnceR
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Lena Embed once 0.7 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Left: Original Image, Right: Image After Reconstruction}
+\caption{Left: Original image, Right: Image after reconstruction}
 \label{fig:lenaEmbedOnceRestoredOriginal}
 \end{figure}
 
@@ -582,7 +602,7 @@ In this instance the PSNR after restoration was: 34.89dB.
 The experimentation process thus shows that if the image reference content is only embedded once into the original image that the quality of the image after embedding as well as the quality of the image after reconstruction is relatively high.
 It was however found that the tamper rate possible was quite low at \textless 3\%.
 To attempt to remedy this problem another instance of the experiment was run with the only independent variable being the fact that the image reference content was now being embedded twice.
-This increases the probability reconstruction will be possible since every piece of image reference content is contained twice in the image after embedding.
+This increases the probability that reconstruction will be possible since every piece of image reference content is contained twice in the image after embedding.
 A specific piece of the image reference content must thus be lost in two locations before reconstruction is no longer possible.
 The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding}, figure \ref{fig:lenaEmbedTwiceTampered} and figure \ref{fig:lenaEmbedTwiceRestoration}
 
@@ -592,7 +612,7 @@ The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding}, figure \ref
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImage"}%
 }%
-\caption{Embedding Twice. Left: Original Image, Right: Image After embedding}
+\caption{Embedding twice. Left: Original image, Right: Image after embedding}
 \label{fig:lenaEmbedTwiceEmbedding}
 \end{figure}
 
@@ -600,7 +620,7 @@ The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding}, figure \ref
 \centerline{%
 \includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImage - Copy"}%
 }%
-\caption{Embedding Twice. Image After Tampering}
+\caption{Embedding twice. Image after tampering}
 \label{fig:lenaEmbedTwiceTampered}
 \end{figure}
 
@@ -611,7 +631,7 @@ The results can be seen in figure \ref{fig:lenaEmbedTwiceEmbedding}, figure \ref
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Lena Embed twice 0.7 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Twice. Left: Original image, Right: Image After Restoration}
+\caption{Embedding twice. Left: Original image, Right: Image after reconstruction}
 \label{fig:lenaEmbedTwiceRestoration}
 \end{figure}
 
@@ -630,7 +650,7 @@ First by embedding the image reference content once (figure \ref{fig:treeEmbedOn
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImage"}%
 }%
-\caption{Embedding Once. Left: Original Image, Right: Image After embedding}
+\caption{Embedding once. Left: Original image, Right: Image after embedding}
 \label{fig:treeEmbedOnceEmbedding}
 \end{figure}
 
@@ -641,7 +661,7 @@ The PSNR of the image after embedding was 27.94dB.
 \centerline{%
 \includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImage - Copy"}%
 }%
-\caption{Embedding Once. Image After Tampering}
+\caption{Embedding once. Image after tampering}
 \label{fig:treeEmbedOnceTamper}
 \end{figure}
 
@@ -651,7 +671,7 @@ The PSNR of the image after embedding was 27.94dB.
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Tree Embed once 0.8 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Once. Left: Original image, Right: Image After Restoration}
+\caption{Embedding once. Left: Original image, Right: Image after reconstruction}
 \label{fig:treeEmbedOnceRestore}
 \end{figure}
 
@@ -666,7 +686,7 @@ The experiment was also conducted by embedding the image reference content twice
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImage"}%
 }%
-\caption{Embedding Twice. Left: Original Image, Right: Image After embedding}
+\caption{Embedding twice. Left: Original image, Right: Image after embedding}
 \label{fig:treeEmbedTwiceEmbedding}
 \end{figure}
 
@@ -677,7 +697,7 @@ The PSNR of the image after embedding was 27.93dB.
 \centerline{%
 \includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImage - Copy"}%
 }%
-\caption{Embedding Twice. Image After Tampering}
+\caption{Embedding twice. Image after tampering}
 \label{fig:treeEmbedTwiceTamper}
 \end{figure}
 
@@ -687,7 +707,7 @@ The PSNR of the image after embedding was 27.93dB.
 \hspace{0.1cm}
 \includegraphics[scale=0.45]{"Tree Embed twice 0.8 threshold/finalImageAfterRestoration"}%
 }%
-\caption{Embedding Twice. Left: Original image, Right: Image After Restoration}
+\caption{Embedding twice. Left: Original image, Right: Image after reconstruction}
 \label{fig:treeEmbedTwiceRestore}
 \end{figure}
 
@@ -699,7 +719,7 @@ The tamper rate, as was the case with the first image image (figure \ref{fig:len
     \hline
     \multicolumn{4}{|c|}{Experimental results summary} \\
     \hline
-    Image & PSNR after embedding & PSNR after restoration & Tampering rate \\ \hline
+    Image & PSNR after embedding & PSNR after restoration & Tamper rate \\ \hline
     Figure \ref{fig:lenaEmbedOnceEmbedding} - \ref{fig:lenaEmbedOnceRestoredOriginal} (Embed once) & 34.92dB & 34.89dB & \textless 3\% \\ \hline
     Figure \ref{fig:lenaEmbedTwiceEmbedding} - \ref{fig:lenaEmbedTwiceRestoration} (Embed twice) & 34.92dB & 32.52 dB & \textless 35\% \\ \hline
     Figure \ref{fig:treeEmbedOnceEmbedding} - \ref{fig:treeEmbedOnceRestore} (Embed once) & 27.94dB & 27.72dB & \textless 3\% \\ \hline
@@ -711,7 +731,8 @@ The tamper rate, as was the case with the first image image (figure \ref{fig:len
 \hspace{0pt} \\
 The second image used thus behaved in a similar manner to the first image with the only significant difference being the much lower PSNR values produced.
 This is due to the fact that the embedding algorithm used dynamically determines where to embed the image reference content depending on the original image.
-Areas in the second image like the grass and tree leaves are detected by the embedding algorithm as noisy and suitable for embedding, the second image thus has more space to embed information in without introducing noticeable visual distortion than the first image.
+Areas in the second image like the grass and tree leaves are detected by the embedding algorithm as noisy and suitable for embedding. 
+The second image thus has more space than the first image to embed information in without introducing noticeable visual distortion.
 The PSNR method used to objectively measure the quality of the images gives a lower quality rating due to more of the image being different from the original image even though when observed visually the image does not appear to have undergone such a big change. 
   As an experimental control the results from the experiment in the proposed method is compared to other current methods for images with self-recovering capabilities.
 This is discussed further in  section \ref{interpretation}.
@@ -734,7 +755,7 @@ It should also be mentioned that the proposed method uses no compression on the 
 Compression would mean that less noise would be introduced during embedding or that a higher quality reference image could be embedded. 
 
 \hspace{0pt} \\
-Research in \cite{wang2002image} points out several shortcomings of methods of measuring and comparing image quality using methods such as PSNR. 
+Research in \cite{wang2002image} points out several shortcomings of measuring and comparing image quality using methods such as PSNR. 
 PSNR is a useful measure for objective image quality assessment to a certain degree, however there are other important factors to consider. 
 The one important factor is how a person would perceive the image quality.
 Another important factor is if the meaning of the image is still clear even after reconstruction.
@@ -746,8 +767,8 @@ It was found during experimentation that image quality can vary greatly among di
 This can be attributed to the fact that an adaptive embedding method is used and where the image reference content is embedded thus differs depending on the chosen original image.
 
 \hspace{0pt} \\
-The embedding rate and effects of the embedding rate seemed consistent across the different images used.
-The embedding rate was low where the image reference content was only embedded once into the original image and compared poorly to methods such as the dynamic block allocation method.
+The tamper rate seemed consistent across the different images used.
+The tamper rate was low where the image reference content was only embedded once into the original image and compared poorly to methods such as the dynamic block allocation method.
 However it was found that if the image reference content is embedded twice into the original image that the tamper rate compares equally to that of dynamic block allocation method.
 
 \subsection{Conclusion}
@@ -761,7 +782,7 @@ The results achieved using the proposed method were compared with the results ac
 The method proposed in this dissertation used the BPCS steganography algorithm, which is an adaptive embedding algorithm, and applied the algorithm to self-recovering images.
 Experimental results showed that the proposed method provided good quality images, measured as PSNR, as well as a good tamper rate.
 It was also shown that the quality of the image after embedding the image reference content as well as the image quality after reconstruction differs depending on the cover image chosen.
-This was attributed to the adaptive embedding algorithm used due to the fact that the embedding differs depending on the cover image.
+This was attributed to the adaptive embedding algorithm used due to the fact that the embedding differs depending on the original image.
 It was also mentioned that no compression was used on the image reference content that was embedded into the original image.
 If compression is used it may result in higher quality of the image after reconstruction as well as the image after embedding due to fewer modifications that will be made during embedding.
 
