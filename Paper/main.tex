@@ -366,7 +366,7 @@ As a solution to this problem each bit plane block used for embedding is treated
 There is thus no overlap between two different blocks used for embedding.
 The image reference content is first processed using the method explained later in this section.
 Each block of the original image, which can store 192 bits, has 12 pixels (with a bit depth of 16 bits, in other words 192 bits) of the image reference content embedded into it.
-An embedding map containing the location of the first pixel to be embedded in the block is also created to keep track of which pixels of the original image contains image reference content.
+An embedding map containing the location of the first pixel to be embedded in the block is also created to keep track of which pixels of the original image contains which pixels of the image reference content.
 Since the individual image reference content pixels are embedded in order it is only necessary to know the location of the first pixel.
 This embedding map is then embedded into the LSB (Least significant bit) layer of that specific 8x8 section of pixels. 
 This allows the extractor to be able to identify where all the extracted pixels belong in the image even if the image has been modified.
@@ -394,7 +394,7 @@ The image is scaled down to the largest possible size that can still be embedded
 This means that the image reference content quality is at a maximum. 
 When extracting the image reference content again the assembled image reference content is scaled up to it's original size of 512x512 pixels, which is the standard image size for the proposed method, before completing the reconstruction.
 All image scaling was done by converting the image data to a Java image object, using the built in Java image scaling feature and then converting the resulting scaled image back to the required format.
-This is done to ensure that the pixels contained in the image reference content matches up (location wise) with the pixels in the original image.
+This scaling up is done to ensure that the pixels contained in the image reference content matches up (location wise) with the pixels in the original image.
 
 \paragraph{Block Spread}
 It is very important how the image reference content is spread across the image because this affects the tamper rate.
